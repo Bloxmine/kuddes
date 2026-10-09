@@ -1,6 +1,6 @@
 # Kuddes (hyves)
 
-A Hyves-style friends network in Dutch. Groups are **Kuddes**, profile guestbook messages are **knuffels**, status posts are **WieWatWaars**. README.md has the feature list, DEPLOY.md the production setup.
+A Hyves-style friends network in Dutch. Groups are **Kuddes**, profile guestbook messages are **knuffels**, status posts are **WieWatWaars**. README.md covers running and self-hosting, TECHSTACK.md the stack and the feature list, DEPLOY.md the production setup, WEIDE.md the federation protocol.
 
 ## Stack and layout
 
