@@ -1,4 +1,4 @@
-import { and, desc, eq, gt, inArray, lt, ne, or, sql } from 'drizzle-orm'
+import { and, desc, eq, gt, inArray, isNull, lt, ne, or, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import type { ActivityType } from '../../shared/api'
@@ -15,6 +15,9 @@ import { HIDDEN_STATUS } from '../../shared/onlineStatus'
 import { checkPost } from '../lib/moderation'
 import { respected } from '../lib/federation/outbox'
 import { fediverseAccounts } from '../lib/federation/servers'
+import { refreshCounts, repliesOf } from '../lib/federation/api'
+import { remoteOf } from '../lib/federation/actors'
+import { withDefaults } from '../../shared/customization'
 import { serverInfo } from '../lib/siteSettings'
 
 const PAGE_SIZE = 20
@@ -98,22 +101,51 @@ export const timelineRoutes = new Hono<AppEnv>()
     // Fediverse: posts of the accounts outside Kuddes you follow (or are friends with); the other tabs leave them out
     const fediverse = c.req.query('tab') === 'fediverse'
     if (fediverse && (!viewer || !serverInfo().fediverse)) return c.json({ items: [], nextCursor: null })
+    // Posts from outside Kuddes that the viewer gets: of accounts they follow (or are friends with), or boosted by those
+    const theirFediverse = viewer
+      ? and(
+          eq(activities.type, 'status'),
+          or(
+            and(
+              sql`${activities.actorId} in ${fediverseAccounts}`,
+              or(
+                sql`${activities.actorId} in (select ${remoteFollows.targetId} from ${remoteFollows} where ${remoteFollows.followerId} = ${viewer.id})`,
+                inArray(activities.actorId, acceptedFriendsOf(viewer.id)),
+              ),
+            ),
+            sql`${activities.boostedById} in (select ${remoteFollows.targetId} from ${remoteFollows} where ${remoteFollows.followerId} = ${viewer.id})`,
+          ),
+        )
+      : undefined
+    const mixIn = !!viewer && serverInfo().fediverse && withDefaults(viewer.preferences).fediverseInOverzicht
     const where = and(
       fediverse
-        ? and(
-            eq(activities.type, 'status'),
-            sql`${activities.actorId} in ${fediverseAccounts}`,
-            or(
-              sql`${activities.actorId} in (select ${remoteFollows.targetId} from ${remoteFollows} where ${remoteFollows.followerId} = ${viewer!.id})`,
-              inArray(activities.actorId, acceptedFriendsOf(viewer!.id)),
-            ),
-          )
-        : sql`${activities.actorId} not in ${fediverseAccounts}`,
+        ? theirFediverse
+        : or(and(sql`${activities.actorId} not in ${fediverseAccounts}`, isNull(activities.boostedById)), mixIn ? theirFediverse : undefined),
       types ? inArray(activities.type, types) : undefined,
       friendsOnly ? or(eq(activities.actorId, viewer.id), eq(activities.targetUserId, viewer.id), inArray(activities.actorId, acceptedFriendsOf(viewer.id))) : undefined,
       Number.isInteger(before) && before > 0 ? lt(activities.id, before) : undefined,
     )
     return c.json(await loadTimeline(where, c.get('user'), PAGE_SIZE))
+  })
+
+  // The replies on its own server to a post from Mastodon, Pixelfed and the like (read from there, not stored)
+  .get('/activities/:id/fediverse-replies', rateLimit('fediverse-reacties', 120, 60 * 1000), async (c) => {
+    const me = requireUser(c)
+    const activity = await findVisibleActivity(Number(c.req.param('id')), me)
+    const [row] = await db
+      .select({ userId: statuses.userId, apId: statuses.apId, remoteApiId: statuses.remoteApiId })
+      .from(activities)
+      .innerJoin(statuses, eq(statuses.id, activities.statusId))
+      .where(eq(activities.id, activity.id))
+    const remote = row?.apId ? await remoteOf(row.userId) : null
+    if (!row || !remote || remote.actor.weide) return c.json([])
+    // Not in the newest posts of their API yet: look once more
+    if (!row.remoteApiId) {
+      await refreshCounts(remote).catch(() => {})
+      ;[row.remoteApiId] = (await db.select({ id: statuses.remoteApiId }).from(statuses).where(eq(statuses.apId, row.apId!))).map((r) => r.id)
+    }
+    return c.json(await repliesOf(remote, row).catch(() => []))
   })
 
   .post('/activities/:id/respect', rateLimit('respect', 200, 60 * 60 * 1000), async (c) => {

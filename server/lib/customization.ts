@@ -149,6 +149,7 @@ export const preferencesSchema = z
     showAge: z.boolean(),
     anonymousVisits: z.boolean(),
     showFediverse: z.boolean(),
+    fediverseInOverzicht: z.boolean(),
     fediverseFollowers: z.boolean(),
     searchEngines: z.boolean(),
     avatarPublic: z.boolean(),

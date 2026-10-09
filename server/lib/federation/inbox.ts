@@ -3,7 +3,7 @@
  * server/routes/federation.ts) and is handled here, as the same thing a
  * member here would do. Anything this server doesn't do (yet) is ignored.
  */
-import { and, eq, isNull, sql } from 'drizzle-orm'
+import { and, eq, isNull, or, sql } from 'drizzle-orm'
 import { STATUS_MAX_LENGTH } from '../../../shared/api'
 import { MOODS } from '../../../shared/moods'
 import { PICKABLE_ICONS } from '../../../shared/icons'
@@ -23,12 +23,13 @@ import { report } from '../reports'
 import { friendshipBetween } from '../users'
 import { CONTEXT, PUBLIC, forgetAccount, resolveActor, type Remote } from './actors'
 import { cleanLine, htmlToText } from './content'
-import { fetchImage, fetchJson, safeFetch } from './http'
+import { fetchImage, fetchJson } from './http'
+import { recentFromApi, refreshCounts } from './api'
 import { storeImage } from '../uploads'
 import { removeMedia } from './actors'
 import { enqueue } from './deliver'
 import { ids, instanceSigningKey, localId } from './keys'
-import { policyOf } from './servers'
+import { mayFederateWith, policyOf } from './servers'
 
 type Json = Record<string, unknown>
 const str = (v: unknown) => (typeof v === 'string' ? v : null)
@@ -62,6 +63,7 @@ export async function handleActivity(act: Json, from: Remote) {
     case 'Undo': {
       const inner = object && typeof object === 'object' ? (object as Json) : null
       if (inner?.type === 'Like') return onLike(idOf(inner.object), from, true)
+      if (inner?.type === 'Announce') return onUnboost(idOf(inner.object), from)
       return onEndFollow(object, from)
     }
     case 'Create':
@@ -75,6 +77,8 @@ export async function handleActivity(act: Json, from: Remote) {
       return onRemove(idOf(object), from)
     case 'Like':
       return onLike(idOf(object), from, false)
+    case 'Announce':
+      return onBoost(idOf(object), from, false)
     case 'Flag':
       return onFlag(act, from)
   }
@@ -202,7 +206,7 @@ async function onCreate(note: Json, from: Remote) {
 }
 
 /** A WieWatWaar from a friend elsewhere, or a public post of someone a member here follows (Mastodon and the like). */
-async function onStatus(id: string, note: Json, from: Remote, earlier = false) {
+async function onStatus(id: string, note: Json, from: Remote, earlier = false, boostedBy: Remote | null = null) {
   const [friend] = await db
     .select({ id: friendships.id })
     .from(friendships)
@@ -213,10 +217,14 @@ async function onStatus(id: string, note: Json, from: Remote, earlier = false) {
     !friend && !from.actor.weide && serverInfo().fediverse && isPublic(note)
       ? (await db.select({ id: remoteFollows.followerId }).from(remoteFollows).where(eq(remoteFollows.targetId, from.user.id)).limit(1)).length > 0
       : false
-  // Nobody here is their friend or follows them: no reason to keep it
-  if (!friend && !followed) return
+  // Nobody here is their friend or follows them (or follows who boosted it): no reason to keep it
+  if (!friend && !followed && !(boostedBy && isPublic(note))) return
   const [known] = await db.select({ id: statuses.id }).from(statuses).where(eq(statuses.apId, id))
-  if (known) return
+  if (known) {
+    // Already here: now it's also boosted by someone followed
+    if (boostedBy) await db.update(activities).set({ boostedById: boostedBy.user.id }).where(eq(activities.statusId, known.id))
+    return
+  }
   const { images, links } = attachmentsOf(note)
   // Sensitive pictures aren't shown here unasked: they stay a link to the post
   const sensitive = note.sensitive === true
@@ -249,7 +257,7 @@ async function onStatus(id: string, note: Json, from: Remote, earlier = false) {
         .returning({ id: photos.id })
       await tx.insert(statusPhotos).values(added.map((p, position) => ({ statusId: status.id, position, photoId: p.id })))
     }
-    await recordActivity({ type: 'status', actorId: from.user.id, statusId: status.id, visibility, createdAt: published(note.published) }, tx)
+    await recordActivity({ type: 'status', actorId: from.user.id, statusId: status.id, visibility, createdAt: published(note.published), boostedById: boostedBy?.user.id ?? null }, tx)
     return status.id
   })
   // Older posts fetched when someone starts following aren't new: no moderation round for those
@@ -355,40 +363,38 @@ export async function fetchEarlierPosts(from: Remote) {
     // Mastodon puts the posts on the first page
     const first = page.first
     if (!Array.isArray(page.orderedItems) && first) page = typeof first === 'string' ? (await fetchJson(first, key)).json : (first as Json)
-    items = list(page.orderedItems ?? page.items)
-      .filter((a): a is Json => !!a && typeof a === 'object' && (a as Json).type === 'Create')
+    const activitiesFound = list(page.orderedItems ?? page.items).filter((a): a is Json => !!a && typeof a === 'object')
+    items = activitiesFound
+      .filter((a) => a.type === 'Create')
       .map((a) => a.object)
       .filter((o): o is Json => !!o && typeof o === 'object')
       .slice(0, 20)
+    // Their boosts too (oldest first, so the newest ends up on top)
+    for (const a of activitiesFound.filter((a) => a.type === 'Announce').slice(0, 10).reverse())
+      await onBoost(idOf(a.object), from, true).catch(() => {})
   }
   // Pixelfed's outbox only says how many there are: its public API lists them, and each is fetched from there as ActivityPub
   if (!items.length) items = await postsFromApi(from, key)
   for (const note of items.reverse()) {
-    const id = idOf(note.id)
-    if (!id || !POST_TYPES.has(String(note.type)) || idOf(note.attributedTo) !== from.actor.uri || note.inReplyTo) continue
-    if (new URL(id).host !== new URL(from.actor.uri).host) continue
-    await onStatus(id, note, from, true)
+    await handleEarlierPost(note, from)
   }
+  // And how many likes, boosts and replies they have there
+  await refreshCounts(from).catch(() => {})
+}
+
+/** One of an account's earlier posts: only its own, and not a reply. */
+async function handleEarlierPost(note: Json, from: Remote) {
+  const id = idOf(note.id)
+  if (!id || !POST_TYPES.has(String(note.type)) || idOf(note.attributedTo) !== from.actor.uri || note.inReplyTo) return
+  if (new URL(id).host !== new URL(from.actor.uri).host) return
+  await onStatus(id, note, from, true)
 }
 
 /** The newest public posts through the server's Mastodon-style API (Pixelfed, and Mastodon when its outbox is closed), as ActivityPub objects. */
 async function postsFromApi(from: Remote, key: Awaited<ReturnType<typeof instanceSigningKey>>) {
   const origin = new URL(from.actor.uri).origin
-  const name = from.user.username.split('@')[0]
-  const getJson = async (url: string) => {
-    const { res, body } = await safeFetch(url, { headers: { Accept: 'application/json' } })
-    return res.ok ? (JSON.parse(body) as unknown) : null
-  }
-  const account = (await getJson(`${origin}/api/v1/accounts/lookup?acct=${encodeURIComponent(name)}`).catch(() => null)) as Json | null
-  const id = str(account?.id)
-  if (!id) return []
-  let listed: unknown = null
-  for (const path of [`/api/pixelfed/v1/accounts/${id}/statuses?limit=20`, `/api/v1/accounts/${id}/statuses?limit=20&exclude_replies=true&exclude_reblogs=true`]) {
-    listed = await getJson(origin + path).catch(() => null)
-    if (Array.isArray(listed)) break
-  }
-  const uris = (Array.isArray(listed) ? listed : [])
-    .filter((s): s is Json => !!s && typeof s === 'object' && !(s as Json).reblog && ((s as Json).visibility ?? 'public') === 'public')
+  const uris = (await recentFromApi(from))
+    .filter((s) => !s.reblog && (s.visibility ?? 'public') === 'public')
     .map((s) => str(s.uri))
     .filter((u): u is string => !!u && new URL(u).origin === origin)
     .slice(0, 20)
@@ -443,6 +449,46 @@ async function removePostPhotos(userId: number) {
     .where(and(eq(photos.userId, userId), sql`not exists (select 1 from ${statusPhotos} where ${statusPhotos.photoId} = ${photos.id})`))
     .returning({ path: photos.path })
   await removeMedia(orphans)
+}
+
+/** Whether someone here follows (or is friends with) this account: only then do its boosts matter here. */
+async function followedHere(userId: number) {
+  const [follow] = await db.select({ id: remoteFollows.followerId }).from(remoteFollows).where(eq(remoteFollows.targetId, userId)).limit(1)
+  if (follow) return true
+  const [friend] = await db
+    .select({ id: friendships.id })
+    .from(friendships)
+    .where(and(eq(friendships.status, 'accepted'), or(eq(friendships.requesterId, userId), eq(friendships.addresseeId, userId))))
+    .limit(1)
+  return !!friend
+}
+
+/**
+ * An account someone here follows boosted a post (Announce): the post comes
+ * here, fetched from its own server, with who boosted it.
+ */
+async function onBoost(objectId: string | null, from: Remote, earlier: boolean) {
+  if (!objectId || localId(objectId) || !serverInfo().fediverse || !(await followedHere(from.user.id))) return
+  if (!(await mayFederateWith(new URL(objectId).host))) return
+  const { json: note, url } = await fetchJson(objectId, await instanceSigningKey())
+  const id = idOf(note.id)
+  // Only from the post's own server, and only a post (not a reply)
+  if (!id || new URL(id).host !== new URL(url).host || !POST_TYPES.has(String(note.type)) || note.inReplyTo) return
+  const authorUri = idOf(note.attributedTo)
+  if (!authorUri || new URL(authorUri).host !== new URL(id).host) return
+  const author = await resolveActor(authorUri)
+  await onStatus(id, note, author, earlier, from)
+}
+
+/** A boost taken back. */
+async function onUnboost(objectId: string | null, from: Remote) {
+  if (!objectId) return
+  const [status] = await db.select({ id: statuses.id }).from(statuses).where(eq(statuses.apId, objectId))
+  if (status)
+    await db
+      .update(activities)
+      .set({ boostedById: null })
+      .where(and(eq(activities.statusId, status.id), eq(activities.boostedById, from.user.id)))
 }
 
 /** A member elsewhere took a knuffel from here off their profile. */

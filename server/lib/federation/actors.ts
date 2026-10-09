@@ -14,7 +14,7 @@ import { profileColorsSchema } from '../customization'
 import { uploadUrl } from '../serialize'
 import { baseUrl } from '../siteSettings'
 import { removeUpload, storeImage } from '../uploads'
-import { cleanLine, htmlToText, textToHtml } from './content'
+import { cleanLine, cleanName, htmlToText, textToHtml } from './content'
 import { mayBeFollowed } from './outbox'
 import { fetchImage, fetchJson, safeFetch } from './http'
 import { ids, instanceKeys, instanceSigningKey, publicKeyOf } from './keys'
@@ -159,7 +159,7 @@ async function storeActor(json: Record<string, unknown>, fetchedFrom: string): P
   if (!handle || !/^[a-z0-9_.-]{1,64}$/.test(handle)) throw new Error('unusable username')
   const username = `${handle}@${host}`
 
-  const nickname = cleanLine(json.name, 60) || handle
+  const nickname = (typeof json.name === 'string' ? cleanName(json.name).slice(0, 60) : '') || handle
   const realName = cleanLine(json.realName ?? json['weide:realName'], 60)
   const about = typeof json.summary === 'string' ? htmlToText(json.summary).slice(0, 2000) || null : null
   const skinValue = str(json.skin ?? json['weide:skin'])

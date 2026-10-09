@@ -171,3 +171,29 @@
   max-width: 18px;
   max-height: 18px;
 }
+
+/* A post from Mastodon, Pixelfed and the like: who boosted it here, and its boosts and replies there */
+.social-boosted {
+  margin: 0 0 6px;
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+.social-fedi {
+  margin-top: 6px;
+}
+
+.social-fedi-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+.social-fedi-handle {
+  color: var(--text-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}

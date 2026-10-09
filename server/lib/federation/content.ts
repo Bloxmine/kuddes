@@ -34,5 +34,8 @@ export function textToHtml(text: string) {
     .join('')
 }
 
+/** A display name from another server: without its custom emoji codes (":pixelfed:"), which only show as images there. */
+export const cleanName = (value: string) => htmlToText(value).replace(/:[\w+-]+:/g, '').replace(/\s+/g, ' ').trim()
+
 /** A short single-line string from another server (a name), at most `max` characters. */
 export const cleanLine = (value: unknown, max: number) => (typeof value === 'string' ? htmlToText(value).replace(/\s+/g, ' ').trim().slice(0, max) : '')

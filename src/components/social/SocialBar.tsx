@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import type { Social } from '../../../shared/api'
+import type { FediverseReply, Social } from '../../../shared/api'
 import { api, errorMessage } from '../../lib/api'
 import { useAuth } from '../../lib/auth'
 import { patchSocial } from '../../lib/queries'
@@ -66,9 +66,20 @@ export function SocialBar({ social, folded }: { social: Social; folded?: boolean
   const shown = showAll ? comments : comments.slice(-COLLAPSED)
   const hidden = commentCount - shown.length
   const details = !folded || open
+  const fedi = social.fediverse
+  // Respect from members here; the rest of the count are likes on its own server
+  const members = respect.count - (fedi?.likes ?? 0)
 
   return (
     <div className="social">
+      {social.boostedBy && (
+        <p className="social-boosted">
+          <FarmIcon name="arrow_refresh" /> Gedeeld door{' '}
+          <Link to={`/profiel/${social.boostedBy.username}`} className="buzz-name">
+            {social.boostedBy.nickname}
+          </Link>
+        </p>
+      )}
       <div className="social-bar">
         <button
           type="button"
@@ -104,10 +115,14 @@ export function SocialBar({ social, folded }: { social: Social; folded?: boolean
             ))}
           </span>
           <span>
-            {respect.count} {respect.count === 1 ? 'lid respecteert' : 'leden respecteren'} dit
+            {members > 0 && `${members} ${members === 1 ? 'lid respecteert' : 'leden respecteren'} dit`}
+            {members > 0 && !!fedi?.likes && ' · '}
+            {!!fedi?.likes && `${fedi.likes} ${fedi.likes === 1 ? 'like' : 'likes'} op ${fedi.domain}`}
           </span>
         </div>
       )}
+
+      {details && fedi && (fedi.boosts > 0 || fedi.replies > 0) && <FediverseActivity activityId={activityId} fediverse={fedi} />}
 
       {details && commentCount > 0 && (
         <ul className="social-comments">
@@ -178,6 +193,71 @@ export function SocialBar({ social, folded }: { social: Social; folded?: boolean
       {(toggleRespect.isError || comment.isError) && (
         <p className="form-error">{errorMessage(toggleRespect.error ?? comment.error)}</p>
       )}
+    </div>
+  )
+}
+
+/** A post from Mastodon, Pixelfed and the like: how often it was boosted there, and its replies there (read from that server on request). */
+function FediverseActivity({ activityId, fediverse }: { activityId: number; fediverse: NonNullable<Social['fediverse']> }) {
+  const [open, setOpen] = useState(false)
+  const replies = useQuery({
+    queryKey: ['fediverse-replies', activityId],
+    queryFn: () => api<FediverseReply[]>(`/activities/${activityId}/fediverse-replies`),
+    enabled: open,
+    staleTime: 5 * 60 * 1000,
+  })
+  return (
+    <div className="social-fedi">
+      <p className="social-fedi-counts">
+        {fediverse.boosts > 0 && (
+          <span>
+            <FarmIcon name="arrow_refresh" /> {fediverse.boosts}× gedeeld
+          </span>
+        )}
+        {fediverse.replies > 0 && (
+          <button type="button" className="link-button" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+            <FarmIcon name="comments" /> {fediverse.replies} {fediverse.replies === 1 ? 'reactie' : 'reacties'} op {fediverse.domain}
+          </button>
+        )}
+      </p>
+      {open &&
+        (replies.isLoading ? (
+          <p className="muted">Laden…</p>
+        ) : !replies.data?.length ? (
+          <p className="muted">
+            De reacties konden niet worden opgehaald.{' '}
+            {fediverse.url && (
+              <a href={fediverse.url} target="_blank" rel="noopener noreferrer nofollow">
+                Bekijk ze op {fediverse.domain}
+              </a>
+            )}
+          </p>
+        ) : (
+          <ul className="social-comments">
+            {replies.data.map((r) => (
+              <li key={r.id} className="social-comment">
+                <Avatar user={{ username: r.handle, name: r.name, avatarUrl: null }} size="tiny" static />
+                <div>
+                  <b className="buzz-name">{r.name}</b> <span className="social-fedi-handle">@{r.handle}</span> <RichText text={r.text} />{' '}
+                  {r.url ? (
+                    <a className="date" href={r.url} target="_blank" rel="noopener noreferrer nofollow">
+                      {formatTime(r.createdAt)}
+                    </a>
+                  ) : (
+                    <span className="date">{formatTime(r.createdAt)}</span>
+                  )}
+                </div>
+              </li>
+            ))}
+            {fediverse.url && (
+              <li>
+                <a href={fediverse.url} target="_blank" rel="noopener noreferrer nofollow">
+                  Reageer op {fediverse.domain}
+                </a>
+              </li>
+            )}
+          </ul>
+        ))}
     </div>
   )
 }

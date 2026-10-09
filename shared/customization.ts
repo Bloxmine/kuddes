@@ -801,6 +801,8 @@ export type Preferences = {
   fediverseFollowers: boolean
   /** Overzicht → Fediverse: posts of accounts you follow on Mastodon and other servers (when this server allows it). */
   showFediverse: boolean
+  /** Also the posts of accounts you follow outside Kuddes in Overzicht → Alles and WieWatWaars, not only under Fediverse. */
+  fediverseInOverzicht: boolean
   /** Privacy: visit profiles without appearing in their "Laatste bezoekers". */
   anonymousVisits: boolean
   /** Privacy: search engines may list your profile (share cards always work). */
@@ -865,6 +867,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   showAge: true,
   anonymousVisits: false,
   showFediverse: true,
+  fediverseInOverzicht: true,
   fediverseFollowers: true,
   searchEngines: true,
   avatarPublic: true,

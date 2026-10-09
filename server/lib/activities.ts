@@ -33,6 +33,8 @@ import { toSummary, uploadUrl, type SummaryRow } from './serialize'
 import { kuddePhotoHref } from '../../shared/kuddes'
 import { acceptedFriendsOf, summaryColumns } from './users'
 import { notHidden } from './reports'
+import { fediverseAccounts } from './federation/servers'
+import { refreshCountsSoon } from './federation/api'
 
 type Executor = Pick<typeof db, 'insert'>
 
@@ -80,14 +82,42 @@ export async function loadSocial(activityIds: number[], viewer: User | null): Pr
       (r) => [r.id, r.actorId],
     ),
   )
+  // Posts from Mastodon, Pixelfed and the like: their counts there, and who boosted them here
+  const remoteRows = await db
+    .select({
+      id: activities.id,
+      boostedById: activities.boostedById,
+      authorId: statuses.userId,
+      domain: users.domain,
+      likes: statuses.remoteLikes,
+      boosts: statuses.remoteBoosts,
+      replies: statuses.remoteReplies,
+      url: statuses.apUrl,
+    })
+    .from(activities)
+    .innerJoin(statuses, eq(statuses.id, activities.statusId))
+    .innerJoin(users, eq(users.id, statuses.userId))
+    .where(and(inArray(activities.id, activityIds), sql`${statuses.userId} in ${fediverseAccounts}`))
+  const remoteOf = new Map(remoteRows.map((r) => [r.id, r]))
+  const boosterIds = [...new Set(remoteRows.map((r) => r.boostedById).filter((x): x is number => x !== null))]
+  const boosters = new Map(
+    boosterIds.length ? (await db.select(summaryColumns).from(users).where(inArray(users.id, boosterIds))).map((u) => [u.id, toSummary(u)]) : [],
+  )
+  void refreshCountsSoon(remoteRows.map((r) => r.authorId)).catch(() => {})
 
   for (const id of activityIds) {
     const respecters = respectRows.filter((r) => r.activityId === id)
     const comments = commentRows.filter((r) => r.comment.activityId === id)
+    const remote = remoteOf.get(id)
     result.set(id, {
       activityId: id,
+      ...(remote && {
+        fediverse: { likes: remote.likes, boosts: remote.boosts, replies: remote.replies, domain: remote.domain!, url: remote.url },
+        ...(remote.boostedById && boosters.get(remote.boostedById) && { boostedBy: boosters.get(remote.boostedById) }),
+      }),
       respect: {
-        count: respecters.length,
+        // Respect here, plus the likes and stars it has on its own server
+        count: respecters.length + (remote?.likes ?? 0),
         respected: !!viewer && respecters.some((r) => r.user.id === viewer.id),
         recent: respecters.slice(0, RECENT_RESPECTERS).map((r) => toSummary(r.user)),
       },

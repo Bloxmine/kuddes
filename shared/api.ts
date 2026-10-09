@@ -546,7 +546,14 @@ export type Social = {
   }
   comments: Comment[]
   commentCount: number
+  /** A post from Mastodon, Pixelfed and the like: its likes (counted in respect), boosts and replies there. */
+  fediverse?: { likes: number; boosts: number; replies: number; domain: string; url: string | null }
+  /** It's here because this account (that someone follows) boosted it. */
+  boostedBy?: UserSummary
 }
+
+/** A reply on another server to a post from there (read from that server, not stored here). */
+export type FediverseReply = { id: string; name: string; handle: string; text: string; url: string | null; createdAt: string }
 
 /** A WieWatWaar without its respect and reactions. */
 export type StatusCore = {

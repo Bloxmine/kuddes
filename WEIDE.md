@@ -196,6 +196,16 @@ Friendships only exist between Weide servers. An account on a server without
     audio) are links too.
   - Kuddes shows these posts in a separate "Fediverse" tab, not between the
     WieWatWaars of members.
+- **Boosts:** an `Announce` from a followed account brings the boosted post,
+  fetched from its own server, with who boosted it. An `Undo` of the
+  `Announce` takes the "boosted by" away again.
+- **Counts and replies:** ActivityPub doesn't carry them, so Kuddes reads
+  them from the server's public Mastodon-style API:
+  - likes, boosts and replies from the account's post list, refreshed at most
+    every 15 minutes when the posts are shown; likes count as respect;
+  - the replies themselves when a member opens them (Mastodon's
+    `/api/v1/statuses/{id}/context`, Pixelfed's
+    `/api/v2/comments/{account}/status/{id}`). They're shown, not stored.
 - **Turning it off:** a server MAY switch following outside Weide off. It
   then refuses new follows and ignores posts that only come in through a
   follow.

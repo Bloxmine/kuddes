@@ -234,6 +234,11 @@ export const statuses = pgTable(
     /** Its pictures, stored here like profile photos (other servers' images can't be shown directly), and where the post is on its server. */
     media: jsonb('media').$type<{ path: string; width: number; height: number; alt: string }[]>(),
     apUrl: text('ap_url'),
+    /** For a post from Mastodon, Pixelfed and the like: its likes, boosts and replies there, and its id in their API (refreshed now and then). */
+    remoteLikes: integer('remote_likes').notNull().default(0),
+    remoteBoosts: integer('remote_boosts').notNull().default(0),
+    remoteReplies: integer('remote_replies').notNull().default(0),
+    remoteApiId: text('remote_api_id'),
     createdAt: createdAt(),
   },
   (t) => [index('statuses_created_idx').on(t.createdAt), index('statuses_user_idx').on(t.userId, t.createdAt), uniqueIndex('statuses_ap_idx').on(t.apId)],
@@ -757,6 +762,8 @@ export const activities = pgTable(
     trackId: integer('track_id').references((): AnyPgColumn => tracks.id, { onDelete: 'cascade' }),
     /** What it was called, for things that don't last (a radio show that went live). */
     title: text('title'),
+    /** A post from elsewhere that came here because an account someone follows boosted it (Announce). */
+    boostedById: integer('boosted_by_id').references(() => users.id, { onDelete: 'set null' }),
     visibility: visibilityEnum('visibility').notNull().default('iedereen'),
     createdAt: createdAt(),
   },
@@ -2195,6 +2202,9 @@ export const remoteActors = pgTable(
     weide: boolean('weide').notNull().default(false),
     /** Where their photo came from, so it's only fetched again when it changes. */
     avatarSource: text('avatar_source'),
+    /** Their id in their server's Mastodon-style API, and when the counts of their posts were last fetched. */
+    apiId: text('api_id'),
+    countsAt: timestamp('counts_at', { withTimezone: true }),
     fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [uniqueIndex('remote_actors_uri_idx').on(t.uri), index('remote_actors_key_idx').on(t.keyId)],

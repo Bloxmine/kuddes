@@ -885,6 +885,12 @@ export function PrivacySettings() {
         onChange={(v) => setPreference('showFediverse', v)}
       />
       <Toggle
+        label="Fediverse ook tussen de rest"
+        hint="Berichten van wie je volgt buiten Kuddes ook in Overzicht → Alles en WieWatWaars, niet alleen onder Fediverse."
+        checked={prefs.fediverseInOverzicht}
+        onChange={(v) => setPreference('fediverseInOverzicht', v)}
+      />
+      <Toggle
         label="Anoniem bezoeken"
         hint="Je komt niet in 'Laatste bezoekers' van profielen die je bekijkt."
         checked={prefs.anonymousVisits}
