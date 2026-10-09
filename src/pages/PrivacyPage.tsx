@@ -221,7 +221,9 @@ export function PrivacyPage() {
                 naam en foto), je WieWatWaars (ook die voor vrienden) en de knuffels en respect die je daar geeft. Meld je iets van iemand op een andere server, dan hoort
                 die server wat er gemeld is en waarom, maar niet dat jij het meldde. Je e-mailadres, wachtwoord, IP-adres en privéberichten gaan nooit naar een andere
                 server. Volg je iemand op Mastodon of een andere server buiten Kuddes, dan krijgt die server je gebruikersnaam, naam en profielfoto
-                (zoals hierboven) en dat je hem volgt; hun openbare berichten worden dan hier bewaard. Wat een andere server met die gegevens doet, valt onder de privacyverklaring van die server; je ziet bij een profiel van elders van welke server
+                (zoals hierboven) en dat je hem volgt; hun openbare berichten worden dan hier bewaard. Mensen op Mastodon, Pixelfed en andere servers kunnen
+                jou ook volgen (zet je dat uit onder Instellingen → Privacy, of is je profiel alleen voor vrienden, dan kan dat niet): hun server krijgt dan je
+                WieWatWaars voor iedereen, met foto’s, en kan die daar openbaar tonen. WieWatWaars voor vrienden gaan nooit naar volgers. Wat een andere server met die gegevens doet, valt onder de privacyverklaring van die server; je ziet bij een profiel van elders van welke server
                 het komt. Van mensen op andere servers bewaart deze server op dezelfde manier wat nodig is: hun naam, foto en wat ze met leden hier delen.
               </li>
               <li>

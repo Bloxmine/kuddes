@@ -11,7 +11,7 @@ import { usePreferences } from './preferences'
 import { keys, useMessageCounts } from './queries'
 import { setTabCount } from './tabBadge'
 
-const KIND_PREF: Record<Notification['kind'], BrowserNotifyKind> = { knuffel: 'notifyKnuffels', mention: 'notifyMentions', reactie: 'notifyReactions', radio: 'notifyRadio', forum: 'notifyForum', kudde: 'notifyReactions', suggestie: 'notifyReactions' }
+const KIND_PREF: Record<Notification['kind'], BrowserNotifyKind> = { knuffel: 'notifyKnuffels', mention: 'notifyMentions', reactie: 'notifyReactions', radio: 'notifyRadio', forum: 'notifyForum', kudde: 'notifyReactions', suggestie: 'notifyReactions', volger: 'notifyRequests' }
 
 /** Calls `onMore(now, before)` when `value` goes up (not for what was already there when the page opened). */
 function useIncrease(value: number | undefined, onMore: (now: number, before: number) => void) {

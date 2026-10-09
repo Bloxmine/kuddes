@@ -673,6 +673,13 @@
       "when": 1791531309623,
       "tag": "0095_remote_media",
       "breakpoints": true
+    },
+    {
+      "idx": 96,
+      "version": "7",
+      "when": 1791534559518,
+      "tag": "0096_follower_notifications",
+      "breakpoints": true
     }
   ]
 }

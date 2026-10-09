@@ -859,7 +859,7 @@ export type ApiError = {
 /** A notification behind the bell (server/lib/notifications.ts). */
 export type Notification = {
   id: number
-  kind: 'knuffel' | 'mention' | 'reactie' | 'radio' | 'forum' | 'kudde' | 'suggestie'
+  kind: 'knuffel' | 'mention' | 'reactie' | 'radio' | 'forum' | 'kudde' | 'suggestie' | 'volger'
   actor: UserSummary
   /** After the actor's name: "heeft een knuffel op je profiel gezet". */
   message: string

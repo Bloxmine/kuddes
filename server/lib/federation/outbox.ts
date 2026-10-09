@@ -7,12 +7,12 @@
 import { createHash } from 'node:crypto'
 import { and, eq, or } from 'drizzle-orm'
 import { db } from '../../db/client'
-import { friendships, knuffels, remoteActors, statuses, users, type User } from '../../db/schema'
+import { friendships, knuffels, remoteActors, remoteFollows, statuses, users, type User } from '../../db/schema'
+import { withDefaults } from '../../../shared/customization'
 import { CONTEXT, PUBLIC, actorDocument, remoteOf, type Remote } from './actors'
 import { textToHtml } from './content'
 import { statusPhotosFor } from '../activities'
-import { uploadUrl } from '../serialize'
-import { baseUrl } from '../siteSettings'
+import { baseUrl, serverInfo } from '../siteSettings'
 import { enqueue, sendNow } from './deliver'
 import { ids, signingKeyOf } from './keys'
 import { federationOn } from './servers'
@@ -37,11 +37,36 @@ async function friendInboxes(userId: number) {
 
 const isLocal = (u: { domain: string | null }) => !u.domain
 
+/** Whether people on Mastodon, Pixelfed and the like may follow this member (their setting, a profile for everyone, and the server allows it). */
+export function mayBeFollowed(user: User) {
+  const prefs = withDefaults(user.preferences)
+  return !user.domain && serverInfo().fediverse && prefs.fediverseFollowers && prefs.profileFor !== 'vrienden'
+}
+
+/** Where a member's followers outside Kuddes get their public posts (each server once). */
+async function followerInboxes(user: User) {
+  if (!mayBeFollowed(user)) return []
+  const rows = await db
+    .select({ inbox: remoteActors.inbox, sharedInbox: remoteActors.sharedInbox })
+    .from(remoteFollows)
+    .innerJoin(remoteActors, eq(remoteActors.userId, remoteFollows.followerId))
+    .where(and(eq(remoteFollows.targetId, user.id), eq(remoteFollows.accepted, true)))
+  return rows.map((r) => r.sharedInbox ?? r.inbox)
+}
+
+/** Everyone elsewhere who gets this member's posts: friends always, followers only what's for everyone. */
+async function audienceOf(user: User, forEveryone: boolean) {
+  return [...(await friendInboxes(user.id)), ...(forEveryone ? await followerInboxes(user) : [])]
+}
+
 // ---------------------------------------------------------------- documents
 
 type StatusRow = typeof statuses.$inferSelect
 
 type Picture = { path: string; width: number; height: number }
+
+/** A stored photo (photos/abc.webp) as a JPEG for other servers (server/routes/federation.ts makes it). */
+const jpegUrl = (path: string) => `${baseUrl()}/fed/media/${path.replace(/\.webp$/, '.jpg')}`
 
 /** The photos with WieWatWaars (their own and open Kudde photos), for sending along. */
 export async function picturesOf(statusIds: number[]) {
@@ -65,7 +90,8 @@ export function statusNote(status: StatusRow, author: { username: string }, pict
     to: open ? [PUBLIC] : [followers],
     cc: open ? [followers] : [],
     ...(pictures.length && {
-      attachment: pictures.map((p) => ({ type: 'Document', mediaType: 'image/webp', url: `${baseUrl()}${uploadUrl(p.path)}`, width: p.width, height: p.height, name: '' })),
+      // As JPEG: Pixelfed and older Mastodon servers don't take WebP
+      attachment: pictures.map((p) => ({ type: 'Document', mediaType: 'image/jpeg', url: jpegUrl(p.path), width: p.width, height: p.height, name: '' })),
     }),
     ...(status.mood && { mood: status.mood }),
     ...(status.where && { where: status.where }),
@@ -173,7 +199,7 @@ export function statusCreated(statusId: number) {
     const [row] = await db.select({ status: statuses, user: users }).from(statuses).innerJoin(users, eq(users.id, statuses.userId)).where(eq(statuses.id, statusId))
     if (!row || !isLocal(row.user) || row.status.kuddeId) return
     const note = statusNote(row.status, row.user, (await picturesOf([statusId])).get(statusId))
-    await enqueue(await friendInboxes(row.user.id), activity('Create', note.attributedTo, note, { id: `${note.id}/activity`, to: note.to, cc: note.cc, published: note.published }), row.user.id)
+    await enqueue(await audienceOf(row.user, row.status.visibility === 'iedereen'), activity('Create', note.attributedTo, note, { id: `${note.id}/activity`, to: note.to, cc: note.cc, published: note.published }), row.user.id)
   })
 }
 
@@ -181,7 +207,7 @@ export function statusDeleted(me: User, statusId: number) {
   if (!isLocal(me)) return
   quietly('WieWatWaar weg', async () => {
     const id = ids.status(statusId)
-    await enqueue(await friendInboxes(me.id), activity('Delete', ids.actor(me.username), { id, type: 'Tombstone' }, { id: `${id}#delete`, to: [PUBLIC] }), me.id)
+    await enqueue(await audienceOf(me, true), activity('Delete', ids.actor(me.username), { id, type: 'Tombstone' }, { id: `${id}#delete`, to: [PUBLIC] }), me.id)
   })
 }
 
@@ -250,7 +276,7 @@ export function profileChanged(userId: number) {
         const [user] = await db.select().from(users).where(eq(users.id, userId))
         if (!user || !isLocal(user)) return
         const doc = await actorDocument(user)
-        await enqueue(await friendInboxes(user.id), activity('Update', doc.id, { ...doc, '@context': undefined }, { id: `${doc.id}#updates/${Date.now()}`, to: [PUBLIC] }), user.id)
+        await enqueue(await audienceOf(user, true), activity('Update', doc.id, { ...doc, '@context': undefined }, { id: `${doc.id}#updates/${Date.now()}`, to: [PUBLIC] }), user.id)
       })
     }, 20_000),
   )
@@ -263,7 +289,7 @@ export function profileChanged(userId: number) {
 export async function accountDeleted(user: User) {
   if (!federationOn() || !isLocal(user)) return
   try {
-    const inboxes = await friendInboxes(user.id)
+    const inboxes = await audienceOf(user, true)
     if (!inboxes.length) return
     const actor = ids.actor(user.username)
     sendNow(inboxes, activity('Delete', actor, actor, { id: `${actor}#delete`, to: [PUBLIC] }), await signingKeyOf(user))

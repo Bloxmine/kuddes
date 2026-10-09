@@ -16,7 +16,8 @@ import { botEvent } from '../bots'
 import { befriend, friendRequestRefusal } from '../friends'
 import { createKnuffel, knuffelRefusal } from '../knuffels'
 import { checkPost } from '../moderation'
-import { unnotify } from '../notifications'
+import { notify, unnotify } from '../notifications'
+import { mayBeFollowed } from './outbox'
 import { removeRelationsBetween } from '../relations'
 import { report } from '../reports'
 import { friendshipBetween } from '../users'
@@ -53,7 +54,7 @@ export async function handleActivity(act: Json, from: Remote) {
   const object = act.object
   switch (type) {
     case 'Follow':
-      return onFollow(idOf(act.id), idOf(object), from)
+      return onFollow(idOf(act.id), idOf(object), from, act.friendship === true || act['weide:friendship'] === true)
     case 'Accept':
       return onAccept(object, from)
     case 'Reject':
@@ -91,12 +92,19 @@ async function answer(type: 'Accept' | 'Reject', local: User, from: Remote, foll
 }
 
 /** A Follow is a friend request (on a Weide server it asks for a friendship; from elsewhere it's the closest thing). */
-async function onFollow(followId: string | null, target: string | null, from: Remote) {
+async function onFollow(followId: string | null, target: string | null, from: Remote, friendship: boolean) {
   const local = await localMember(target)
   if (!followId) return
   if (!local) return
   const existing = await friendshipBetween(local.id, from.user.id)
   if (existing?.status === 'accepted') return answer('Accept', local, from, followId)
+  // Mastodon, Pixelfed and the like follow one way: accepted straight away, unless the member wants friend requests only
+  if (!friendship && !from.actor.weide && mayBeFollowed(local) && (await policyOf(from.user.domain!)) !== 'stil') {
+    const [added] = await db.insert(remoteFollows).values({ followerId: from.user.id, targetId: local.id, accepted: true }).onConflictDoNothing().returning()
+    if (added)
+      await notify({ userIds: [local.id], actorId: from.user.id, kind: 'volger', ref: `volger:${from.user.id}:${local.id}`, message: `volgt je nu vanaf ${from.user.domain}`, link: `/profiel/${from.user.username}` })
+    return answer('Accept', local, from, followId)
+  }
   // A server that's set to "stil" can't start new friendships
   const refused = (!existing && (await policyOf(from.user.domain!)) === 'stil') || (await friendRequestRefusal(from.user, local))
   if (refused) return answer('Reject', local, from, followId)
@@ -136,6 +144,20 @@ async function onEndFollow(object: unknown, from: Remote) {
   const followId = idOf(object)
   if (!followId) return
   const inner = object && typeof object === 'object' ? (object as Json) : null
+  // A follower elsewhere stops following
+  if (inner && idOf(inner.actor) === from.actor.uri) {
+    const member = await localMember(idOf(inner.object))
+    const [gone] = member
+      ? await db
+          .delete(remoteFollows)
+          .where(and(eq(remoteFollows.followerId, from.user.id), eq(remoteFollows.targetId, member.id)))
+          .returning()
+      : []
+    if (gone) {
+      await unnotify(`volger:${from.user.id}:${member!.id}`)
+      return
+    }
+  }
   const local = localId(followId)
   // They don't want to be followed (any more)
   if (local?.kind === 'subscription') {

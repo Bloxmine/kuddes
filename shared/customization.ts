@@ -797,6 +797,8 @@ export type Preferences = {
   messagesFrom: 'iedereen' | 'vrienden' | 'niemand'
   /** Privacy: show your age on your profile. */
   showAge: boolean
+  /** People on Mastodon, Pixelfed and other servers outside Kuddes may follow you (and get your WieWatWaars for everyone); off = they send a friend request instead. */
+  fediverseFollowers: boolean
   /** Overzicht → Fediverse: posts of accounts you follow on Mastodon and other servers (when this server allows it). */
   showFediverse: boolean
   /** Privacy: visit profiles without appearing in their "Laatste bezoekers". */
@@ -863,6 +865,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   showAge: true,
   anonymousVisits: false,
   showFediverse: true,
+  fediverseFollowers: true,
   searchEngines: true,
   avatarPublic: true,
   allowCalls: false,

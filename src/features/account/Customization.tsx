@@ -873,6 +873,12 @@ export function PrivacySettings() {
       </p>
       <Toggle label="Toon mijn leeftijd" hint="Op je profiel en bij Nieuwste leden." checked={prefs.showAge} onChange={(v) => setPreference('showAge', v)} />
       <Toggle
+        label="Volgers buiten Kuddes"
+        hint="Mensen op Mastodon, Pixelfed en andere servers kunnen je volgen. Ze zien dan je WieWatWaars voor iedereen (met foto’s); die voor vrienden niet. Uit: ze sturen een vriendschapsverzoek."
+        checked={prefs.fediverseFollowers}
+        onChange={(v) => setPreference('fediverseFollowers', v)}
+      />
+      <Toggle
         label="Fediverse in Overzicht"
         hint="Een tab met de openbare berichten van wie je volgt op Mastodon en andere servers buiten Kuddes."
         checked={prefs.showFediverse}

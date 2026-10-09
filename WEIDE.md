@@ -88,6 +88,7 @@ uses:
 | --- | --- |
 | Server actor | `/fed/actor` (type `Application`) |
 | Member | `/fed/users/{naam}` |
+| A photo as JPEG | `/fed/media/photos/{name}.jpg` |
 | WieWatWaar | `/fed/statuses/{id}` |
 | Knuffel | `/fed/knuffels/{id}` |
 | Friend request | `/fed/follows/{id}` |
@@ -126,7 +127,7 @@ fields (`inbox`, `outbox`, `followers`, `following`, `endpoints.sharedInbox`,
 
 | Field | Meaning |
 | --- | --- |
-| `manuallyApprovesFollowers` | Always `true`: a friendship is asked for and answered. |
+| `manuallyApprovesFollowers` | `true` (a friendship is asked for and answered), except when accounts outside Weide may follow the member (section 7). |
 | `weideVersion` | `"1.0"`. Its presence marks a Weide account. |
 | `realName` | The real name, next to the display name in `name`. |
 | `skin` | The key of a built-in profile design, or `"eigen"` for the member's own. |
@@ -194,6 +195,20 @@ Friendships only exist between Weide servers. An account on a server without
 - **Turning it off:** a server MAY switch following outside Weide off. It
   then refuses new follows and ignores posts that only come in through a
   follow.
+
+The other way around, accounts outside Weide may follow a member:
+
+- **Following:** a `Follow` without `friendship` from a server without Weide
+  is accepted right away (`Accept`), unless the member turned that off or
+  has a profile for friends only. In those cases it becomes a friend request
+  as before.
+- **What followers get:** the member's WieWatWaars for everyone, profile
+  updates and deletions; never what's for friends only.
+- **`manuallyApprovesFollowers`** in the actor is `false` exactly when
+  followers are accepted like this.
+- **Photos** go out as JPEG (`/fed/media/photos/{name}.jpg`), because
+  Pixelfed and older Mastodon servers don't take WebP. Pixelfed only shows
+  posts with a photo.
 
 ### WieWatWaar (status)
 

@@ -1977,7 +1977,7 @@ export const messengerGroupLines = pgTable(
  * you posted. `ref` is what it's about (e.g. "knuffel:12"), so the same thing
  * notifies you once and goes away with it. Friend requests have their own count.
  */
-export const notificationKindEnum = pgEnum('notification_kind', ['knuffel', 'mention', 'reactie', 'radio', 'forum', 'kudde', 'suggestie'])
+export const notificationKindEnum = pgEnum('notification_kind', ['knuffel', 'mention', 'reactie', 'radio', 'forum', 'kudde', 'suggestie', 'volger'])
 
 export const notifications = pgTable(
   'notifications',

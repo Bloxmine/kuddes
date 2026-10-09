@@ -9,7 +9,11 @@ import { Hono, type Context } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { withDefaults } from '../../shared/customization'
 import { db } from '../db/client'
-import { friendships, knuffels, statuses, users } from '../db/schema'
+import { friendships, knuffels, remoteFollows, statuses, users } from '../db/schema'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+import sharp from 'sharp'
+import { config } from '../config'
 import { notFound, HttpError } from '../lib/errors'
 import { rateLimit } from '../lib/rateLimit'
 import { notHidden } from '../lib/reports'
@@ -161,10 +165,17 @@ export const federationRoutes = new Hono()
   .get('/fed/users/:username/:collection{followers|following}', async (c) => {
     const user = await sharedMember(c.req.param('username'))
     const open = withDefaults(user.preferences).profileFor !== 'vrienden'
-    const [{ n }] = await db
-      .select({ n: count() })
-      .from(friendships)
-      .where(and(eq(friendships.status, 'accepted'), or(eq(friendships.requesterId, user.id), eq(friendships.addresseeId, user.id))))
+    const [[{ n: friends }], [{ n: followers }]] = await Promise.all([
+      db
+        .select({ n: count() })
+        .from(friendships)
+        .where(and(eq(friendships.status, 'accepted'), or(eq(friendships.requesterId, user.id), eq(friendships.addresseeId, user.id)))),
+      db
+        .select({ n: count() })
+        .from(remoteFollows)
+        .where(and(eq(c.req.param('collection') === 'followers' ? remoteFollows.targetId : remoteFollows.followerId, user.id), eq(remoteFollows.accepted, true))),
+    ])
+    const n = friends + followers
     return ap(c, { '@context': CONTEXT, id: `${ids.actor(user.username)}/${c.req.param('collection')}`, type: 'OrderedCollection', totalItems: open ? n : 0 })
   })
 
@@ -186,6 +197,17 @@ export const federationRoutes = new Hono()
       return { id: `${note.id}/activity`, type: 'Create', actor: note.attributedTo, published: note.published, to: note.to, cc: note.cc, object: note }
     })
     return ap(c, { '@context': CONTEXT, id: `${ids.actor(user.username)}/outbox`, type: 'OrderedCollection', totalItems: items.length, orderedItems: items })
+  })
+
+  // A photo as JPEG, for servers that don't take WebP (Pixelfed, older Mastodon); only what's already public under /uploads/photos
+  .get('/fed/media/photos/:name{[\\w-]+\\.jpg}', rateLimit('federatie-media', 600, 60 * 1000), async (c) => {
+    const file = path.join(config.uploadDir, 'photos', c.req.param('name').replace(/\.jpg$/, '.webp'))
+    const data = await readFile(file).catch(() => null)
+    if (!data) throw notFound()
+    c.header('Content-Type', 'image/jpeg')
+    c.header('Cache-Control', 'public, max-age=31536000, immutable')
+    c.header('X-Robots-Tag', 'noindex')
+    return c.body(new Uint8Array(await sharp(data).jpeg({ quality: 85, mozjpeg: true }).toBuffer()))
   })
 
   .post('/fed/inbox', rateLimit('federatie', 1200, 60 * 1000), inboxLimit, receive)

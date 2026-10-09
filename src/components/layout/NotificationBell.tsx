@@ -11,7 +11,7 @@ import { FarmIcon } from '../ui/FarmIcon'
 import type { FarmIconName } from '../ui/farmIcons'
 import './NotificationBell.css'
 
-const KIND_ICONS: Record<Notification['kind'], FarmIconName> = { knuffel: 'teddy_bear', mention: 'user_comment', reactie: 'comments', radio: 'transmit', forum: 'comment_box', kudde: 'tag_blue', suggestie: 'lightbulb' }
+const KIND_ICONS: Record<Notification['kind'], FarmIconName> = { knuffel: 'teddy_bear', mention: 'user_comment', reactie: 'comments', radio: 'transmit', forum: 'comment_box', kudde: 'tag_blue', suggestie: 'lightbulb', volger: 'world_link' }
 
 /**
  * The bell in the top bar: friend and relation requests, and notifications

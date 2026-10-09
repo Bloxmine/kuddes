@@ -15,6 +15,7 @@ import { uploadUrl } from '../serialize'
 import { baseUrl } from '../siteSettings'
 import { removeUpload, storeImage } from '../uploads'
 import { cleanLine, htmlToText, textToHtml } from './content'
+import { mayBeFollowed } from './outbox'
 import { fetchImage, fetchJson, safeFetch } from './http'
 import { ids, instanceKeys, instanceSigningKey, publicKeyOf } from './keys'
 import { describeServer, mayFederateWith } from './servers'
@@ -66,8 +67,8 @@ export async function actorDocument(user: User) {
     followers: `${actor}/followers`,
     following: `${actor}/following`,
     endpoints: { sharedInbox: ids.sharedInbox() },
-    // A friendship is always asked for and answered
-    manuallyApprovesFollowers: true,
+    // Kuddes servers ask for a friendship; Mastodon and the like may just follow, if the member allows it
+    manuallyApprovesFollowers: !mayBeFollowed(user),
     discoverable: open,
     published: user.createdAt.toISOString(),
     ...(avatar && { icon: { type: 'Image', mediaType: 'image/webp', url: `${baseUrl()}${avatar}` } }),
