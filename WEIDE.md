@@ -183,7 +183,10 @@ Friendships only exist between Weide servers. An account on a server without
   - Posts of type `Note`, `Image`, `Article`, `Page` and `Video` are
     accepted, so Pixelfed and the like work too.
   - Kuddes downloads up to four pictures per post and keeps them, with their
-    descriptions (`name`).
+    descriptions (`name`), as that account's photos: in the post and in the
+    Foto's of its profile.
+  - When the first member follows an account, Kuddes also fetches its 20
+    newest posts from its `outbox`, so the profile isn't empty.
   - Pictures of a `sensitive` post stay links; other attachments (video,
     audio) are links too.
   - Kuddes shows these posts in a separate "Fediverse" tab, not between the

@@ -40,6 +40,7 @@ import { automationEvent } from '../lib/automations'
 import { followChanged, friendshipEnded, profileChanged, respected } from '../lib/federation/outbox'
 import { serverInfo } from '../lib/siteSettings'
 import { remoteOf, resolveHandle } from '../lib/federation/actors'
+import { fetchEarlierPosts } from '../lib/federation/inbox'
 import { HANDLE_PATTERN } from '../../shared/federation'
 
 
@@ -377,7 +378,11 @@ export const userRoutes = new Hono<AppEnv>()
     if (!remote || remote.actor.weide) throw new HttpError(400, 'Alleen accounts buiten Kuddes kun je volgen; hier word je vrienden.')
     if (!serverInfo().fediverse) throw new HttpError(403, 'Volgen buiten Kuddes staat uit op deze server.')
     const [row] = await db.insert(remoteFollows).values({ followerId: me.id, targetId: user.id }).onConflictDoNothing().returning()
-    if (row) followChanged(me, user)
+    if (row) {
+      followChanged(me, user)
+      // The first to follow them: their newest posts and photos come here too
+      void fetchEarlierPosts(remote).catch((e) => console.error('[federatie] eerdere berichten:', e))
+    }
     return c.json(await remoteInfo(user, me))
   })
 

@@ -3,13 +3,13 @@
  * server/routes/federation.ts) and is handled here, as the same thing a
  * member here would do. Anything this server doesn't do (yet) is ignored.
  */
-import { and, eq, isNull } from 'drizzle-orm'
+import { and, eq, isNull, sql } from 'drizzle-orm'
 import { STATUS_MAX_LENGTH } from '../../../shared/api'
 import { MOODS } from '../../../shared/moods'
 import { PICKABLE_ICONS } from '../../../shared/icons'
 import { REPORT_KINDS, type ReportKind } from '../../../shared/safety'
 import { db } from '../../db/client'
-import { activities, activityRespects, friendships, knuffels, remoteFollows, respects, statuses, users, type User } from '../../db/schema'
+import { activities, activityRespects, friendships, knuffels, photos, remoteFollows, respects, statuses, statusPhotos, users, type User } from '../../db/schema'
 import { serverInfo } from '../siteSettings'
 import { recordActivity } from '../activities'
 import { botEvent } from '../bots'
@@ -22,11 +22,11 @@ import { report } from '../reports'
 import { friendshipBetween } from '../users'
 import { CONTEXT, PUBLIC, forgetAccount, resolveActor, type Remote } from './actors'
 import { cleanLine, htmlToText } from './content'
-import { fetchImage } from './http'
+import { fetchImage, fetchJson } from './http'
 import { storeImage } from '../uploads'
 import { removeMedia } from './actors'
 import { enqueue } from './deliver'
-import { ids, localId } from './keys'
+import { ids, instanceSigningKey, localId } from './keys'
 import { policyOf } from './servers'
 
 type Json = Record<string, unknown>
@@ -180,7 +180,7 @@ async function onCreate(note: Json, from: Remote) {
 }
 
 /** A WieWatWaar from a friend elsewhere, or a public post of someone a member here follows (Mastodon and the like). */
-async function onStatus(id: string, note: Json, from: Remote) {
+async function onStatus(id: string, note: Json, from: Remote, earlier = false) {
   const [friend] = await db
     .select({ id: friendships.id })
     .from(friendships)
@@ -216,13 +216,22 @@ async function onStatus(id: string, note: Json, from: Remote) {
         visibility,
         apId: id,
         apUrl: link(note.url) ?? id,
-        media: media.length ? media : null,
         createdAt: published(note.published),
       })
       .returning({ id: statuses.id })
+    // Its pictures become their photos here: in the post, and in the Foto's of their profile
+    if (media.length) {
+      const added = await tx
+        .insert(photos)
+        .values(media.map((m) => ({ userId: from.user.id, path: m.path, caption: m.alt.slice(0, 120), description: m.alt, width: m.width, height: m.height, createdAt: published(note.published) })))
+        .returning({ id: photos.id })
+      await tx.insert(statusPhotos).values(added.map((p, position) => ({ statusId: status.id, position, photoId: p.id })))
+    }
     await recordActivity({ type: 'status', actorId: from.user.id, statusId: status.id, visibility, createdAt: published(note.published) }, tx)
     return status.id
   })
+  // Older posts fetched when someone starts following aren't new: no moderation round for those
+  if (earlier) return
   checkPost({
     author: from.user,
     place: 'wiewatwaar',
@@ -307,6 +316,35 @@ function fediverseText(note: Json, text: string, links: string[]) {
   return [warning && `Let op: ${warning}`, text, ...links.map((u) => `Bijlage: ${u}`)].filter(Boolean).join('\n\n')
 }
 
+/**
+ * The first member here follows an account outside Kuddes: its newest posts
+ * (from its outbox) come here too, so its profile and Foto's aren't empty until
+ * it posts again. Oldest first, so they're in order.
+ */
+export async function fetchEarlierPosts(from: Remote) {
+  const [any] = await db.select({ id: statuses.id }).from(statuses).where(eq(statuses.userId, from.user.id)).limit(1)
+  if (any) return
+  const key = await instanceSigningKey()
+  const outboxUrl = str((await fetchJson(from.actor.uri, key)).json.outbox)
+  if (!outboxUrl || new URL(outboxUrl).host !== new URL(from.actor.uri).host) return
+  let page = (await fetchJson(outboxUrl, key)).json
+  // Mastodon and Pixelfed put the posts on the first page
+  const first = page.first
+  if (!Array.isArray(page.orderedItems) && first) page = typeof first === 'string' ? (await fetchJson(first, key)).json : (first as Json)
+  const items = list(page.orderedItems ?? page.items)
+    .filter((a): a is Json => !!a && typeof a === 'object' && (a as Json).type === 'Create')
+    .map((a) => a.object)
+    .filter((o): o is Json => !!o && typeof o === 'object')
+    .slice(0, 20)
+    .reverse()
+  for (const note of items) {
+    const id = idOf(note.id)
+    if (!id || !POST_TYPES.has(String(note.type)) || idOf(note.attributedTo) !== from.actor.uri || note.inReplyTo) continue
+    if (new URL(id).host !== new URL(from.actor.uri).host) continue
+    await onStatus(id, note, from, true)
+  }
+}
+
 async function onUpdate(object: unknown, from: Remote) {
   const id = idOf(object)
   if (id === from.actor.uri) return void (await resolveActor(from.actor.uri, true))
@@ -329,12 +367,24 @@ async function onDelete(id: string | null, from: Remote) {
     .delete(statuses)
     .where(and(eq(statuses.apId, id), eq(statuses.userId, from.user.id)))
     .returning({ id: statuses.id, media: statuses.media })
-  if (status) return removeMedia(status.media)
+  if (status) {
+    await removeMedia(status.media)
+    return removePostPhotos(from.user.id)
+  }
   const [knuffel] = await db
     .delete(knuffels)
     .where(and(eq(knuffels.apId, id), eq(knuffels.authorId, from.user.id)))
     .returning({ id: knuffels.id })
   if (knuffel) await unnotify(`knuffel:${knuffel.id}`)
+}
+
+/** Photos of an account from elsewhere that no longer belong to a post (it was deleted there) go too. */
+async function removePostPhotos(userId: number) {
+  const orphans = await db
+    .delete(photos)
+    .where(and(eq(photos.userId, userId), sql`not exists (select 1 from ${statusPhotos} where ${statusPhotos.photoId} = ${photos.id})`))
+    .returning({ path: photos.path })
+  await removeMedia(orphans)
 }
 
 /** A member elsewhere took a knuffel from here off their profile. */

@@ -9,7 +9,7 @@ import { withDefaults, type Preferences } from '../../../shared/customization'
 import { SKINS } from '../../../shared/skins'
 import { HANDLE_PATTERN } from '../../../shared/federation'
 import { db } from '../../db/client'
-import { federationServers, remoteActors, statuses, users, type User } from '../../db/schema'
+import { federationServers, photos, remoteActors, statuses, users, type User } from '../../db/schema'
 import { profileColorsSchema } from '../customization'
 import { uploadUrl } from '../serialize'
 import { baseUrl } from '../siteSettings'
@@ -231,9 +231,11 @@ export async function removeMedia(media: { path: string }[] | null) {
 /** An account here that came from elsewhere goes, with all it left here (its photo and the pictures of its posts). */
 export async function forgetAccount(user: { id: number; avatarPath: string | null }) {
   const posts = await db.select({ media: statuses.media }).from(statuses).where(and(eq(statuses.userId, user.id), isNotNull(statuses.media)))
+  const pictures = await db.select({ path: photos.path }).from(photos).where(eq(photos.userId, user.id))
   await db.delete(users).where(eq(users.id, user.id))
   await removeUpload(user.avatarPath)
   for (const p of posts) await removeMedia(p.media)
+  await removeMedia(pictures)
 }
 
 /** The account of the actor with this id: from here when it's fresh, else fetched (again). */
