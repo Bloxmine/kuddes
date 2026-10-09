@@ -26,6 +26,10 @@ export const kuddeColumns = {
   visibility: kuddes.visibility,
   photosShareable: kuddes.photosShareable,
   photography: kuddes.photography,
+  remoteActorId: kuddes.remoteActorId,
+  remoteDomain: kuddes.remoteDomain,
+  remoteName: kuddes.remoteName,
+  remoteUrl: kuddes.remoteUrl,
   memberCount,
 }
 
@@ -47,6 +51,7 @@ export const toKudde = (row: KuddeRow): Kudde => ({
   visibility: row.visibility,
   photosShareable: row.photosShareable,
   photography: row.photography,
+  remote: row.remoteActorId && row.remoteDomain ? { domain: row.remoteDomain, handle: `!${row.remoteName}@${row.remoteDomain}`, url: row.remoteUrl } : null,
 })
 
 export async function membershipOf(kuddeId: number, userId: number) {

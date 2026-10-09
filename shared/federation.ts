@@ -70,8 +70,8 @@ export type FederationOverview = {
   queue: { waiting: number; failing: number }
 }
 
-/** A handle like "@naam@server.nl" (or "naam@server.nl"); the server may have a port while testing. */
-export const HANDLE_PATTERN = /^@?([a-z0-9][a-z0-9_.-]*)@([a-z0-9.-]+\.[a-z]{2,}|localhost(?::\d+)?|[a-z0-9.-]+:\d+)$/i
+/** A handle like "@naam@server.nl" (or "naam@server.nl", or "!community@server" for a Lemmy community); the server may have a port while testing. */
+export const HANDLE_PATTERN = /^[@!]?([a-z0-9][a-z0-9_.-]*)@([a-z0-9.-]+\.[a-z]{2,}|localhost(?::\d+)?|[a-z0-9.-]+:\d+)$/i
 
 /** The server part of a remote member's username ("naam@server.nl"), or null for a member of this server. */
 export const serverOf = (username: string) => {

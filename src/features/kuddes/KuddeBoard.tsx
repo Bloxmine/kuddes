@@ -79,7 +79,22 @@ export function KuddeBoard({ kudde }: { kudde: KuddeDetail }) {
         </p>
       ) : (
         <>
-          {member ? (
+          {kudde.remote ? (
+            // A community on another server: read along here, post there
+            <p className="muted kb-join">
+              <FarmIcon name="world_link" /> Dit prikbord komt van <b>{kudde.remote.handle}</b>.{' '}
+              {member ? 'Nieuwe berichten en reacties komen vanzelf binnen.' : 'Word lid om de nieuwe berichten en reacties binnen te krijgen.'} Zelf plaatsen of reageren doe
+              je{' '}
+              {kudde.remote.url ? (
+                <a href={kudde.remote.url} target="_blank" rel="noopener noreferrer nofollow">
+                  op {kudde.remote.domain}
+                </a>
+              ) : (
+                `op ${kudde.remote.domain}`
+              )}
+              .
+            </p>
+          ) : member ? (
             <Composer kudde={kudde} />
           ) : (
             <p className="muted kb-join">{kudde.membership === null ? <><Link to={`/inloggen?next=/kuddes/${kudde.slug}`}>Log in</Link> en word lid om mee te praten.</> : 'Word lid om op het prikbord te posten en mee te stemmen.'}</p>
@@ -437,7 +452,7 @@ function PostCard({ post: p, kudde, member }: { post: KuddePost; kudde: KuddeDet
               )}
             </div>
           ))}
-          {member && (
+          {member && !kudde.remote && (
             <form
               className="kb-reply-form"
               onSubmit={(e) => {

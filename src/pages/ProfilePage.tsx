@@ -108,6 +108,8 @@ function ProfileView({ username }: { username: string }) {
     )
   }
 
+  // A community elsewhere (Lemmy) is a Kudde here
+  if (profile.remote?.kudde) return <Navigate to={`/kuddes/${profile.remote.kudde}`} replace />
   if (profile.locked) return <LockedProfile profile={profile} />
 
   const tabParam = params.get('tab') as ProfileTab | null

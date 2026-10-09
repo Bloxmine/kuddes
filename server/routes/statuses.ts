@@ -1,6 +1,6 @@
 import { POLL_LIMITS } from '../../shared/polls'
 import { checkSoon } from '../lib/achievements'
-import { and, desc, eq, ilike, inArray, isNull, lt, or, sql, type SQL } from 'drizzle-orm'
+import { and, desc, eq, ilike, inArray, isNull, or, sql, type SQL } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { STATUS_MAX_LENGTH, STATUS_MAX_PHOTOS, type Page, type Status } from '../../shared/api'
@@ -79,7 +79,7 @@ export async function loadStatuses(where: SQL | undefined, viewer: User | null, 
     .innerJoin(activities, eq(activities.statusId, statuses.id))
     .leftJoin(kuddes, eq(kuddes.id, statuses.kuddeId))
     .where(and(visibleTo(viewer), where, notHidden('wiewatwaar', statuses.id)))
-    .orderBy(desc(statuses.id))
+    .orderBy(desc(statuses.createdAt), desc(statuses.id))
     .limit(limit + 1)
 
   const page = rows.slice(0, limit)
@@ -103,7 +103,7 @@ export const statusRoutes = new Hono<AppEnv>()
     const q = (c.req.query('q') ?? '').trim().slice(0, 60)
     const pattern = `%${q.replace(/[\\%_]/g, (m) => `\\${m}`)}%`
     const conditions = [
-      before ? lt(statuses.id, before) : undefined,
+      before ? sql`(${statuses.createdAt}, ${statuses.id}) < (select s.created_at, s.id from ${statuses} s where s.id = ${before})` : undefined,
       // Posts from Mastodon and the like are in Overzicht → Fediverse, not here
       sql`${statuses.userId} not in ${fediverseAccounts}`,
       q ? or(ilike(statuses.text, pattern), ilike(statuses.where, pattern), ilike(users.nickname, pattern), ilike(users.name, pattern)) : undefined,
@@ -118,7 +118,7 @@ export const statusRoutes = new Hono<AppEnv>()
     const limit = Math.min(Number(c.req.query('limit')) || PAGE_SIZE, 50)
     return c.json(
       // The ones posted as a Kudde belong to the Kudde, not the profile
-      await loadStatuses(and(eq(statuses.userId, user.id), isNull(statuses.kuddeId), before ? lt(statuses.id, before) : undefined), c.get('user'), limit),
+      await loadStatuses(and(eq(statuses.userId, user.id), isNull(statuses.kuddeId), before ? sql`(${statuses.createdAt}, ${statuses.id}) < (select s.created_at, s.id from ${statuses} s where s.id = ${before})` : undefined), c.get('user'), limit),
     )
   })
 

@@ -1,4 +1,4 @@
-import { and, desc, eq, gt, inArray, isNull, lt, ne, or, sql } from 'drizzle-orm'
+import { and, desc, eq, gt, inArray, isNull, ne, or, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import type { ActivityType } from '../../shared/api'
@@ -124,7 +124,8 @@ export const timelineRoutes = new Hono<AppEnv>()
         : or(and(sql`${activities.actorId} not in ${fediverseAccounts}`, isNull(activities.boostedById)), mixIn ? theirFediverse : undefined),
       types ? inArray(activities.type, types) : undefined,
       friendsOnly ? or(eq(activities.actorId, viewer.id), eq(activities.targetUserId, viewer.id), inArray(activities.actorId, acceptedFriendsOf(viewer.id))) : undefined,
-      Number.isInteger(before) && before > 0 ? lt(activities.id, before) : undefined,
+      // In date order: what's from before the last one shown (posts from elsewhere can come in later than they were written)
+      Number.isInteger(before) && before > 0 ? sql`(${activities.createdAt}, ${activities.id}) < (select a.created_at, a.id from ${activities} a where a.id = ${before})` : undefined,
     )
     return c.json(await loadTimeline(where, c.get('user'), PAGE_SIZE))
   })

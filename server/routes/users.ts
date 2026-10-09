@@ -5,13 +5,13 @@ import { bodyLimit } from 'hono/body-limit'
 import { z } from 'zod'
 import { HIDDEN_STATUS, ONLINE_STATUSES } from '../../shared/onlineStatus'
 import { GAMER_PLATFORMS, GAMER_TAG_MAX, INTERESTS, INTEREST_MAX, type GamerPlatform, type InterestKey } from '../../shared/profileExtras'
-import { MEMBER_PAGE_SIZE, type MemberCard, type Profile } from '../../shared/api'
+import { MEMBER_PAGE_SIZE, type FediverseFollows, type MemberCard, type Profile } from '../../shared/api'
 import { CONSENT_VERSION } from '../../shared/privacy'
 import { withDefaults } from '../../shared/customization'
 import { AVATAR_FRAMES, isAvatarFrame, type AvatarFrame } from '../../shared/frames'
 import { PROFILE_CURSORS, isProfileCursor, type ProfileCursor } from '../../shared/cursors'
 import { db } from '../db/client'
-import { activities, friendships, photos, profileVisits, remoteFollows, respects, users, type User } from '../db/schema'
+import { activities, friendships, kuddes, photos, profileVisits, remoteFollows, respects, users, type User } from '../db/schema'
 import { recordActivity } from '../lib/activities'
 import { HttpError, parse } from '../lib/errors'
 import { hashPassword, verifyPassword } from '../lib/password'
@@ -66,9 +66,11 @@ async function remoteInfo(user: User, viewer: User | null): Promise<NonNullable<
         .from(remoteFollows)
         .where(and(eq(remoteFollows.followerId, viewer.id), eq(remoteFollows.targetId, user.id)))
     : []
+  const [kudde] = await db.select({ slug: kuddes.slug }).from(kuddes).where(eq(kuddes.remoteActorId, user.id))
   return {
     domain: user.domain!,
     url: remote?.actor.url ?? null,
+    kudde: kudde?.slug ?? null,
     weide: remote?.actor.weide ?? false,
     following: follow ? (follow.accepted ? 'following' : 'pending') : 'none',
   }
@@ -407,6 +409,27 @@ export const userRoutes = new Hono<AppEnv>()
       .returning()
     if (row) followChanged(me, user, true)
     return c.json(user.domain ? await remoteInfo(user, me) : null)
+  })
+
+  // Who you follow outside Kuddes and who follows you from there (Vrienden → Buiten Kuddes)
+  .get('/me/fediverse-follows', async (c) => {
+    const me = requireUser(c)
+    const notACommunity = sql`not exists (select 1 from ${kuddes} k where k.remote_actor_id = ${users.id})`
+    const [following, followers] = await Promise.all([
+      db
+        .select({ ...summaryColumns, accepted: remoteFollows.accepted })
+        .from(remoteFollows)
+        .innerJoin(users, eq(users.id, remoteFollows.targetId))
+        .where(and(eq(remoteFollows.followerId, me.id), notACommunity))
+        .orderBy(asc(sql`lower(${users.nickname})`)),
+      db
+        .select(summaryColumns)
+        .from(remoteFollows)
+        .innerJoin(users, eq(users.id, remoteFollows.followerId))
+        .where(and(eq(remoteFollows.targetId, me.id), eq(remoteFollows.accepted, true)))
+        .orderBy(asc(sql`lower(${users.nickname})`)),
+    ])
+    return c.json({ following: following.map((u) => ({ ...toSummary(u), accepted: u.accepted })), followers: followers.map(toSummary) } satisfies FediverseFollows)
   })
 
   // Cancel a request, decline one, or end a friendship

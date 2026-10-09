@@ -19,6 +19,7 @@ import { mayBeFollowed } from './outbox'
 import { fetchImage, fetchJson, safeFetch } from './http'
 import { ids, instanceKeys, instanceSigningKey, publicKeyOf } from './keys'
 import { describeServer, mayFederateWith } from './servers'
+import { kuddeForGroup } from './groups'
 
 /** Weide's own terms, next to ActivityStreams and the security vocabulary (WEIDE.md, "Context"). */
 export const WEIDE_NS = 'https://w3id.org/weide#'
@@ -107,7 +108,8 @@ export async function instanceDocument() {
 
 export type Remote = { user: User; actor: typeof remoteActors.$inferSelect }
 
-const ACTOR_TYPES = new Set(['Person', 'Service', 'Application', 'Organization'])
+// A Group is a community (Lemmy and the like): it becomes a Kudde here (groups.ts)
+const ACTOR_TYPES = new Set(['Person', 'Service', 'Application', 'Organization', 'Group'])
 const REFRESH_MS = 24 * 60 * 60 * 1000
 const str = (v: unknown) => (typeof v === 'string' ? v : null)
 /** A link may be a string or an object with an id or href (and icons an array of them). */
@@ -221,6 +223,7 @@ async function storeActor(json: Record<string, unknown>, fetchedFrom: string): P
     .values({ domain: host, weide, lastSeenAt: new Date() })
     .onConflictDoUpdate({ target: federationServers.domain, set: { weide, lastSeenAt: new Date() } })
   void describeServer(host, new URL(uri).origin)
+  if (type === 'Group') await kuddeForGroup({ user, actor }, json)
   return { user, actor }
 }
 
@@ -288,8 +291,11 @@ export async function resolveHandle(handle: string): Promise<Remote | null> {
       headers: { Accept: 'application/jrd+json, application/json' },
     })
     if (!res.ok) return null
-    const links = (JSON.parse(body) as { links?: { rel?: string; type?: string; href?: string }[] }).links ?? []
-    const self = links.find((l) => l.rel === 'self' && /activity\+json|ld\+json/.test(l.type ?? ''))?.href
+    const links = (JSON.parse(body) as { links?: { rel?: string; type?: string; href?: string; properties?: Record<string, string> }[] }).links ?? []
+    const selves = links.filter((l) => l.rel === 'self' && /activity\+json|ld\+json/.test(l.type ?? ''))
+    // "!naam@server" is a community; Lemmy lists a person and a community with the same name both
+    const isGroup = (l: (typeof selves)[number]) => Object.values(l.properties ?? {}).includes('Group')
+    const self = (handle.trim().startsWith('!') ? (selves.find(isGroup) ?? selves[0]) : (selves.find((l) => !isGroup(l)) ?? selves[0]))?.href
     return self ? await resolveActor(self, true) : null
   } catch {
     return null

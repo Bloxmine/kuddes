@@ -82,6 +82,8 @@ export type Profile = UserSummary & {
     weide: boolean
     /** Whether the viewer follows them (only for accounts that aren't on a Kuddes server). */
     following: 'none' | 'pending' | 'following'
+    /** A community (Lemmy): it's a Kudde here, this one. */
+    kudde: string | null
   } | null
   /** Whether the viewer may send a personal message (members can limit it). */
   canMessage: boolean
@@ -552,6 +554,12 @@ export type Social = {
   boostedBy?: UserSummary
 }
 
+/** Who you follow outside Kuddes (Mastodon, Pixelfed…), and who follows you from there; communities are Kuddes instead. */
+export type FediverseFollows = {
+  following: (UserSummary & { accepted: boolean })[]
+  followers: UserSummary[]
+}
+
 /** A reply on another server to a post from there (read from that server, not stored here). */
 export type FediverseReply = { id: string; name: string; handle: string; text: string; url: string | null; createdAt: string }
 
@@ -677,6 +685,8 @@ export type Kudde = {
   photosShareable: boolean
   /** A photography Kudde (photos with camera details, on /fotografie). */
   photography: boolean
+  /** A community on another server (Lemmy and the like): joining follows it, its posts come in, and it's read-only here. */
+  remote: { domain: string; handle: string; url: string | null } | null
 }
 
 export type KuddeMembership = 'owner' | 'member' | 'pending' | 'none'

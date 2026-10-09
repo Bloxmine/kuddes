@@ -17,6 +17,10 @@ import { notify } from '../lib/notifications'
 import { findUser, summaryColumns, requireProfileAccess } from '../lib/users'
 import { ownsImages, profileColorsSchema } from '../lib/customization'
 import { checkSoon } from '../lib/achievements'
+import { groupMembershipChanged } from '../lib/federation/groups'
+import { resolveHandle } from '../lib/federation/actors'
+import { HANDLE_PATTERN } from '../../shared/federation'
+import { serverInfo } from '../lib/siteSettings'
 import { clientIp } from '../lib/clientIp'
 
 const optional = (max: number, label: string) =>
@@ -128,6 +132,12 @@ export const kuddeRoutes = new Hono<AppEnv>()
     const sub = c.req.query('sub')
     const q = (c.req.query('q') ?? '').trim().slice(0, 60)
     const pattern = `%${q.replace(/[\\%_]/g, (m) => `\\${m}`)}%`
+    // "!community@lemmy.world": looked up there, and a Kudde from then on
+    if (c.get('user') && HANDLE_PATTERN.test(q) && serverInfo().fediverse) {
+      const remote = await resolveHandle(q.startsWith('@') ? `!${q.slice(1)}` : q.startsWith('!') ? q : `!${q}`).catch(() => null)
+      const [kudde] = remote ? await db.select(kuddeColumns).from(kuddes).where(eq(kuddes.remoteActorId, remote.user.id)) : []
+      if (kudde) return c.json([toKudde(kudde)])
+    }
     const rows = await db
       .select(kuddeColumns)
       .from(kuddes)
@@ -328,6 +338,8 @@ export const kuddeRoutes = new Hono<AppEnv>()
         .returning({ userId: kuddeMembers.userId })
       if (joined.length && role === 'member') await recordActivity({ type: 'kudde_join', actorId: me.id, kuddeId: kudde.id }, tx)
     })
+    // A community elsewhere (Lemmy): joining follows it there
+    await groupMembershipChanged(me, kudde, true)
     return c.json({ membership: await membershipOf(kudde.id, me.id) })
   })
 
@@ -342,6 +354,7 @@ export const kuddeRoutes = new Hono<AppEnv>()
     await db
       .delete(activities)
       .where(and(eq(activities.type, 'kudde_join'), eq(activities.actorId, me.id), eq(activities.kuddeId, kudde.id)))
+    await groupMembershipChanged(me, kudde, false)
     return c.json({ membership: 'none' })
   })
 

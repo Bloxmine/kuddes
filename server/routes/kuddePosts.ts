@@ -56,6 +56,11 @@ async function readersOf(kudde: KuddeRow, ids: number[]) {
   return rows.map((r) => r.id)
 }
 
+/** A community on another server (Lemmy): you read along here, and post on its own server. */
+function readOnlyCommunity(kudde: { remoteActorId: number | null; remoteDomain: string | null }) {
+  if (kudde.remoteActorId) throw new HttpError(403, `Deze Kudde is een community op ${kudde.remoteDomain}. Plaatsen en reageren doe je (nog) daar.`)
+}
+
 function mustBeMember(role: Role) {
   if (!isMember(role)) throw new HttpError(403, 'Word eerst lid van deze Kudde.')
 }
@@ -193,6 +198,7 @@ export const kuddePostRoutes = new Hono<AppEnv>()
     async (c) => {
       const me = requireVerified(c)
       const kudde = await findKudde(c.req.param('slug'))
+      readOnlyCommunity(kudde)
       const role = await rightsOf(kudde.id, me.id)
       mustBeMember(role)
       const body = await c.req.parseBody()
@@ -298,6 +304,7 @@ export const kuddePostRoutes = new Hono<AppEnv>()
   .post('/kudde-posts/:id{[0-9]+}/replies', rateLimit('reacties', 120, 60 * 60 * 1000), async (c) => {
     const me = requireVerified(c)
     const { post, kudde, role } = await findPost(Number(c.req.param('id')), me)
+    readOnlyCommunity(kudde)
     mustBeMember(role)
     const input = parse(z.object({ text: text(KUDDE_POST_LIMITS.reply, 'Je reactie').min(1, 'Schrijf een reactie.') }), await c.req.json().catch(() => null))
     const [reply] = await db.insert(kuddePostReplies).values({ postId: post.id, userId: me.id, text: input.text }).returning({ id: kuddePostReplies.id })

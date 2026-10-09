@@ -513,10 +513,20 @@ export const kuddes = pgTable(
     info: jsonb('info').$type<KuddeInfo>(),
     /** How often the page was opened (for the Bezoekersteller gadget). */
     views: integer('views').notNull().default(0),
+    /**
+     * A community on another server (Lemmy and the like): its Group account here
+     * (users, remote_actors), its server, its name there and its page. Joining
+     * follows it; its posts come in as posts on the Prikbord.
+     */
+    remoteActorId: integer('remote_actor_id').references((): AnyPgColumn => users.id, { onDelete: 'cascade' }),
+    remoteDomain: text('remote_domain'),
+    remoteName: text('remote_name'),
+    remoteUrl: text('remote_url'),
     createdAt: createdAt(),
   },
   (t) => [
     uniqueIndex('kuddes_slug_idx').on(t.slug),
+    uniqueIndex('kuddes_remote_idx').on(t.remoteActorId),
     uniqueIndex('kuddes_name_idx').on(sql`lower(${t.name})`),
     index('kuddes_category_idx').on(t.category),
   ],
@@ -563,9 +573,11 @@ export const kuddePosts = pgTable(
     poll: jsonb('poll').$type<{ question: string; options: string[]; closed: boolean }>(),
     /** Pinned by the owner: shown above the other posts (one at a time). */
     pinnedAt: timestamp('pinned_at', { withTimezone: true }),
+    /** A post in a community elsewhere (Lemmy): its ActivityPub id. */
+    apId: text('ap_id'),
     createdAt: createdAt(),
   },
-  (t) => [index('kudde_posts_kudde_idx').on(t.kuddeId, t.id), index('kudde_posts_user_idx').on(t.userId)],
+  (t) => [index('kudde_posts_kudde_idx').on(t.kuddeId, t.id), index('kudde_posts_user_idx').on(t.userId), uniqueIndex('kudde_posts_ap_idx').on(t.apId)],
 )
 
 /** Photos members add to a Kudde's own Foto's box. */
@@ -653,9 +665,11 @@ export const kuddePostReplies = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     text: text('text').notNull(),
+    /** A comment in a community elsewhere (Lemmy): its ActivityPub id. */
+    apId: text('ap_id'),
     createdAt: createdAt(),
   },
-  (t) => [index('kudde_post_replies_post_idx').on(t.postId, t.id)],
+  (t) => [index('kudde_post_replies_post_idx').on(t.postId, t.id), uniqueIndex('kudde_post_replies_ap_idx').on(t.apId)],
 )
 
 /** Events ("evenementen") posted on a Kudde by its members; they fill the Agenda. */
@@ -770,6 +784,8 @@ export const activities = pgTable(
   (t) => [
     index('activities_actor_idx').on(t.actorId, t.id),
     index('activities_type_idx').on(t.type, t.id),
+    // The timeline is in date order
+    index('activities_created_idx').on(t.createdAt, t.id),
     uniqueIndex('activities_status_idx').on(t.statusId),
     uniqueIndex('activities_blog_idx').on(t.blogId),
   ],

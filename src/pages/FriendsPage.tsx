@@ -1,7 +1,7 @@
 import { FarmIcon } from '../components/ui/FarmIcon'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import type { Me, UserSummary } from '../../shared/api'
+import type { FediverseFollows, Me, UserSummary } from '../../shared/api'
 import { RequireAuth } from '../components/layout/RequireAuth'
 import { Avatar } from '../components/ui/Avatar'
 import { Box } from '../components/ui/Box'
@@ -12,6 +12,8 @@ import { formatTime } from '../lib/time'
 import { usePageTitle } from '../lib/usePageTitle'
 import './AccountPages.css'
 import { RelationRequests } from '../features/relations/Relations'
+import { useServerInfo } from '../features/federation/serverInfo'
+import '../features/federation/Federation.css'
 
 function useFriendAction(me: Me) {
   const queryClient = useQueryClient()
@@ -42,6 +44,50 @@ function MemberRow({ user, meta, children }: { user: UserSummary; meta?: string;
       </div>
       {children && <div className="member-list-actions">{children}</div>}
     </li>
+  )
+}
+
+/** Who you follow on Mastodon, Pixelfed and the like, and who follows you from there. */
+function FediverseFollowsBox() {
+  const queryClient = useQueryClient()
+  const server = useServerInfo()
+  const { data } = useQuery({ queryKey: ['fediverse-follows'], queryFn: () => api<FediverseFollows>('/me/fediverse-follows') })
+  const unfollow = useMutation({
+    mutationFn: (username: string) => api<unknown>(`/users/${username}/follow`, { method: 'DELETE' }),
+    onSuccess: (_, username) =>
+      Promise.all([queryClient.invalidateQueries({ queryKey: ['fediverse-follows'] }), queryClient.invalidateQueries({ queryKey: keys.profile(username) })]),
+  })
+  if (!data || (!server?.fediverse && !data.following.length && !data.followers.length)) return null
+  return (
+    <Box title="Buiten Kuddes" icon="world_link">
+      <h3 className="fd-h">Je volgt ({data.following.length})</h3>
+      {data.following.length === 0 ? (
+        <p className="empty">
+          Je volgt nog niemand op Mastodon, Pixelfed of een andere server. Zoek iemand op met <b>@naam@server</b>.
+        </p>
+      ) : (
+        <ul className="member-list">
+          {data.following.map((u) => (
+            <MemberRow key={u.id} user={u} meta={`@${u.username}${u.accepted ? '' : ' · volgverzoek verstuurd'}`}>
+              <Button disabled={unfollow.isPending} onClick={() => confirm(`${u.nickname} niet meer volgen?`) && unfollow.mutate(u.username)}>
+                Niet meer volgen
+              </Button>
+            </MemberRow>
+          ))}
+        </ul>
+      )}
+      <h3 className="fd-h">Volgen jou ({data.followers.length})</h3>
+      {data.followers.length === 0 ? (
+        <p className="empty">Nog niemand van buiten Kuddes. Mensen op Mastodon of Pixelfed vinden je als @jouwnaam@{server?.domain ?? 'deze-server'}.</p>
+      ) : (
+        <ul className="member-list">
+          {data.followers.map((u) => (
+            <MemberRow key={u.id} user={u} meta={`@${u.username}`} />
+          ))}
+        </ul>
+      )}
+      {unfollow.isError && <p className="form-error">{errorMessage(unfollow.error)}</p>}
+    </Box>
   )
 }
 
@@ -101,6 +147,8 @@ function FriendsOverview({ me }: { me: Me }) {
               </ul>
             )}
           </Box>
+
+          <FediverseFollowsBox />
         </div>
         <aside className="sticky-side">
           <Box title="Verstuurde verzoeken" icon="time">

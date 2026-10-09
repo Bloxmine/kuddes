@@ -224,6 +224,28 @@ The other way around, accounts outside Weide may follow a member:
   Pixelfed and older Mastodon servers don't take WebP. Pixelfed only shows
   posts with a photo.
 
+### Communities (Lemmy and the like)
+
+A community is an ActivityPub `Group`. On a Weide server it becomes a Kudde:
+
+- **Finding it:** `!naam@server` (WebFinger; when a person and a community
+  share a name, the `!` picks the link whose `properties` say `Group`).
+- **Joining:** joining the Kudde sends a `Follow` to the Group as the member
+  (an `Undo` when they leave). The first member's join also reads the Group's
+  `outbox`, so the newest posts are there right away.
+- **What comes in:** the Group sends `Announce` activities wrapping a
+  `Create`, `Update`, `Delete` or `Remove`.
+  - A `Page` (or a `Note` without `inReplyTo`) becomes a post on the Kudde's
+    Prikbord: the title in bold, the text, the link it's about, and its
+    picture stored here.
+  - A `Note` with `inReplyTo` becomes a reply under the post it belongs to
+    (replies to replies go under the same post).
+  - A `Delete` or `Remove` takes them away again.
+- **Trust:** what the Group passes on from accounts on other servers is
+  fetched again from its own server, not taken from the announcement.
+- **Read-only:** members read along here and post on the community's own
+  server (posting through Weide comes in a later version).
+
 ### WieWatWaar (status)
 
 A WieWatWaar is a `Create` of a `Note`:

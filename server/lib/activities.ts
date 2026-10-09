@@ -234,7 +234,7 @@ export async function loadTimeline(where: SQL | undefined, viewer: User | null, 
         sql`(${activities.blogId} is null or ${notHidden('blog', activities.blogId)})`,
       ),
     )
-    .orderBy(desc(activities.id))
+    .orderBy(desc(activities.createdAt), desc(activities.id))
     .limit(limit + 1)
   const page = rows.slice(0, limit)
   if (!page.length) return { items: [], nextCursor: null }

@@ -25,6 +25,7 @@ import { CONTEXT, PUBLIC, forgetAccount, resolveActor, type Remote } from './act
 import { cleanLine, htmlToText } from './content'
 import { fetchImage, fetchJson } from './http'
 import { recentFromApi, refreshCounts } from './api'
+import { kuddeOfGroup, onGroupAnnounce } from './groups'
 import { storeImage } from '../uploads'
 import { removeMedia } from './actors'
 import { enqueue } from './deliver'
@@ -78,6 +79,8 @@ export async function handleActivity(act: Json, from: Remote) {
     case 'Like':
       return onLike(idOf(object), from, false)
     case 'Announce':
+      // A community passes on what's posted in it; anyone else boosts
+      if (await kuddeOfGroup(from.user.id)) return onGroupAnnounce(object, from)
       return onBoost(idOf(object), from, false)
     case 'Flag':
       return onFlag(act, from)
@@ -222,7 +225,7 @@ async function onStatus(id: string, note: Json, from: Remote, earlier = false, b
   const [known] = await db.select({ id: statuses.id }).from(statuses).where(eq(statuses.apId, id))
   if (known) {
     // Already here: now it's also boosted by someone followed
-    if (boostedBy) await db.update(activities).set({ boostedById: boostedBy.user.id }).where(eq(activities.statusId, known.id))
+    if (boostedBy) await db.update(activities).set({ boostedById: boostedBy.user.id, createdAt: earlier ? undefined : new Date() }).where(eq(activities.statusId, known.id))
     return
   }
   const { images, links } = attachmentsOf(note)
@@ -257,7 +260,7 @@ async function onStatus(id: string, note: Json, from: Remote, earlier = false, b
         .returning({ id: photos.id })
       await tx.insert(statusPhotos).values(added.map((p, position) => ({ statusId: status.id, position, photoId: p.id })))
     }
-    await recordActivity({ type: 'status', actorId: from.user.id, statusId: status.id, visibility, createdAt: published(note.published), boostedById: boostedBy?.user.id ?? null }, tx)
+    await recordActivity({ type: 'status', actorId: from.user.id, statusId: status.id, visibility, createdAt: boostedBy && !earlier ? new Date() : published(note.published), boostedById: boostedBy?.user.id ?? null }, tx)
     return status.id
   })
   // Older posts fetched when someone starts following aren't new: no moderation round for those
