@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local config and user uploads
+.env
+uploads/
+
+# BuddyPoke (the HTML5 port) is its own repository; clone it into web/ (see README)
+/web/
+
+# Build info
+*.tsbuildinfo
+
+# Bejeweled 3 (games/bejeweled): the code is in this repo, but the art, sound
+# and music come from an installed copy of the game (tools/build_assets.py),
+# so they stay out of git; copy them to the server like BuddyPoke (DEPLOY.md)
+games/bejeweled/extracted/
+games/bejeweled/web/assets/
+games/bejeweled/tools/quickbms
+__pycache__/
+
+# Mario Kart Wii sprites (Nintendo's): not in the repository; a server may put
+# them in public/mkwii/ itself (DEPLOY.md), else the gadget shows names only
+public/mkwii/

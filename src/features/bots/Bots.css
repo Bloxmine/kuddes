@@ -1,0 +1,192 @@
+/* Beheer → Bots (BotsAdmin.tsx) */
+.bot-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bot-item {
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.bot-item.off .bot-head {
+  opacity: 0.7;
+}
+
+.bot-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bot-who {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.bot-kinds {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.bot-kinds label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.bot-kinds label.on {
+  border-color: var(--box-border);
+  background: var(--tint-2);
+}
+
+.bot-kinds span {
+  display: grid;
+}
+
+.bot-editor {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.bot-editor h3 {
+  margin: 6px 0 0;
+  color: var(--title);
+  font-size: 12px;
+}
+
+.bot-rule {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.bot-rule.off {
+  opacity: 0.65;
+}
+
+.bot-rule-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.bot-rule-line select {
+  width: auto;
+  max-width: 100%;
+}
+
+.bot-time {
+  width: auto;
+}
+
+.bot-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.bot-checks label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bot-try {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px dashed var(--box-border);
+  border-radius: 6px;
+}
+
+.bot-steps {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.bot-said {
+  white-space: pre-wrap;
+}
+
+.bot-options {
+  display: grid;
+  gap: 6px;
+}
+
+.bot-options > label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 6px;
+  align-items: center;
+}
+
+.bot-options > label small {
+  grid-column: 2;
+}
+
+.bot-number {
+  width: 64px;
+}
+
+.bot-watch {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.bot-watch-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.bot-watch-side {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+}
+
+.bot-behaviours {
+  display: grid;
+  gap: 6px;
+}
+
+.bot-rule-line.off > :not(label) {
+  opacity: 0.55;
+}
+
+.bot-behaviours small {
+  flex-basis: 100%;
+}
+
+@media (max-width: 700px) {
+  .bot-watch-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

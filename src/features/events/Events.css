@@ -1,0 +1,374 @@
+/* Events and the Agenda */
+
+/* A tear-off calendar page: month on a red band */
+.event-date {
+  display: grid;
+  flex: none;
+  width: 46px;
+  overflow: hidden;
+  border: 1px solid #c9c9c9;
+  border-radius: 6px;
+  background: linear-gradient(#fff, #f1f1f1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.event-date-month {
+  padding: 1px 0;
+  background: linear-gradient(#f26b6b, #c83c3c);
+  color: #fff;
+  font: bold 10px/1.4 var(--font-body);
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.event-date-day {
+  padding: 2px 0 3px;
+  color: #222;
+  font: bold 20px/1.1 var(--font-title);
+}
+
+.event-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.event-row:last-child {
+  border-bottom: 0;
+}
+
+.event-row-info {
+  display: grid;
+  flex: 1;
+  gap: 1px;
+  min-width: 0;
+}
+
+.event-title {
+  font: bold 14px var(--font-title);
+}
+
+.event-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.event-row-side {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  font-size: 11px;
+  text-align: right;
+}
+
+.event-going b {
+  color: var(--title);
+  font-size: 13px;
+}
+
+.attend-buttons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.attend-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* The chosen answer turns green-glossy but keeps the size of the other button */
+.btn-cta.attend-btn {
+  padding: 3px 11px;
+  border-radius: 5px;
+  font: bold 11px/15px var(--font-body);
+}
+
+.btn.attend-btn.compact {
+  min-width: 0;
+  padding: 1px 7px;
+  font-size: 10px;
+}
+
+.btn-cta.attend-btn.compact {
+  font: bold 10px/15px var(--font-body);
+}
+
+/* Narrow columns: the buttons go under the text */
+.event-list.compact .event-row {
+  flex-wrap: wrap;
+}
+
+.event-list.compact .event-row-side {
+  justify-items: start;
+  width: 100%;
+  padding-left: 58px;
+  text-align: left;
+}
+
+.event-list.compact .event-title {
+  font-size: 13px;
+}
+
+/* Event page */
+.event-detail-head {
+  display: flex;
+  gap: 14px;
+}
+
+.event-detail-head .event-date {
+  width: 64px;
+}
+
+.event-detail-head .event-date-day {
+  font-size: 30px;
+}
+
+.event-detail-head h1 {
+  margin-bottom: 4px;
+  font-size: 24px;
+}
+
+.event-detail-head .event-meta {
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+.event-description {
+  margin: 14px 0 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.event-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.event-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.event-form {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.event-form .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Agenda */
+.agenda-tabs {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agenda-tabs .timeline-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.agenda-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.agenda-intro {
+  margin: 6px 0 10px;
+  font-size: 12px;
+}
+
+.calendar-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  transition: opacity 0.15s;
+}
+
+.calendar.loading {
+  opacity: 0.6;
+}
+
+.calendar-weekday {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--tint-1);
+  color: var(--title-soft);
+  font: bold 11px var(--font-body);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.calendar-day {
+  min-height: 86px;
+  padding: 3px 4px;
+  border-right: 1px solid var(--row-border);
+  border-bottom: 1px solid var(--row-border);
+  cursor: pointer;
+  outline-offset: -2px;
+}
+
+.calendar-day:nth-child(7n) {
+  border-right: 0;
+}
+
+.calendar-day:hover {
+  background: var(--tint-1);
+}
+
+.calendar-day.other {
+  background: color-mix(in srgb, var(--tint-1) 60%, transparent);
+  color: var(--text-muted);
+}
+
+.calendar-day.other .calendar-num {
+  opacity: 0.6;
+}
+
+.calendar-day.selected {
+  background: var(--tint-2);
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.calendar-num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  font: bold 11px var(--font-body);
+}
+
+.calendar-day.today .calendar-num {
+  background: var(--highlight);
+  color: #fff;
+}
+
+.calendar-day ul {
+  display: grid;
+  gap: 2px;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calendar-day li a {
+  display: block;
+  overflow: hidden;
+  padding: 1px 4px;
+  border-left: 3px solid var(--brand);
+  border-radius: 3px;
+  background: var(--tint-2);
+  color: var(--title);
+  font-size: 10px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-day li a:hover {
+  text-decoration: none;
+  filter: brightness(0.95);
+}
+
+.calendar-day li.mine.ja a,
+.legend.ja {
+  border-left-color: #2e9e4a;
+  background: #d8f5d8;
+  color: #1c4d24;
+}
+
+.calendar-day li.mine.misschien a,
+.legend.misschien {
+  border-left-color: #e0a100;
+  background: #fff1c2;
+  color: #5a4200;
+}
+
+.calendar-day li.more {
+  padding-left: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.legend {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  margin-left: 6px;
+  border-left: 3px solid;
+  border-radius: 2px;
+}
+
+@media (max-width: 640px) {
+  .calendar-day {
+    min-height: 54px;
+  }
+
+  .calendar-day li a {
+    font-size: 0;
+    height: 6px;
+    padding: 0;
+  }
+}
+
+/* The pin stays with the address when it wraps */
+.event-place {
+  display: inline;
+}
+
+.event-place .farm-icon {
+  margin-right: 2px;
+}

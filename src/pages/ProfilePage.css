@@ -1,0 +1,730 @@
+/* A "gepimpt" profile gets its own full-width background */
+.profile {
+  margin-top: 12px;
+  padding: 1px 0 12px;
+}
+
+.profile.skinned {
+  background: var(--profile-bg);
+  /* Text inherits the page's computed colour, so the design has to set it again */
+  color: var(--text);
+}
+
+.profile.skinned:not(.profile-preview) {
+  /* The design's own background, in a layer that fades in at the top and out
+     at the bottom, so it blends into the page (or a seasonal night sky)
+     instead of starting with a hard edge. The layer is behind the content;
+     isolation keeps it above the site's own background decorations. */
+  position: relative;
+  isolation: isolate;
+  margin-top: 0;
+  padding-top: 13px;
+  background: none;
+}
+
+.profile.skinned:not(.profile-preview)::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--profile-bg);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+  pointer-events: none;
+  content: '';
+}
+
+.profile .page-con {
+  margin-top: 12px;
+}
+
+/* Header box: avatar, name and the profile menu */
+.profile-hdr {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px 0;
+  /* A design can give the title bar its own pattern (shared/customization.ts, headerVars) */
+  background: var(--profile-hdr-bg, linear-gradient(to bottom, var(--surface) 0%, var(--surface) 60%, var(--box-hdr-bottom) 100%));
+}
+
+.profile-hdr-info {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+.profile-hdr-info > .avatar {
+  margin-bottom: 8px;
+}
+
+.profile-hdr h1 {
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 8px;
+  padding: var(--profile-name-pad, 0);
+  border-radius: 10px;
+  background: var(--profile-name-plate, none);
+  color: var(--profile-name-color, var(--title));
+  font-family: var(--profile-name-font, var(--font-title));
+  text-shadow: var(--profile-name-shadow, none);
+  overflow-wrap: anywhere;
+  /* "Neon": a flicker now and then (headerVars) */
+  animation: var(--profile-name-anim, none);
+}
+
+.profile-hdr h1 small {
+  font-size: 13px;
+  color: var(--profile-name-soft, var(--text-muted));
+  font-weight: normal;
+}
+
+.profile-menu {
+  display: flex;
+  flex-wrap: wrap;
+  font: bold 13px/1.38 var(--font-title);
+  margin-bottom: -1px;
+}
+
+.profile-menu > li {
+  position: relative;
+}
+
+.profile-menu > li > button {
+  display: block;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--profile-tab-bg, none);
+  color: var(--link);
+  font: inherit;
+  cursor: pointer;
+}
+
+.profile-menu > li > button:hover {
+  text-decoration: underline;
+}
+
+.profile-menu > li.current > button {
+  padding: 4px 15px 5px;
+  border-color: var(--box-hdr-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--surface);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.profile-menu-more.open .sub-menu {
+  display: block;
+  min-width: 140px;
+}
+
+.profile-hdr-optns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  max-width: 560px;
+  padding-bottom: 8px;
+  font-size: 11px;
+}
+
+.profile-birthday {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: linear-gradient(#ffe38a, #f7b733);
+  color: #6b3d00;
+  font: bold 11px var(--font-body);
+  vertical-align: middle;
+}
+
+/*
+ * Wider than a phone: the pills stay on the right of the name and tabs, in one
+ * row that swipes sideways when they don't all fit (fading at that edge,
+ * scrollFades.ts), instead of dropping below. Phones stack them (mobile.css).
+ */
+@media (min-width: 761px) {
+  .profile-hdr {
+    flex-wrap: nowrap;
+  }
+
+  .profile-hdr-info {
+    flex: 0 1 auto;
+  }
+
+  .profile-hdr-optns {
+    --fade-left: 0px;
+    --fade-right: 0px;
+    flex: 1 1 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    min-width: 120px;
+    max-width: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+  }
+
+  .profile-hdr-optns::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Pushed to the right while there's room (justify-content would make the start unreachable once it scrolls) */
+  .profile-hdr-optns > :first-child {
+    margin-left: auto;
+  }
+
+  .profile-hdr-optns > * {
+    flex: none;
+  }
+
+  .profile-hdr-optns[data-fade~='left'] {
+    --fade-left: 28px;
+  }
+
+  .profile-hdr-optns[data-fade~='right'] {
+    --fade-right: 28px;
+  }
+}
+
+/* Small pills in the profile's own colours */
+.profile-hdr-optns .link-button,
+.profile-hdr-optns a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: linear-gradient(var(--box-hdr-top), var(--box-hdr-bottom));
+  color: var(--link);
+  font: bold 11px/16px var(--font-body);
+  white-space: nowrap;
+}
+
+.profile-hdr-optns .link-button:hover,
+.profile-hdr-optns a:hover {
+  border-color: var(--link);
+  text-decoration: none;
+}
+
+/* First row: picture | profile | friends */
+.profile-row-1 {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr) 300px;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .profile-row-1 {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+
+  .profile-row-1 > .friends-overview {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-row-1 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.profile-actions .box-con {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-actions .avatar {
+  width: auto !important;
+}
+
+.profile-verified {
+  color: #3a8a1f;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.respect {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 8px 0;
+  border-top: 1px solid var(--box-sctn-border);
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.respect-count {
+  color: var(--accent);
+  font: bold 20px/1 var(--font-title);
+}
+
+.profile-action-list {
+  align-self: stretch;
+  font-size: 11px;
+}
+
+.profile-action-list li {
+  padding: 3px 0;
+}
+
+.profile-action-list button:disabled {
+  color: #3a8a1f;
+  cursor: default;
+  text-decoration: none;
+}
+
+.profile-status .buzz-item {
+  padding: 0;
+}
+
+.profile-status .buzz-content {
+  font-size: 14px;
+  font-family: var(--font-title);
+}
+
+.profile-famous {
+  margin-bottom: 8px;
+}
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.profile-table th,
+.profile-table td {
+  padding: 5px 7px;
+  border-bottom: 1px solid var(--row-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.profile-table tr:nth-child(even) th,
+.profile-table tr:nth-child(even) td {
+  background: var(--alt-bg);
+}
+
+.profile-table th {
+  width: 110px;
+  color: var(--title-soft);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.profile-table td {
+  overflow-wrap: anywhere;
+}
+
+/* In a narrow column (the left one, 200px) the label goes above its value; the right one (300px) still fits side by side */
+@container (max-width: 260px) {
+  .profile-table,
+  .profile-table tbody,
+  .profile-table tr,
+  .profile-table th,
+  .profile-table td {
+    display: block;
+    width: auto;
+  }
+
+  .profile-table tr {
+    padding: 4px 6px;
+    border-bottom: 1px solid var(--row-border);
+  }
+
+  .profile-table tr:nth-child(even) {
+    background: var(--alt-bg);
+  }
+
+  .profile-table th,
+  .profile-table td,
+  .profile-table tr:nth-child(even) th,
+  .profile-table tr:nth-child(even) td {
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .profile-table th {
+    font-size: 11px;
+    white-space: normal;
+  }
+}
+
+.profile-about {
+  margin-top: 12px;
+}
+
+/* Chosen to go first: above the facts, with a line under it */
+.profile-about.first {
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dotted var(--box-sctn-border);
+}
+
+.profile-about h3 {
+  margin-bottom: 4px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+/* Friends */
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 4px;
+}
+
+.friends-grid-wide {
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+}
+
+.friends-grid li {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.friends-grid .avatar {
+  max-width: 100%;
+}
+
+/* Photos */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 8px;
+}
+
+.photo-grid .media-link {
+  cursor: zoom-in;
+}
+
+/* Knuffels */
+.knuffel-form {
+  margin: calc(-2px - var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px)) 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--alt-bg);
+}
+
+.knuffel-label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+
+.knuffel-login {
+  margin: calc(-2px - var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px)) 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--note-border);
+  background: var(--note-bg);
+  font-size: 11px;
+}
+
+.knuffel {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.knuffel:first-child {
+  padding-top: 0;
+}
+
+.knuffel:last-child {
+  border-bottom: 0;
+}
+
+.knuffel-body {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.knuffel-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.knuffel-body p {
+  margin: 3px 0;
+}
+
+.knuffel-tls {
+  font-size: 11px;
+}
+
+/* Groups and visitors */
+.group-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.group-logo {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+  color: #fff;
+  font: bold 13px var(--font-title);
+}
+
+.visitor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 4px;
+}
+
+.visitor-grid li {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.visitor-note {
+  margin-top: 8px;
+  font-size: 11px;
+}
+
+.profile-online {
+  color: #3a8a1f;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.profile-online.offline {
+  color: var(--text-muted);
+  font-weight: normal;
+}
+
+/* Becoming friends: a big glossy button under the photo (ProfileActions.tsx); a request to you stands out */
+.profile-friend {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  margin: 8px 0 10px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.profile-friend p {
+  margin: 0;
+}
+
+.profile-friend-btn {
+  width: 100%;
+  justify-content: center;
+  gap: 6px;
+}
+
+.profile-friend.incoming {
+  padding: 8px;
+  border: 1px solid var(--note-border);
+  border-radius: 8px;
+  background: var(--note-bg);
+  color: var(--note-text);
+}
+
+.profile-friend.outgoing,
+.profile-friend.friends {
+  color: var(--text-muted);
+}
+
+.profile-actions-login {
+  font-size: 11px;
+  text-align: center;
+}
+
+.profile-empty-hint {
+  margin-top: 12px;
+}
+
+.profile-status .composer {
+  margin-bottom: 12px;
+}
+
+.photo-upload {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: calc(-2px - var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px)) 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--alt-bg);
+  font-size: 11px;
+}
+
+.photo-upload input[type='file'] {
+  max-width: 100%;
+  font-size: 11px;
+}
+
+.photo-upload .text-box {
+  flex: 1;
+  min-width: 120px;
+}
+
+.photo-upload .form-error {
+  width: 100%;
+}
+
+/* Narrow columns (the sidebar, or wherever a member put the box) */
+.layout-col {
+  container-type: inline-size;
+}
+
+@container (max-width: 420px) {
+  .photo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .photo-grid .media-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+}
+
+aside .photo-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+aside .photo-grid .media-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+
+/* Lijfspreuk and gamertags in the Profiel box */
+.profile-motto {
+  margin: 10px 0 0;
+  padding: 6px 10px;
+  border-left: 3px solid var(--brand);
+  border-radius: 0 4px 4px 0;
+  background: var(--tint-1);
+  color: var(--title);
+  font: italic 13px var(--font-title);
+}
+
+.profile-gamertags {
+  margin-top: 12px;
+}
+
+.profile-gamertags h3 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 6px;
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}
+
+.profile-gamertags ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-gamertags li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px;
+  border: 1px solid var(--row-border);
+  border-radius: 5px;
+  background: var(--surface);
+  font-size: 12px;
+}
+
+.gt-badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px 1px 3px;
+  border-radius: 3px;
+  background: #555;
+  color: #fff;
+  font: bold 10px/16px var(--font-body);
+}
+
+.gt-psn { background: #1f4fb5; }
+.gt-xbox { background: #1f7a1f; }
+.gt-steam { background: #1b2838; }
+.gt-nintendo, .gt-wii { background: #e4000f; }
+.gt-epic { background: #2a2a2a; }
+.gt-battlenet { background: #148eff; }
+.gt-riot { background: #d13639; }
+.gt-minecraft { background: #5b8b32; }
+.gt-discord { background: #5865f2; }
+
+.gt-tag {
+  overflow: hidden;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: all;
+}
+
+/* The moving background fades like the design's own background does */
+.profile.skinned:not(.profile-preview) > .bgfx {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+}
+
+/* Under the WieWatWaars on a profile: "Eerdere bekijken" in the box, "Oudere laden" on the tab */
+.profile-status-more {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin: 8px 0 2px;
+  font-size: 12px;
+}
+
+.profile-status-more .farm-icon {
+  vertical-align: -3px;
+}
+
+/* A profile for friends only, seen by someone who isn't one (LockedProfile): one small card */
+.profile-locked .box {
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.profile-locked-note {
+  margin: 0 0 10px;
+  text-align: center;
+}

@@ -1,0 +1,212 @@
+/* "Kuddes nieuws" on Home (NewsCard.tsx) */
+.news-box-body {
+  display: grid;
+  gap: 10px;
+}
+
+.news-box.wide .news-box-body {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+/* The newest post: a small thumbnail (if it has a picture) next to the text */
+.news-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.news-top-text {
+  min-width: 0;
+}
+
+.news-thumb {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background: var(--tint-1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.news-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-label {
+  color: var(--highlight);
+  font: bold 10px var(--font-title);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.news-top h3 {
+  margin: 1px 0 3px;
+  font: bold 16px/1.25 var(--font-title);
+}
+
+.news-top h3 a {
+  color: var(--title);
+}
+
+.news-top p {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.news-top-ftr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+/* How much respect: small and grey, next to the date (not .news-respect: that's the big box on the news page) */
+.news-card-respect {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-muted);
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.news-card-respect .farm-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.news-more {
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Older headlines */
+.news-side {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.news-older {
+  display: grid;
+  margin: 0;
+  padding: 8px 0 0;
+  border-top: 1px dotted var(--box-sctn-border);
+  list-style: none;
+}
+
+.news-box.wide .news-older {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.news-older li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.news-older li + li {
+  border-top: 1px dotted var(--box-sctn-border);
+}
+
+.news-older a {
+  display: grid;
+  min-width: 0;
+}
+
+.news-older b {
+  overflow: hidden;
+  color: var(--link);
+  font: bold 12px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-older a span {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+/* De Kuddes Courant: a newspaper look, with a dateline, rubrics and serif headlines */
+.courant .box-con {
+  background:
+    linear-gradient(color-mix(in srgb, var(--surface) 92%, #f3ead6), color-mix(in srgb, var(--surface) 92%, #f3ead6));
+}
+
+.courant-dateline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 10px;
+  margin: 0 0 10px;
+  padding: 3px 0;
+  border-top: 2px solid var(--title);
+  border-bottom: 1px solid var(--title);
+  color: var(--title);
+  font: italic 11px Georgia, 'Times New Roman', serif;
+}
+
+/* "Dinsdag 6 oktober 2026": only the first letter big, as in Dutch */
+.courant-dateline span:first-child {
+  display: inline-block;
+}
+
+.courant-dateline span:first-child::first-letter {
+  text-transform: uppercase;
+}
+
+.courant-rubric {
+  color: var(--title-soft);
+  font: italic 12px Georgia, 'Times New Roman', serif;
+}
+
+.courant .news-top h3 {
+  margin: 2px 0 4px;
+  font: bold 19px/1.2 Georgia, 'Times New Roman', serif;
+}
+
+.courant .news-top p {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 13px;
+}
+
+.courant .news-thumb {
+  width: 84px;
+  height: 84px;
+  border-radius: 2px;
+  filter: sepia(0.15);
+}
+
+.courant-also {
+  margin: 0;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  color: var(--title);
+  font: bold 11px var(--font-title);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.courant .news-older b {
+  font: bold 13px Georgia, 'Times New Roman', serif;
+}
+
+.courant .news-older {
+  padding-top: 0;
+  border-top: 0;
+}

@@ -1,0 +1,89 @@
+/* The Fotografie gadget (PhotographyGadget.tsx): a small photo wall, or a strip */
+.phg {
+  display: grid;
+  gap: 8px;
+}
+
+.phg-wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phg-wall::after {
+  flex-grow: 10;
+  content: '';
+}
+
+.phg-wall li {
+  position: relative;
+  min-width: 0;
+  max-height: 150px;
+}
+
+.phg-wall a,
+.phg-strip a {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--tint-2);
+}
+
+.phg-wall i {
+  display: block;
+}
+
+.phg-wall img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.phg-wall a:hover img,
+.phg-strip a:hover img {
+  transform: scale(1.05);
+}
+
+.phg-strip {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0 0 6px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.phg-strip li {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.phg-strip a {
+  width: 120px;
+  height: 90px;
+}
+
+.phg-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.phg-more {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  justify-self: start;
+  font-size: 12px;
+  font-weight: bold;
+}

@@ -1,0 +1,26 @@
+/* Nieuwe mensen (/leden): the members as tiles, as many as fit across */
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 14px;
+  list-style: none;
+}
+
+.members-online {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  background: #5cb82a;
+}
+
+.members-more {
+  display: flex;
+  justify-content: center;
+  padding: 0 14px 14px;
+}

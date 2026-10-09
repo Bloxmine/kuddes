@@ -1,0 +1,42 @@
+/* The suggestion and problem form (SuggestionForm.tsx) */
+.kind-switch {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.kind-switch label {
+  padding: 5px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.kind-switch label.current {
+  border-color: var(--brand);
+  background: var(--alt-bg);
+  font-weight: bold;
+}
+
+.kind-switch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kind-note {
+  margin: -4px 0 10px;
+  font-size: 11px;
+}
+
+.suggestion-title {
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.suggestion-body {
+  margin: 2px 0;
+  white-space: pre-line;
+}

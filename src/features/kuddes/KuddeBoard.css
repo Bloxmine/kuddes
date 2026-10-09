@@ -1,0 +1,275 @@
+/* The Prikbord on a Kudde */
+
+.kb-join {
+  margin: 0 0 10px;
+}
+
+.kb-composer .composer-hdr .kb-kudde-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
+}
+
+.kb-composer .composer-preview img {
+  max-width: 180px;
+  max-height: 120px;
+}
+
+/* "Posten als": you or the Kudde, two boxes of the same size */
+.kb-as {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 150px));
+  gap: 4px;
+  padding: 2px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.kb-as button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 30px;
+  padding: 0 10px 0 3px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  color: var(--title);
+  font: 12px var(--font-title);
+  cursor: pointer;
+}
+
+.kb-as button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kb-as button:hover {
+  background: var(--tint-1);
+}
+
+.kb-as button.current {
+  border-color: var(--brand);
+  background: linear-gradient(to bottom, var(--surface), var(--tint-2));
+  font-weight: bold;
+}
+
+.kb-as .avatar-img,
+.kb-as .kb-kudde-avatar,
+.kb-reply .avatar-img {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+/* Under reactions the pictures stay round, like under respect */
+.kb-reply .avatar-img {
+  border-radius: 50%;
+}
+
+.kb-kudde-avatar {
+  display: inline-block;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--surface);
+  border-radius: 6px;
+  background: var(--tint-3) center / cover;
+  box-shadow: 0 0 0 1px var(--box-border);
+}
+
+.kb-as .kb-kudde-avatar {
+  border-width: 1px;
+}
+
+@media (max-width: 640px) {
+  .kb-composer .composer-hdr {
+    flex-wrap: wrap;
+  }
+
+  .kb-as {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ----------------------------------------------------------------- posts */
+
+.kb-posts {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.kb-post {
+  padding: 10px 12px;
+  border: 1px solid var(--row-border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+/* A post as the Kudde stands out, like a notice pinned to the board */
+.kb-post.as-kudde {
+  border-color: var(--link);
+  background: linear-gradient(var(--tint-2), var(--surface) 60px);
+  box-shadow: inset 3px 0 0 var(--link);
+}
+
+.kb-post-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kb-post-who {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.kb-name {
+  font-weight: bold;
+}
+
+.kb-badge {
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--brand-dark);
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
+.kb-when {
+  font-size: 10px;
+}
+
+.kb-delete,
+.kb-pin {
+  align-self: flex-start;
+  opacity: 0.6;
+}
+
+.kb-delete:hover,
+.kb-pin:hover,
+.kb-pin[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.kb-pin[aria-pressed='true'] {
+  background: var(--tint-2);
+}
+
+/* The pinned post, on top of the board */
+.kb-post.pinned {
+  position: relative;
+  border-color: var(--note-border);
+  box-shadow: inset 3px 0 0 var(--note-border);
+}
+
+.kb-post.pinned.as-kudde {
+  box-shadow: inset 3px 0 0 var(--link);
+}
+
+.kb-pinned {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: -2px 0 6px;
+  padding: 1px 8px 1px 4px;
+  border-radius: 999px;
+  background: var(--note-bg);
+  color: var(--note-text);
+  font: bold 11px/16px var(--font-body);
+}
+
+.kb-text {
+  margin: 8px 0 0;
+  font-size: 13px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.kb-photo img {
+  display: block;
+  max-width: min(100%, 460px);
+  max-height: 420px;
+  margin-top: 8px;
+  border-radius: 4px;
+}
+
+.kb-poll {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: var(--tint-1);
+}
+
+.kb-replies {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--row-border);
+}
+
+.kb-reply {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.kb-reply-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.kb-reply-form {
+  display: flex;
+  gap: 6px;
+}
+
+.kb-reply-form input {
+  flex: 1;
+  min-width: 0;
+}
+
+.kb-glitter {
+  margin-top: 8px;
+}
+
+.kb-glitter img {
+  max-width: 100%;
+  height: auto;
+}
+
+.kb-photo {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+/* Respect under a post */
+.kb-respect {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+/* The icon picked for a post, at the right of its header */
+.kb-post-icon {
+  flex: none;
+  align-self: center;
+}

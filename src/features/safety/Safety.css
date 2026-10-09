@@ -1,0 +1,104 @@
+/* Beheer → Rustige stand and the reported posts in Meldingen (SafetyAdmin.tsx) */
+.sf-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.sf-switch.on {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.sf-switch p {
+  margin: 2px 0 0;
+}
+
+.sf-h {
+  margin: 12px 0 6px;
+  color: var(--title);
+  font-size: 12px;
+}
+
+.sf-rows {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sf-rows label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.sf-rows select {
+  width: auto;
+  max-width: 100%;
+}
+
+.sf-num {
+  width: 64px;
+}
+
+.sf-save {
+  position: sticky;
+  bottom: 8px;
+  padding: 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+.sf-reports {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sf-reports > li {
+  padding: 10px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+}
+
+.sf-reports > li.urgent {
+  border-color: var(--highlight);
+  border-left-width: 4px;
+}
+
+.sf-report-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.sf-excerpt {
+  margin: 6px 0;
+  padding: 6px 10px;
+  border-left: 3px solid var(--box-border);
+  background: var(--tint-1);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sf-why,
+.sf-notes {
+  margin: 4px 0;
+}
+
+.sf-notes {
+  padding-left: 18px;
+  color: var(--text-muted);
+}

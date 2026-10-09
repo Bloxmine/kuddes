@@ -1,0 +1,1187 @@
+/*
+ * Kuddes Studio (StudioPage.tsx): GarageBand 09's brushed metal and blue
+ * display on top, FL Studio's dark workspace below. These are the program's
+ * own colours (like the Office programs' and the calculator's), kept as
+ * tokens on the window.
+ */
+.std-app {
+  --std-metal-top: #e6e6e6;
+  --std-metal-mid: #c9c9c9;
+  --std-metal-bottom: #a7a7a7;
+  --std-metal-text: #2b2b2b;
+  --std-lcd-top: #dcefff;
+  --std-lcd-bottom: #a8cdee;
+  --std-lcd-text: #0f2a44;
+  --std-bg: #2a3236;
+  --std-panel: #39444a;
+  --std-panel-hi: #4a575e;
+  --std-head-top: #56646b;
+  --std-head-bottom: #3d484e;
+  --std-line: #1e2427;
+  --std-text: #dbe3e7;
+  --std-dim: #95a3aa;
+  --std-accent: #f39a3c;
+  --std-step-a: #5b6469;
+  --std-step-b: #6f5b5b;
+  --std-green: #8fd14f;
+
+  overflow: hidden;
+  border: 1px solid var(--std-line);
+  border-radius: 8px;
+  background: var(--std-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: var(--std-text);
+  font:
+    12px 'Lucida Grande',
+    'Segoe UI',
+    Tahoma,
+    sans-serif;
+  user-select: none;
+}
+
+/* The same space under the header as the Office programs */
+.std-page,
+.std-page.page {
+  margin-top: 14px;
+}
+
+.std-app button {
+  font: inherit;
+}
+
+/* ------------------------------------------------------------ brushed metal top */
+.std-top {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 3px), linear-gradient(var(--std-metal-top), var(--std-metal-mid) 55%, var(--std-metal-bottom));
+  border-bottom: 1px solid #6d6d6d;
+  color: var(--std-metal-text);
+}
+
+.std-menubar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.std-filemenu {
+  position: relative;
+}
+
+.std-menu-btn {
+  padding: 2px 9px;
+  border: 1px solid #8a8a8a;
+  border-radius: 4px;
+  background: linear-gradient(#fbfbfb, #d6d6d6);
+  color: var(--std-metal-text);
+  cursor: pointer;
+}
+
+.std-menu-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.std-menu {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 3px);
+  left: 0;
+  min-width: 250px;
+  margin: 0;
+  padding: 4px 0;
+  border: 1px solid #8a8a8a;
+  border-radius: 5px;
+  background: #f4f4f4;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  list-style: none;
+}
+
+.std-menu li.sep {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #d0d0d0;
+}
+
+.std-menu button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 4px 12px;
+  border: 0;
+  background: none;
+  color: #222;
+  text-align: left;
+  cursor: pointer;
+}
+
+.std-menu button:hover:not(:disabled) {
+  background: linear-gradient(#5d9cec, #3b7dd8);
+  color: #fff;
+}
+
+.std-menu button:disabled {
+  opacity: 0.45;
+}
+
+.std-menu kbd {
+  margin-left: auto;
+  color: #888;
+  font: 11px inherit;
+}
+
+.std-title {
+  width: 200px;
+  min-width: 0;
+  padding: 2px 6px;
+  border: 1px solid #8a8a8a;
+  border-radius: 4px;
+  background: #fff;
+  color: #000;
+  font:
+    bold 12px 'Lucida Grande',
+    'Segoe UI',
+    sans-serif;
+}
+
+.std-status {
+  color: #555;
+  font-size: 11px;
+}
+
+.std-brand {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  color: #444;
+  font-weight: bold;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.std-close {
+  padding: 0 7px;
+  border-radius: 4px;
+  color: #333;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.std-close:hover {
+  background: #e81123;
+  color: #fff;
+  text-decoration: none;
+}
+
+.std-transport {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  padding: 8px 10px;
+}
+
+.std-buttons {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #6a6a6a;
+  border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.std-tbtn {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 32px;
+  border: 0;
+  border-right: 1px solid #7a7a7a;
+  background: linear-gradient(#fdfdfd, #d2d2d2 50%, #c4c4c4 51%, #dedede);
+  cursor: pointer;
+}
+
+.std-tbtn:last-child {
+  border-right: 0;
+}
+
+.std-tbtn:active,
+.std-tbtn.on {
+  background: linear-gradient(#bdbdbd, #e2e2e2);
+}
+
+.std-tbtn:disabled {
+  cursor: default;
+}
+
+.std-tbtn:disabled span {
+  opacity: 0.4;
+}
+
+/* Transport symbols, drawn: ⏮ ▶ ■ ● */
+.g-play {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 13px solid #333;
+}
+
+.std-tbtn.play.on .g-stop {
+  background: #2f7bd8;
+}
+
+.g-stop {
+  width: 13px;
+  height: 13px;
+  background: #333;
+}
+
+.g-rec {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #d22;
+}
+
+.g-start {
+  width: 13px;
+  height: 14px;
+  border-left: 3px solid #333;
+  background: linear-gradient(to left, #333 0 0) no-repeat;
+  clip-path: polygon(0 0, 3px 0, 3px 45%, 100% 0, 100% 100%, 3px 55%, 3px 100%, 0 100%);
+  background-color: #333;
+}
+
+/* PAT / SONG, with a little light as in FL Studio */
+.std-mode {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #6a6a6a;
+  border-radius: 5px;
+}
+
+.std-mode button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 0;
+  background: linear-gradient(#fafafa, #cfcfcf);
+  color: #444;
+  font-weight: bold;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.std-mode button + button {
+  border-left: 1px solid #8a8a8a;
+}
+
+.std-mode i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8a8a8a;
+}
+
+.std-mode button.on {
+  background: linear-gradient(#cfcfcf, #ececec);
+  color: #111;
+}
+
+.std-mode button.on i {
+  background: var(--std-green);
+  box-shadow: 0 0 5px var(--std-green);
+}
+
+/* GarageBand's blue display */
+.std-lcd {
+  display: flex;
+  gap: 2px;
+  padding: 4px 6px;
+  border: 1px solid #4d6a85;
+  border-radius: 7px;
+  background: linear-gradient(var(--std-lcd-top), var(--std-lcd-bottom));
+  box-shadow:
+    inset 0 2px 5px rgba(0, 40, 80, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.7);
+  color: var(--std-lcd-text);
+}
+
+.std-lcd-cell {
+  display: grid;
+  justify-items: center;
+  min-width: 90px;
+  padding: 0 8px;
+  border-right: 1px solid rgba(15, 42, 68, 0.2);
+}
+
+.std-lcd-cell:last-child {
+  border-right: 0;
+}
+
+.std-lcd-cell.small {
+  min-width: 60px;
+}
+
+.std-lcd small {
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.std-lcd b {
+  font:
+    20px/1.1 'DejaVu Sans Mono',
+    Consolas,
+    monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.std-lcd-cell span {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  font-size: 10px;
+}
+
+.std-lcd input {
+  width: 52px;
+  border: 0;
+  background: transparent;
+  color: var(--std-lcd-text);
+  font:
+    20px/1.1 'DejaVu Sans Mono',
+    Consolas,
+    monospace;
+  text-align: right;
+}
+
+.std-lcd input:focus {
+  outline: 1px dotted var(--std-lcd-text);
+}
+
+.std-knobs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.std-knob-label {
+  display: grid;
+  justify-items: center;
+  font-size: 10px;
+}
+
+.std-metro {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid #7a7a7a;
+  border-radius: 4px;
+  background: linear-gradient(#fafafa, #d0d0d0);
+  color: #333;
+  cursor: pointer;
+}
+
+.std-metro.on {
+  background: linear-gradient(#c8c8c8, #ececec);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.std-master {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.std-master input {
+  width: 90px;
+}
+
+.std-meter {
+  position: relative;
+  width: 90px;
+  height: 10px;
+  overflow: hidden;
+  border: 1px solid #555;
+  border-radius: 2px;
+  background: #222;
+}
+
+.std-meter span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, #47c447 0 65%, #e8d23a 65% 85%, #e04a3a 85%);
+  background-size: 90px 100%;
+}
+
+/* The browser holds the sound back */
+.std-blocked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px;
+  background: var(--std-accent);
+  color: #222;
+  font-weight: bold;
+}
+
+.std-blocked button {
+  padding: 2px 10px;
+  border: 1px solid #6a4410;
+  border-radius: 3px;
+  background: #fff3e0;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------ FL's dark workspace */
+.std-views {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--std-line);
+  background: linear-gradient(var(--std-head-top), var(--std-head-bottom));
+}
+
+.std-views button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px solid var(--std-line);
+  border-radius: 3px;
+  background: var(--std-panel);
+  color: var(--std-dim);
+  cursor: pointer;
+}
+
+.std-views button.on {
+  background: var(--std-panel-hi);
+  color: var(--std-text);
+  box-shadow: inset 0 -2px 0 var(--std-accent);
+}
+
+.std-soon-label {
+  margin-left: 10px;
+  color: var(--std-dim);
+  font-size: 11px;
+}
+
+.std-views .std-soon {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.std-views .std-soon::after {
+  content: 'binnenkort';
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--std-accent);
+  color: #222;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.std-work {
+  display: flex;
+  min-height: 560px;
+}
+
+.std-browser {
+  flex: 0 0 170px;
+  padding: 6px;
+  border-right: 1px solid var(--std-line);
+  background: var(--std-panel);
+  overflow-y: auto;
+}
+
+.std-browser h2 {
+  margin: 6px 0 4px;
+  color: var(--std-accent);
+  font:
+    bold 11px 'Lucida Grande',
+    'Segoe UI',
+    sans-serif;
+  text-transform: uppercase;
+}
+
+.std-browser ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.std-browser li {
+  display: flex;
+}
+
+.std-try {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 3px 4px;
+  border: 0;
+  background: none;
+  color: var(--std-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.std-try:hover,
+.std-add:hover {
+  background: var(--std-panel-hi);
+}
+
+.std-add {
+  width: 22px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--std-green);
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.std-hint {
+  color: var(--std-dim);
+  font-size: 11px;
+}
+
+.std-pad {
+  margin: 0;
+  padding: 14px;
+}
+
+.std-panels {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px;
+}
+
+.std-win {
+  border: 1px solid var(--std-line);
+  border-radius: 4px;
+  background: var(--std-panel);
+}
+
+.std-win > h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--std-line);
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(var(--std-head-top), var(--std-head-bottom));
+  color: var(--std-text);
+  font:
+    bold 12px 'Lucida Grande',
+    'Segoe UI',
+    sans-serif;
+}
+
+.std-win > h2 small {
+  color: var(--std-dim);
+  font-weight: normal;
+}
+
+.std-patbar {
+  display: flex;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.std-patbar select,
+.std-roll-tools select,
+.std-rack-foot select {
+  padding: 1px 4px;
+  border: 1px solid var(--std-line);
+  border-radius: 3px;
+  background: #2b3236;
+  color: var(--std-text);
+}
+
+.std-patbar select {
+  border-left-width: 4px;
+}
+
+.std-patbar button,
+.std-roll-tools button {
+  padding: 1px 8px;
+  border: 1px solid var(--std-line);
+  border-radius: 3px;
+  background: var(--std-panel-hi);
+  color: var(--std-text);
+  cursor: pointer;
+}
+
+.std-patbar button:disabled {
+  opacity: 0.4;
+}
+
+.std-octave {
+  margin-left: auto;
+  color: var(--std-dim);
+  font-weight: normal;
+  font-size: 11px;
+}
+
+/* ------------------------------------------------------------ channel rack */
+.std-rack {
+  padding: 6px;
+  overflow-x: auto;
+}
+
+.std-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+  padding: 2px 0;
+}
+
+.std-row-ctl {
+  position: sticky;
+  z-index: 2;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 4px;
+  background: var(--std-panel);
+}
+
+.std-led {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 1px solid var(--std-line);
+  border-radius: 50%;
+  background: #3a3f42;
+  cursor: pointer;
+}
+
+.std-led.lit {
+  background: var(--std-green);
+  box-shadow: 0 0 5px var(--std-green);
+}
+
+.std-solo {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--std-line);
+  border-radius: 3px;
+  background: var(--std-panel-hi);
+  color: var(--std-dim);
+  font-size: 9px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.std-solo.on {
+  background: var(--std-accent);
+  color: #222;
+}
+
+.std-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 130px;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid var(--std-line);
+  border-left: 5px solid var(--ch);
+  border-radius: 3px;
+  background: linear-gradient(#5a676e, #47535a);
+  color: var(--std-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.std-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.std-row.on .std-name {
+  background: linear-gradient(#6c7d86, #56656d);
+  box-shadow: 0 0 0 1px var(--std-green);
+}
+
+.std-steps {
+  display: flex;
+  gap: 2px;
+}
+
+.std-step {
+  width: 22px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--std-line);
+  border-radius: 3px;
+  background: linear-gradient(rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.1)), var(--std-step-a);
+  cursor: pointer;
+}
+
+.std-step.g1 {
+  background: linear-gradient(rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.1)), var(--std-step-b);
+}
+
+.std-step.bar {
+  margin-left: 6px;
+}
+
+.std-step.on {
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 60%), var(--ch);
+  box-shadow: 0 0 6px var(--ch);
+}
+
+.std-step.on.soft {
+  opacity: 0.6;
+}
+
+.std-step.now {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+.std-mini {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--std-line);
+  border-radius: 3px;
+  background: #2b3236;
+  color: var(--std-dim);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.std-mini svg {
+  position: absolute;
+  inset: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  fill: var(--ch);
+}
+
+.std-x {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--std-dim);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.std-x:hover {
+  background: #a33;
+  color: #fff;
+}
+
+.std-rack-foot {
+  position: sticky;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 6px;
+  width: max-content;
+  max-width: 100%;
+}
+
+.std-rack-foot label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ------------------------------------------------------------ knobs */
+.std-knob {
+  display: inline-flex;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.std-knob:focus-visible {
+  outline: 1px solid var(--std-accent);
+  border-radius: 50%;
+}
+
+.std-knob-ring {
+  fill: #23292c;
+  stroke: #15191b;
+}
+
+.std-knob-arc {
+  fill: none;
+  stroke: var(--std-accent);
+  stroke-width: 2.5;
+}
+
+.std-knob-cap {
+  fill: #6b787f;
+  stroke: #2b3236;
+}
+
+.std-knob-line {
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.std-top .std-knob-ring {
+  fill: #9a9a9a;
+  stroke: #666;
+}
+
+.std-top .std-knob-cap {
+  fill: #e0e0e0;
+  stroke: #888;
+}
+
+.std-top .std-knob-line {
+  stroke: #333;
+}
+
+/* ------------------------------------------------------------ piano roll */
+.std-roll-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 5px 8px;
+}
+
+.std-roll-tools label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.std-roll-name {
+  padding-left: 6px;
+  border-left: 4px solid var(--ch);
+  font-weight: bold;
+}
+
+.std-roll-body {
+  display: flex;
+  height: 320px;
+  overflow: auto;
+  border-top: 1px solid var(--std-line);
+}
+
+.std-keys {
+  position: sticky;
+  z-index: 3;
+  left: 0;
+  display: flex;
+  flex: 0 0 52px;
+  flex-direction: column;
+  height: max-content;
+}
+
+.std-keys button {
+  padding: 0 4px 0 0;
+  border: 0;
+  border-bottom: 1px solid #b9b9b9;
+  background: linear-gradient(90deg, #dcdcdc, #fff);
+  color: #555;
+  font-size: 8px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.std-keys button.black {
+  margin-right: 18px;
+  border-bottom-color: #000;
+  background: linear-gradient(90deg, #111, #444);
+}
+
+.std-keys button:active {
+  background: var(--std-accent);
+}
+
+.std-grid {
+  position: relative;
+  flex: none;
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
+  background-size:
+    var(--bar) 100%,
+    var(--beat) 100%,
+    var(--col) 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.std-lane {
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  left: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  background: #48565d;
+}
+
+.std-lane.black {
+  background: #3d494f;
+}
+
+.std-grid .std-lane {
+  z-index: 0;
+  pointer-events: none;
+}
+
+.std-note {
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+  padding-left: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  border-radius: 2px;
+  background: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 70%), var(--ch);
+  color: #1b1b1b;
+  font-size: 9px;
+  line-height: 12px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.std-note::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.std-playline {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 6px #fff;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------ playlist */
+.std-playlist {
+  display: flex;
+  max-height: 330px;
+  overflow: auto;
+}
+
+.std-tracks {
+  position: sticky;
+  z-index: 3;
+  left: 0;
+  flex: 0 0 70px;
+  height: max-content;
+  background: var(--std-panel);
+}
+
+.std-ruler-pad {
+  height: 18px;
+  border-bottom: 1px solid var(--std-line);
+}
+
+.std-track-name {
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+  border-bottom: 1px solid var(--std-line);
+  color: var(--std-dim);
+  font-size: 11px;
+}
+
+.std-pl-scroll {
+  flex: none;
+}
+
+.std-ruler {
+  display: flex;
+  height: 18px;
+  border-bottom: 1px solid var(--std-line);
+  background: #2f373b;
+}
+
+.std-ruler span {
+  flex: none;
+  padding-left: 3px;
+  border-left: 1px solid #55626a;
+  color: var(--std-dim);
+  font-size: 10px;
+}
+
+.std-pl-grid {
+  position: relative;
+  background-color: #3b474d;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.35) 1px, transparent 1px), linear-gradient(rgba(0, 0, 0, 0.45) 1px, transparent 1px);
+  background-size:
+    var(--cell) 100%,
+    100% var(--track);
+  cursor: copy;
+  touch-action: none;
+}
+
+.std-clip {
+  position: absolute;
+  margin: 2px 1px;
+  overflow: hidden;
+  padding: 2px 5px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 60%), var(--ch);
+  color: #1b1b1b;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: grab;
+}
+
+.std-clip.on {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+@media (max-width: 760px) {
+  .std-work {
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .std-browser {
+    flex-basis: auto;
+    max-height: 180px;
+    border-right: 0;
+    border-bottom: 1px solid var(--std-line);
+  }
+
+  .std-brand,
+  .std-soon-label {
+    display: none;
+  }
+
+  .std-lcd-cell {
+    min-width: 0;
+    padding: 0 5px;
+  }
+
+  .std-lcd b,
+  .std-lcd input {
+    font-size: 15px;
+  }
+
+  .std-lcd-cell.small {
+    display: none;
+  }
+
+  .std-name {
+    width: 92px;
+  }
+}
+
+/* A project to listen to, in a shared file (StudioPreview.tsx) */
+.std-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #6a6a6a;
+  border-radius: 6px;
+  background: linear-gradient(#e6e6e6, #b9b9b9);
+  color: #222;
+}
+
+.std-preview .std-tbtn {
+  border: 1px solid #6a6a6a;
+  border-radius: 5px;
+}
+
+.std-preview span {
+  display: grid;
+  min-width: 0;
+}
+
+.std-preview small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  color: #444;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Sending to Kuddes Muziek or Kuddes Radio (ShareDialog.tsx); that dialog has the site's own look */
+.std-views .std-share-btn {
+  border-color: #8a5a1c;
+  background: linear-gradient(#f7b25e, var(--std-accent));
+  color: #2a1a05;
+  font-weight: bold;
+}
+
+.std-share {
+  display: grid;
+  gap: 10px;
+}
+
+.std-share p {
+  margin: 0;
+}
+
+.std-share-what {
+  display: grid;
+  gap: 3px;
+}
+
+.std-share-colors {
+  display: flex;
+  gap: 6px;
+}
+
+.std-share-colors button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--box-border);
+  cursor: pointer;
+}
+
+.std-share-colors button.on {
+  box-shadow: 0 0 0 2px var(--title);
+}

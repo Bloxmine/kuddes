@@ -1,0 +1,263 @@
+/* Hyves smileys are small GIFs; keep them on the text baseline */
+img.smiley {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  image-rendering: auto;
+}
+
+/* The picker, styled after the Hyves krabbel box */
+.smiley-picker {
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+  text-align: left;
+}
+
+.smiley-picker-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 4px 8px 0;
+  border-bottom: 1px solid var(--box-border);
+  background: linear-gradient(to bottom, var(--tint-1), var(--box-hdr-bottom));
+}
+
+.smiley-picker-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: -1px;
+  padding: 4px 12px;
+  border: 1px solid var(--box-border);
+  border-bottom-color: var(--surface);
+  border-radius: 6px 6px 0 0;
+  background: var(--surface);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}
+
+.smiley-picker-tabs button img.smiley {
+  width: 16px;
+}
+
+.smiley-search {
+  flex: 0 1 150px;
+  min-width: 0;
+  margin: 0 0 4px auto;
+  padding: 2px 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 11px;
+}
+
+.smiley-picker-body {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  min-height: 150px;
+}
+
+.smiley-cats {
+  padding: 6px 0;
+  border-right: 1px solid var(--box-sctn-border);
+  background: var(--tint-1);
+}
+
+.smiley-cats button {
+  display: block;
+  width: 100%;
+  padding: 3px 12px;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.smiley-cats button:hover {
+  text-decoration: underline;
+}
+
+.smiley-cats button.current {
+  color: var(--title);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.smiley-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  gap: 4px;
+  max-height: 220px;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.smiley-grid button {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.smiley-grid button:hover {
+  border-color: var(--box-border);
+  background: var(--tint-1);
+}
+
+/* The dark "Preview" panel from the Hyves krabbel box */
+.text-preview {
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.text-preview header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  background: linear-gradient(to bottom, #3a3a3a, #1d1d1d);
+  color: #fff;
+  font: bold 14px var(--font-title);
+}
+
+.text-preview header button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.text-preview-body {
+  min-height: 40px;
+  max-height: 260px;
+  padding: 10px 12px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Hyves-style formatting tabs above a textarea (Bold, Italic, Link, Strike) */
+.format-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--box-border);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-2));
+  overflow: hidden;
+}
+
+.format-tabs button {
+  padding: 3px 14px;
+  border: 0;
+  border-right: 1px solid var(--box-border);
+  background: none;
+  color: var(--title);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.format-tabs button:hover {
+  background: var(--surface);
+}
+
+/* The MSN emoticons (Kuddes Messenger): one grid, no categories */
+.smiley-picker-body.msn {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.smiley-picker-body.msn .smiley-grid button {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+/* The small pop-up picker (MiniSmileyPicker), above a one-line box */
+.mini-smileys {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  z-index: 30;
+  width: min(270px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+.mini-smileys-bar {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--tint-1);
+}
+
+.mini-smileys-bar select,
+.mini-smileys-bar input {
+  min-width: 0;
+  height: 24px;
+  padding: 0 5px;
+  border: 1px solid var(--box-border);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 11px;
+}
+
+.mini-smileys-bar input {
+  flex: 1;
+}
+
+.mini-smileys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+  max-height: 150px;
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.mini-smileys-grid button {
+  display: grid;
+  place-items: center;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+}
+
+.mini-smileys-grid button:hover {
+  background: var(--tint-2);
+}
+
+.mini-smileys-grid img.smiley {
+  max-width: 26px;
+  max-height: 24px;
+}
+
+.mini-smileys .empty {
+  grid-column: 1 / -1;
+  margin: 6px;
+  font-size: 11px;
+}

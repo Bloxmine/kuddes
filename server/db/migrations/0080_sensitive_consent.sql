@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "sensitive_consent_at" timestamp with time zone;

@@ -1,0 +1,510 @@
+/* A photo on its own page (PhotoPage.tsx), like Flickr: a dark stage, a column on the right (as wide as the rest of the site) */
+.pp-view {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  margin: 6px 0 16px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--box-bg, var(--surface));
+  box-shadow: 0 1px 3px rgba(19, 50, 79, 0.06);
+}
+
+.pp-stage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: min(78vh, 760px);
+  background: #212326;
+  color: #eee;
+}
+
+.pp-stage:fullscreen {
+  min-height: 100vh;
+}
+
+.pp-stage-top,
+.pp-stage-bottom {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+
+.pp-back {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: #fff;
+  font: bold 13px var(--font-title);
+}
+
+.pp-back:hover {
+  color: #9ccaff;
+  text-decoration: none;
+}
+
+.pp-photo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 0 60px;
+}
+
+.pp-photo img {
+  max-width: 100%;
+  max-height: min(66vh, 640px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.pp-stage:fullscreen .pp-photo img {
+  max-height: calc(100vh - 140px);
+}
+
+.pp-arrow {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 64px;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 54px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.pp-arrow:hover {
+  color: #fff;
+}
+
+.pp-arrow.prev {
+  left: 8px;
+}
+
+.pp-arrow.next {
+  right: 8px;
+}
+
+.pp-stage-bottom {
+  gap: 16px;
+}
+
+.pp-strip {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  justify-content: safe center;
+  min-width: 0;
+  padding: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.pp-strip button {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  background: #444;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.pp-strip button:hover,
+.pp-strip button.current {
+  opacity: 1;
+}
+
+.pp-strip button.current {
+  border-color: #fff;
+}
+
+.pp-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pp-actions {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+
+.pp-icon-btn,
+.pp-actions .btn {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+}
+
+.pp-icon-btn:hover,
+.pp-actions .btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  text-decoration: none;
+}
+
+.pp-icon-btn.on {
+  border-color: #f5c242;
+  background: rgba(245, 194, 66, 0.25);
+}
+
+/* The column on the right */
+.pp-side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-left: 1px solid var(--box-border);
+}
+
+.pp-who {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.pp-who > div {
+  display: grid;
+  min-width: 0;
+}
+
+.pp-name {
+  overflow: hidden;
+  font: bold 15px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pp-details {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 18px;
+}
+
+.pp-details h1 {
+  margin: 0;
+  padding-right: 30px;
+  font-size: 20px;
+}
+
+.pp-description {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.pp-edit {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  padding: 4px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.pp-edit:hover {
+  background: var(--tint-1);
+}
+
+.pp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+
+.pp-stats {
+  column-gap: 18px;
+}
+
+.pp-dates {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.pp-camera {
+  display: grid;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.pp-camera > div:first-of-type {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pp-camera dd {
+  display: grid;
+  margin: 0;
+}
+
+.pp-camera small {
+  color: var(--text-muted);
+}
+
+.pp-camera-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pp-camera-settings span {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}
+
+.pp-camera-hidden {
+  margin: 0;
+  font-size: 11px;
+}
+
+.pp-album {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin: 0;
+  font-size: 13px;
+}
+
+.pp-edit-form {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.pp-edit-form label {
+  display: grid;
+  gap: 3px;
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}
+
+.pp-edit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.pp-edit-album {
+  display: flex;
+  gap: 4px;
+}
+
+.pp-edit-album select {
+  flex: 1;
+  min-width: 0;
+}
+
+.pp-edit-form .pp-check {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Below: the reactions, and the album */
+.pp-below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  margin: 0 0 20px;
+}
+
+.pp-below h2 {
+  margin: 0 0 12px;
+  color: var(--title);
+  font: bold 20px var(--font-title);
+}
+
+.pp-comment {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.pp-comment p {
+  margin: 0 0 2px;
+}
+
+.pp-comment .link-button {
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+.pp-comment-form {
+  display: grid;
+  gap: 6px;
+}
+
+.pp-in {
+  align-self: start;
+  padding: 16px;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--box-bg, var(--surface));
+}
+
+.pp-in h2 {
+  font-size: 14px;
+}
+
+.pp-in-album {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--text);
+}
+
+.pp-in-album:hover {
+  text-decoration: none;
+}
+
+.pp-in-album img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.pp-in-album span {
+  display: grid;
+}
+
+.pp-in-album b {
+  color: var(--link);
+}
+
+.pp-in-none {
+  margin: 0;
+  text-align: center;
+}
+
+@media (max-width: 960px) {
+  .pp-view,
+  .pp-below {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pp-side {
+    border-top: 1px solid var(--box-border);
+    border-left: 0;
+  }
+
+  .pp-stage {
+    min-height: 0;
+  }
+
+  .pp-photo {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pp-photo {
+    padding: 0;
+  }
+
+  .pp-arrow {
+    width: 36px;
+    font-size: 40px;
+  }
+}
+
+/* Respect, and who gave it (round pictures, like under respect everywhere) */
+.pp-respect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.pp-respect-btn {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.pp-respect-btn.on {
+  border-color: #e8b923;
+  background: linear-gradient(to bottom, #fff6d6, #ffe9a3);
+}
+
+.pp-respecters {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pp-respecters .avatar {
+  width: auto !important;
+  margin-right: -10px;
+}
+
+.pp-respecters .avatar-link,
+.pp-respecters .avatar-img {
+  border-radius: 50%;
+}
+
+.pp-respecters .avatar-img {
+  width: 24px !important;
+  height: 24px !important;
+  font-size: 10px;
+}
+
+.pp-respecters small {
+  margin-left: 14px;
+}
+
+/* Smileys in a reaction */
+.pp-smiley-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.pp-smiley-btn:hover,
+.pp-smiley-btn.current {
+  border-color: var(--box-border);
+  background: var(--tint-1);
+}
+
+.pp-smileys .smiley-picker {
+  max-height: 260px;
+  overflow-y: auto;
+}

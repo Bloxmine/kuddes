@@ -1,0 +1,25 @@
+name: kuddes
+
+# The database. In development the defaults are fine; on the server the
+# password comes from POSTGRES_PASSWORD in .env (see DEPLOY.md).
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kuddes
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kuddes}
+      POSTGRES_DB: kuddes
+    ports:
+      # Only reachable from this machine, never from the internet
+      - '127.0.0.1:5433:5432'
+    volumes:
+      - kuddes-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kuddes']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  kuddes-db:

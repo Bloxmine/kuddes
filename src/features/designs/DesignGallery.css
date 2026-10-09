@@ -1,0 +1,202 @@
+/* The Designgalerij (DesignGalleryPage.tsx): cards with a live mini preview, the share dialog */
+.dg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dg-grid.loading {
+  opacity: 0.6;
+}
+
+.dg-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 1px 4px rgba(19, 50, 79, 0.08);
+}
+
+/* The preview fills the top of the card, a bit taller than in the editors */
+.dg-preview {
+  padding: 10px 10px 0;
+}
+
+.dg-preview .theme-mini {
+  height: 120px;
+}
+
+.dg-body {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 4px;
+  padding: 10px 12px 6px;
+}
+
+.dg-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font: bold 10px var(--font-title);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.dg-body h3 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--title);
+  font: bold 15px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dg-desc {
+  margin: 0;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.dg-by {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.dg-by .avatar-img {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 9px;
+}
+
+.dg-stats {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.dg-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dg-stats .farm-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.dg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 12px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.dg-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--title);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Respect: the site's own respect button (SocialBar.css), pushed to the right */
+.dg-respect {
+  margin-left: auto;
+  padding: 2px 8px;
+}
+
+/* Your own (or, for the admin, anyone's): small icon buttons on the right */
+.dg-tool {
+  min-width: 0;
+  padding: 4px 7px;
+}
+
+.dg-own {
+  margin-left: auto;
+}
+
+.dg-error {
+  margin: 0;
+  padding: 0 12px 10px;
+}
+
+/* Share dialog: your own themes and designs to pick from */
+.dg-pick-group h3 {
+  margin: 10px 0 6px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.dg-pick {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dg-pick button {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 6px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: var(--tint-1);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  text-align: left;
+  cursor: pointer;
+}
+
+.dg-pick button:hover {
+  border-color: var(--box-border);
+}
+
+.dg-pick button.current {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.dg-pick .theme-mini {
+  height: 70px;
+}
+
+.dg-pick span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dg-share-fields {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.dg-share-fields label {
+  display: grid;
+  gap: 4px;
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}

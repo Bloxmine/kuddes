@@ -1,0 +1,1 @@
+ALTER TABLE "statuses" ADD COLUMN "icon" text;

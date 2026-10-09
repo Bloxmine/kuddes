@@ -1,0 +1,104 @@
+.relation-icon {
+  display: inline-flex;
+  vertical-align: -3px;
+}
+
+/* A small badge on a friend's picture */
+.friends-grid li {
+  position: relative;
+}
+
+/* A small icon on a friend's picture: no circle, just a drop shadow so it stands out */
+.friends-grid .relation-icon {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.45));
+}
+
+.relation-hdr {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 16px 0 8px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.relation-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.relation-pick button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 3px 8px 3px 3px;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.relation-pick button .avatar-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.relation-pick button:hover:not(:disabled) {
+  border-color: var(--link);
+}
+
+/* A best friend: a gold edge, in the theme's own colours so it reads on dark themes too */
+.relation-pick button.on {
+  border-color: #e8b923;
+  background: color-mix(in srgb, #e8b923 16%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #e8b923 50%, transparent);
+  font-weight: bold;
+}
+
+.relation-pick button:disabled:not(.on) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.relation-family {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.relation-family li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.relation-family select {
+  height: 26px;
+}
+
+.relation-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.relation-add select {
+  height: 28px;
+}

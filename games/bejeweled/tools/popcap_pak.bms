@@ -1,0 +1,28 @@
+# PopCap .pak archive (Bejeweled 3, Peggle, Plants vs Zombies, ...)
+# Whole file is XOR 0xF7. Header: magic C0 4A C0 BA, version (u32),
+# then entries: flags(byte, 0x80=end) namelen(byte) name size(u32) filetime(u64),
+# followed by the file data back to back in the same order.
+filexor 0xF7
+idstring "\xC0\x4A\xC0\xBA"
+get VERSION long
+set COUNT long 0
+for
+    get FLAGS byte
+    if FLAGS & 0x80
+        break
+    endif
+    get NAMESZ byte
+    getdstring NAME NAMESZ
+    get SIZE long
+    get FTIME longlong
+    putarray 0 COUNT NAME
+    putarray 1 COUNT SIZE
+    math COUNT + 1
+next
+savepos OFFSET
+for i = 0 < COUNT
+    getarray NAME 0 i
+    getarray SIZE 1 i
+    log NAME OFFSET SIZE
+    math OFFSET + SIZE
+next i

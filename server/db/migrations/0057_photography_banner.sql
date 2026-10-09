@@ -1,0 +1,3 @@
+ALTER TABLE "photography_pages" ADD COLUMN "banner_photo_id" integer;--> statement-breakpoint
+ALTER TABLE "photography_pages" ADD COLUMN "banner_y" integer DEFAULT 50 NOT NULL;--> statement-breakpoint
+ALTER TABLE "photography_pages" ADD CONSTRAINT "photography_pages_banner_photo_id_photos_id_fk" FOREIGN KEY ("banner_photo_id") REFERENCES "public"."photos"("id") ON DELETE set null ON UPDATE no action;

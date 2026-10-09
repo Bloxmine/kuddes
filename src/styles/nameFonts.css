@@ -1,0 +1,210 @@
+/*
+ * The webfonts for names on profiles and Kuddes (NAME_FONTS in
+ * shared/customization.ts). Served from our own server, so visitors don't
+ * talk to Google. A file only loads when a name on the page uses it. Each
+ * comes in one weight; the range stops the browser faking a bold one.
+ * Licences: public/fonts/names/OFL.txt.
+ */
+
+@font-face {
+  font-family: 'Pacifico';
+  src: url('/fonts/names/pacifico.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lobster';
+  src: url('/fonts/names/lobster.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bangers';
+  src: url('/fonts/names/bangers.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/fonts/names/press-start-2p.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Creepster';
+  src: url('/fonts/names/creepster.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nosifer';
+  src: url('/fonts/names/nosifer.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik Wet Paint';
+  src: url('/fonts/names/rubik-wet-paint.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Monoton';
+  src: url('/fonts/names/monoton.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bungee Shade';
+  src: url('/fonts/names/bungee-shade.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik Glitch';
+  src: url('/fonts/names/rubik-glitch.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UnifrakturMaguntia';
+  src: url('/fonts/names/unifrakturmaguntia.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rye';
+  src: url('/fonts/names/rye.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ewert';
+  src: url('/fonts/names/ewert.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fascinate Inline';
+  src: url('/fonts/names/fascinate-inline.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Faster One';
+  src: url('/fonts/names/faster-one.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Henny Penny';
+  src: url('/fonts/names/henny-penny.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Kablammo';
+  src: url('/fonts/names/kablammo.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik Puddles';
+  src: url('/fonts/names/rubik-puddles.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Frijole';
+  src: url('/fonts/names/frijole.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Butcherman';
+  src: url('/fonts/names/butcherman.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Shrikhand';
+  src: url('/fonts/names/shrikhand.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Audiowide';
+  src: url('/fonts/names/audiowide.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  src: url('/fonts/names/orbitron.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bungee Spice';
+  src: url('/fonts/names/bungee-spice.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nabla';
+  src: url('/fonts/names/nabla.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sedgwick Ave Display';
+  src: url('/fonts/names/sedgwick-ave-display.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cherry Bomb One';
+  src: url('/fonts/names/cherry-bomb-one.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/names/silkscreen.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/names/silkscreen-700.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}

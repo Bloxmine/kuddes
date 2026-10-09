@@ -1,0 +1,374 @@
+/*
+ * Kuddes Woord (WoordPage.tsx): the page itself, as Word 2007 draws it. The
+ * window around it is the shared Office window (src/features/office/Office.css).
+ * The page is always paper-white.
+ */
+/* The Stijlen gallery: each style shows what it looks like */
+.ofc-styles {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--ofc-group-border);
+  background: #fff;
+}
+
+.ofc-styles button {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 2px;
+  width: 64px;
+  height: 56px;
+  padding: 0 2px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.ofc-style-sample {
+  max-width: 100%;
+  overflow: hidden;
+  color: #000;
+  font: 13px Calibri, Carlito, sans-serif;
+  white-space: nowrap;
+}
+
+.ofc-style-sample.kop1 {
+  color: #365f91;
+  font: bold 14px Cambria, Georgia, serif;
+}
+
+.ofc-style-sample.kop2 {
+  color: #4f81bd;
+  font: bold 13px Cambria, Georgia, serif;
+}
+
+.ofc-style-sample.titel {
+  color: #17365d;
+  font: 18px Cambria, Georgia, serif;
+}
+
+.ofc-style-sample.ondertitel {
+  color: #4f81bd;
+  font-style: italic;
+}
+
+.ofc-style-sample.citaat {
+  font-style: italic;
+}
+
+.ofc-styles small {
+  color: #444;
+  font-size: 10px;
+}
+
+.ofc-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 4px;
+}
+
+.ofc-scheme {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 52px;
+  height: 66px;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+}
+
+.ofc-scheme-swatch {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+}
+
+.ofc-scheme-swatch.blauw {
+  background: linear-gradient(#e4effc 30%, #c4d8f1 30%, #a5bad6);
+}
+
+.ofc-scheme-swatch.zilver {
+  background: linear-gradient(#f6f7f9 30%, #dfe3e8 30%, #c3c8cf);
+}
+
+.ofc-scheme-swatch.zwart {
+  background: linear-gradient(#4c4c4c 30%, #e6e6e6 30%, #8a8a8a);
+}
+
+/* ------------------------------------------------------------ the page */
+.ofc-zoom {
+  width: var(--ofc-page-w);
+  margin: 0 auto;
+}
+
+/* The ruler: centimetres, the margins in grey */
+.ofc-ruler {
+  position: sticky;
+  top: -18px;
+  z-index: 1;
+  height: 18px;
+  margin-bottom: 8px;
+  border: 1px solid #8a9bb3;
+  background:
+    linear-gradient(90deg, #c9d3df var(--ofc-pad-x), transparent var(--ofc-pad-x), transparent calc(100% - var(--ofc-pad-x)), #c9d3df calc(100% - var(--ofc-pad-x))),
+    #fff;
+}
+
+.ofc-ruler-scale {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, #555 0 1px, transparent 1px 1cm) 0 100% / 100% 7px no-repeat,
+    repeating-linear-gradient(90deg, #999 0 1px, transparent 1px 0.25cm) 0 100% / 100% 3px no-repeat;
+  background-position-x: var(--ofc-pad-x);
+}
+
+.ofc-sheet {
+  position: relative;
+  min-height: var(--ofc-page-h);
+  padding: var(--ofc-pad-y) var(--ofc-pad-x);
+  background:
+    /* Where a printed page would end: a thin dotted line at every page's height */
+    repeating-linear-gradient(to bottom, transparent 0 calc(var(--ofc-page-h) - 1px), rgba(0, 0, 0, 0.18) calc(var(--ofc-page-h) - 1px) var(--ofc-page-h)),
+    var(--ofc-page-color);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.18),
+    3px 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ofc-sheet.painting .ofc-body {
+  cursor: copy;
+}
+
+/* What's typed: as Word 2007 sets it (the same as DOC_CSS in editor.ts, for exports and printing) */
+.ofc-body {
+  min-height: calc(var(--ofc-page-h) - 2 * var(--ofc-pad-y));
+  outline: 0;
+  color: #000;
+  font: 11pt/1.15 Calibri, Carlito, "Segoe UI", sans-serif;
+  overflow-wrap: break-word;
+  cursor: text;
+}
+
+.ofc-body.cols-2 {
+  column-count: 2;
+  column-gap: 1.25cm;
+}
+
+.ofc-body.cols-3 {
+  column-count: 3;
+  column-gap: 1.25cm;
+}
+
+.ofc-body p {
+  margin: 0 0 10pt;
+}
+
+.ofc-body p.kw-tight {
+  margin: 0;
+}
+
+.ofc-body p.kw-subtitle {
+  color: #4f81bd;
+  font-size: 13pt;
+  font-style: italic;
+  letter-spacing: 0.5pt;
+}
+
+.ofc-body h1 {
+  margin: 0 0 15pt;
+  padding-bottom: 4pt;
+  border-bottom: 1pt solid #4f81bd;
+  color: #17365d;
+  font: normal 26pt Cambria, Caladea, Georgia, serif;
+}
+
+.ofc-body h2 {
+  margin: 24pt 0 6pt;
+  color: #365f91;
+  font: bold 14pt Cambria, Caladea, Georgia, serif;
+}
+
+.ofc-body h3 {
+  margin: 10pt 0 4pt;
+  color: #4f81bd;
+  font: bold 13pt Cambria, Caladea, Georgia, serif;
+}
+
+.ofc-body blockquote {
+  margin: 10pt 40pt;
+  padding-left: 10pt;
+  border-left: 3pt solid #4f81bd;
+  font-style: italic;
+}
+
+.ofc-body ul,
+.ofc-body ol {
+  margin: 0 0 10pt;
+  padding-left: 24pt;
+}
+
+.ofc-body a {
+  color: #0000ff;
+  text-decoration: underline;
+}
+
+.ofc-body img {
+  max-width: 100%;
+}
+
+.ofc-body img.smiley {
+  vertical-align: middle;
+}
+
+.ofc-body table.kw-table {
+  width: 100%;
+  margin: 0 0 10pt;
+  border-collapse: collapse;
+}
+
+.ofc-body table.kw-table td {
+  min-width: 20pt;
+  padding: 3pt 6pt;
+  border: 1pt solid #7f7f7f;
+  vertical-align: top;
+}
+
+.ofc-body hr {
+  border: 0;
+  border-top: 1px solid #a5a5a5;
+}
+
+/* A page break: a dashed line with its name, as Word shows it on screen */
+.ofc-body hr.kw-pagebreak {
+  position: relative;
+  height: 14px;
+  margin: 12px 0;
+  border-top: 1px dashed #7f7f7f;
+  overflow: visible;
+}
+
+.ofc-body hr.kw-pagebreak::after {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  padding: 0 6px;
+  background: var(--ofc-page-color);
+  color: #7f7f7f;
+  content: 'Pagina-einde';
+  font: 9pt Calibri, Carlito, sans-serif;
+  transform: translateX(-50%);
+}
+
+/* WordArt (the same as in editor.ts) */
+.kw-wordart {
+  display: inline-block;
+  font: bold 32pt Impact, "Arial Black", sans-serif;
+}
+
+.wa-blauw {
+  color: #1f497d;
+  background: linear-gradient(#8db3e2, #17365d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.wa-goud {
+  color: #c9a227;
+  background: linear-gradient(#fff3b0, #d4a017 50%, #8a6d00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.wa-regenboog {
+  color: #c00000;
+  background: linear-gradient(90deg, #ff0000, #ff9900, #ffee00, #33cc33, #0099ff, #9933ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.wa-schaduw {
+  color: #4f81bd;
+  text-shadow: 3px 3px 0 #a6a6a6;
+}
+
+.wa-omlijnd {
+  color: #fff;
+  -webkit-text-stroke: 1.5px #1f497d;
+  text-shadow: 2px 2px 0 #95b3d7;
+}
+
+/* ------------------------------------------------------------ find and replace */
+.ofc-find {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  z-index: 5;
+  display: grid;
+  gap: 6px;
+  width: 300px;
+  padding: 8px 10px 10px;
+  border: 1px solid #6f8fbf;
+  border-radius: 4px;
+  background: #f4f7fb;
+  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+.ofc-find label {
+  display: grid;
+  gap: 2px;
+}
+
+.ofc-find .ofc-check {
+  display: flex;
+  padding: 0;
+}
+
+.ofc-find-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid #a7b8cf;
+}
+
+.ofc-find-tabs button {
+  padding: 2px 10px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+  background: none;
+}
+
+.ofc-find-tabs button.on {
+  border-color: #a7b8cf;
+  background: #fff;
+  margin-bottom: -1px;
+}
+
+.ofc-find-x {
+  margin-left: auto;
+  font-size: 16px !important;
+  line-height: 1;
+}
+
+.ofc-find-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.ofc-find-note {
+  margin: 0;
+  color: #444;
+}

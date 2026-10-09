@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="robots" content="noindex">
+  <title>Graffitimuur - Kuddes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="stage">
+    <canvas id="wall"></canvas>
+    <canvas id="paint"></canvas>
+    <canvas id="anim"></canvas>
+    <canvas id="relief"></canvas>
+    <canvas id="ui"></canvas>
+  </div>
+
+  <button id="cycleBtn" title="Wissel naar de speciale bussen (C)">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 4a8 8 0 0 1 7.75 6h-2.1A6 6 0 0 0 7.5 7.5L10 10H3V3l2.1 2.1A7.97 7.97 0 0 1 12 4zm-7.75 10h2.1a6 6 0 0 0 10.15 2.5L14 14h7v7l-2.1-2.1A8 8 0 0 1 4.25 14z"/></svg>
+    <span>Speciaal</span>
+  </button>
+
+  <input id="rgbPicker" type="color" aria-label="Kleur van de RGB-bus" tabindex="-1">
+
+  <div id="chrome">
+    <div id="menu">
+      <button id="menuBtn" aria-expanded="false" aria-controls="settings" title="Instellingen">
+        <span class="brand">Graffitimuur</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 7h16v2H4zm0 4h16v2H4zm0 4h16v2H4z"/></svg>
+      </button>
+
+      <div id="settings" class="panel" hidden>
+        <div class="panel-hdr">Instellingen</div>
+        <section>
+          <h3>Muur</h3>
+          <div id="walls" class="walls" role="radiogroup" aria-label="Muur"></div>
+        </section>
+
+        <section>
+          <h3>Druipen <span id="dripVal" class="val">Gemiddeld</span></h3>
+          <input id="drip" type="range" min="0" max="100" step="1" value="50" aria-label="Hoeveel de verf druipt">
+          <div class="scale"><span>Niet</span><span>Heel lopend</span></div>
+        </section>
+
+        <section>
+          <h3>Afstand <span id="distVal" class="val">12 cm</span></h3>
+          <input id="dist" type="range" min="2" max="45" step="0.5" value="12" aria-label="Afstand tot de muur">
+          <div class="scale"><span>Dichtbij</span><span>Ver weg</span></div>
+        </section>
+
+        <section>
+          <h3>Cap</h3>
+          <div class="seg" role="radiogroup" aria-label="Cap">
+            <button data-cap="fat" role="radio">Dik</button>
+            <button data-cap="skinny" role="radio">Dun</button>
+          </div>
+        </section>
+
+        <section class="actions">
+          <button id="saveBtn">Foto bewaren</button>
+          <button id="muteBtn">Geluid aan</button>
+          <button id="clearBtn" class="danger">Muur schoonmaken</button>
+        </section>
+
+        <p id="progress" class="progress"></p>
+
+        <p class="keys">
+          <kbd>1</kbd>–<kbd>0</kbd> bussen · <kbd>Scroll</kbd> afstand · <kbd>F</kbd> cap ·
+          <kbd>W</kbd> muur · <kbd>C</kbd> andere bussen · <kbd>Esc</kbd> terugzetten · <kbd>S</kbd> foto
+        </p>
+      </div>
+    </div>
+
+    <div id="hint">Pak een bus &rarr;</div>
+  </div>
+
+  <script src="js/wall.js"></script>
+  <script src="js/paint.js"></script>
+  <script src="js/can.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

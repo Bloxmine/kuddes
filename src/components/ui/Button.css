@@ -1,0 +1,97 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  vertical-align: middle;
+  min-width: 5em;
+  padding: 3px 11px;
+  border: 1px solid var(--btn-border);
+  border-bottom-color: var(--btn-border-dark);
+  border-radius: 5px;
+  /* Glossy like the top bar, but softer: a bright top half with a crisp edge, light coming back up from the bottom */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.35) 48%, rgba(255, 255, 255, 0) 50%),
+    radial-gradient(ellipse 80% 55% at 50% 100%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 75%),
+    linear-gradient(to bottom, var(--tint-1) 0%, var(--tint-2) 50%, var(--tint-3) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 1px rgba(0, 0, 0, 0.06);
+  color: var(--text);
+  font: normal 11px/15px var(--font-body);
+  text-shadow: 1px 1px 0 var(--surface);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 48%, rgba(255, 255, 255, 0) 50%),
+    radial-gradient(ellipse 80% 55% at 50% 100%, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0) 75%),
+    linear-gradient(to bottom, var(--tint-1) 0%, var(--tint-2) 50%, var(--tint-3) 100%);
+  border-color: var(--btn-border-dark);
+}
+
+/* Pressed: the shine goes, it sits in the page */
+.btn:active {
+  background: linear-gradient(to bottom, var(--tint-3) 0%, var(--tint-2) 100%);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+  border-color: var(--brand);
+  color: var(--title);
+  text-shadow: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn-cta {
+  padding: 7px 16px 8px;
+  border: 1px solid var(--cta-border);
+  border-radius: 7px;
+  /* The same glass as the top bar (Header.css .topbar) */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 48%, rgba(255, 255, 255, 0.04) 50%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(ellipse 75% 60% at 50% 100%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(to bottom, var(--cta-top) 0%, var(--cta-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.22);
+  color: #fff;
+  font: bold 14px/18px var(--font-title);
+  text-shadow: 1px 1px 2px var(--cta-shadow);
+}
+
+.btn-cta:hover {
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.26) 48%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(ellipse 75% 60% at 50% 100%, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0) 70%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--cta-top) 88%, white) 0%, color-mix(in srgb, var(--cta-bottom) 92%, white) 100%);
+  border-color: var(--cta-border);
+}
+
+.btn-cta:active {
+  background: linear-gradient(to bottom, var(--brand-darker) 0%, var(--brand-dark) 100%);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-shadow: 1px 1px 2px var(--cta-shadow);
+}
+
+/* White glossy button on coloured banners ("Lees meer") */
+.btn-light {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(to bottom, #ffffff 0%, #f7f7f7 50%, #ececec 100%);
+  color: #1b2733;
+  text-shadow: none;
+  font: bold 13px/18px var(--font-title);
+  padding: 7px 14px;
+  border-radius: 7px;
+}

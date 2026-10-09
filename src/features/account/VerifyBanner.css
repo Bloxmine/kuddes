@@ -1,0 +1,25 @@
+.verify-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 10px;
+  padding: 9px 14px;
+  border: 1px solid #e8b923;
+  border-radius: 8px;
+  background: color-mix(in srgb, #e8b923 14%, var(--surface));
+  color: var(--text);
+  font-size: 12px;
+}
+
+.verify-banner p {
+  flex: 1;
+  min-width: 220px;
+  margin: 0;
+}
+
+.verify-banner-actions {
+  display: flex;
+  gap: 14px;
+  white-space: nowrap;
+}

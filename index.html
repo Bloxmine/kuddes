@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Kuddes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Kuddes: het gezelligste vriendennetwerk van Nederland." />
+    <meta name="theme-color" content="#4ba3e0" />
+    <!-- In production the server puts the page's own title, description, share card and structured data here (server/lib/seo.ts) -->
+    <title>Kuddes</title>
+    <!-- Applies the saved theme and display settings before the first paint (a file, not inline: the CSP forbids inline scripts) -->
+    <script src="/prepaint.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+/* Playing cards (PlayingCard.tsx), for Patience and Poker. Size: --card-w on a parent. */
+.pc-card {
+  --cw: var(--card-w, 72px);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--cw);
+  height: calc(var(--cw) * 1.4);
+  border: 1px solid #b9b9b9;
+  border-radius: calc(var(--cw) * 0.09);
+  background: linear-gradient(160deg, #ffffff, #f1f1ee);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  color: #1d1d1d;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1;
+  user-select: none;
+}
+
+.pc-card.red {
+  color: #c8161d;
+}
+
+.pc-corner {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  font-size: calc(var(--cw) * 0.2);
+}
+
+.pc-corner b {
+  font-weight: bold;
+}
+
+.pc-corner i {
+  font-size: 0.85em;
+  font-style: normal;
+}
+
+.pc-corner.tl {
+  top: calc(var(--cw) * 0.05);
+  left: calc(var(--cw) * 0.07);
+}
+
+.pc-corner.br {
+  right: calc(var(--cw) * 0.07);
+  bottom: calc(var(--cw) * 0.05);
+  transform: rotate(180deg);
+}
+
+.pc-mid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: calc(var(--cw) * 0.52);
+}
+
+/* Jack, queen and king: the letter in a little frame */
+.pc-mid.face {
+  inset: 20% 18%;
+  align-content: center;
+  gap: 2px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  font-size: calc(var(--cw) * 0.32);
+}
+
+.pc-mid.face i {
+  font-size: 0.8em;
+  font-style: normal;
+}
+
+/* The back: a pattern in the site's colours */
+.pc-card.back {
+  border-color: #fff;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.18) 0 4px, transparent 4px 9px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.18) 0 4px, transparent 4px 9px),
+    linear-gradient(135deg, var(--brand), var(--brand-dark));
+  box-shadow:
+    inset 0 0 0 3px #fff,
+    0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.pc-card.spot {
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+}

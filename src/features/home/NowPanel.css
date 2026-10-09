@@ -1,0 +1,163 @@
+/*
+ * "Nu in Nederland" (NowPanel.tsx): a drawer above Home, in the background.
+ * Closed it's only a small grey label under the menu.
+ */
+.now-nl {
+  position: relative;
+  display: grid;
+}
+
+.now-nl-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.now-nl.open .now-nl-drawer {
+  grid-template-rows: 1fr;
+}
+
+.now-nl-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.now-nl-panel {
+  margin: 0 0 12px;
+  padding: 14px 12px 12px;
+  border: 1px solid color-mix(in srgb, var(--box-border) 60%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--box-bg, var(--surface)) 55%, transparent);
+}
+
+.now-nl-panel header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 10px;
+}
+
+.now-nl-panel h2 {
+  margin: 0;
+  color: var(--title-soft);
+  font: bold 14px var(--font-title);
+}
+
+.now-nl-panel header .muted {
+  font-size: 11px;
+}
+
+.now-nl-map {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.now-nl-note {
+  margin: 0;
+  padding: 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* A tile: Hyves blue in a few shades, the word in the bottom left; the big ones with a photo */
+.now-nl-tile {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid var(--box-bg, var(--surface));
+  border-radius: 6px;
+  /* Soft blues that stay behind the rest of the page */
+  background: color-mix(in srgb, var(--brand) calc(34% - var(--shade) * 5%), var(--surface));
+  color: var(--title);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+}
+
+button.now-nl-tile {
+  cursor: pointer;
+}
+
+button.now-nl-tile:hover {
+  background: color-mix(in srgb, var(--brand) 45%, var(--surface));
+}
+
+.now-nl-tile span {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  padding: 0 0.25em 0.12em;
+  font: var(--fs) / 1.05 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.now-nl-tile.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.75);
+}
+
+.now-nl-tile.photo::after {
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+  content: '';
+}
+
+.now-nl-tile.photo span {
+  z-index: 1;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* The label: small and grey, on its own row on the right with a bit of room under the menu (above the panel when open) */
+.now-nl-tab {
+  order: -1;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin: -6px 6px 4px;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: 10px/13px var(--font-body);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.now-nl-tab .farm-icon {
+  width: 11px;
+  height: 11px;
+  opacity: 0.8;
+}
+
+.now-nl-tab:hover,
+.now-nl.open .now-nl-tab {
+  color: var(--link);
+  opacity: 1;
+}
+
+@media (max-width: 700px) {
+  .now-nl-map {
+    height: 160px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .now-nl-drawer {
+    transition: none;
+  }
+}

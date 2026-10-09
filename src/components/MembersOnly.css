@@ -1,0 +1,27 @@
+.members-only {
+  max-width: 520px;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.members-only p {
+  margin: 8px 0;
+}
+
+.members-only-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.members-only-embed {
+  margin: 6px 0;
+  padding: 6px 10px;
+  border: 1px dashed var(--box-border);
+  border-radius: 4px;
+  background: var(--tint-1);
+  color: var(--text-muted);
+  font-size: 12px;
+}

@@ -1,0 +1,170 @@
+/* Profielkaartje (ShareCardPage.tsx); the card itself is server/lib/shareCard.ts */
+.sc-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  align-items: center;
+  margin: 6px 0 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 14px, color-mix(in srgb, var(--brand) 6%, transparent) 14px 28px),
+    linear-gradient(to bottom, var(--tint-1), var(--tint-3));
+}
+
+.sc-hero > div {
+  flex: 1;
+  min-width: 220px;
+}
+
+.sc-hero h1 {
+  margin: 0 0 2px;
+}
+
+.sc-hero p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.sc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.sc-switch {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--tint-1);
+  cursor: pointer;
+}
+
+.sc-switch.on {
+  border-color: #8fd36b;
+  background: color-mix(in srgb, #8fd36b 16%, var(--surface));
+}
+
+.sc-switch input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+.sc-switch span,
+.sc-check span {
+  display: grid;
+}
+
+.sc-sub {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin: 14px 0 6px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.sc-always {
+  margin: 0 0 6px;
+  font-size: 11px;
+}
+
+.sc-check {
+  align-items: flex-start;
+  margin-top: 4px;
+}
+
+.sc-check small {
+  font-size: 10px;
+}
+
+.sc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.sc-message {
+  margin-top: 12px;
+}
+
+.sc-saving {
+  margin: 6px 0 0;
+  font-size: 10px;
+}
+
+.sc-preview {
+  display: block;
+  width: 100%;
+  height: 440px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--tint-1);
+}
+
+.sc-share.off {
+  opacity: 0.55;
+}
+
+.sc-share > p.muted {
+  margin: 0 0 6px;
+  font-size: 11px;
+}
+
+.sc-copy {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.sc-copy .text-box {
+  flex: 1;
+  min-width: 0;
+  font: 11px ui-monospace, 'Courier New', monospace;
+}
+
+.sc-copy .btn,
+.sc-buttons .btn {
+  display: inline-flex;
+  flex: none;
+  gap: 5px;
+  align-items: center;
+}
+
+.sc-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+}
+
+.sc-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.sc-buttons a[aria-disabled='true'] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.sc-join {
+  margin-top: 10px !important;
+  font-size: 10px;
+}
+
+@media (max-width: 860px) {
+  .sc-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

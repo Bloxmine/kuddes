@@ -1,0 +1,63 @@
+.firehose-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: calc(-2px - var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px)) 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--box-border);
+  background: var(--tint-1);
+}
+
+.firehose-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.firehose-form .text-box {
+  width: 220px;
+  padding-right: 20px;
+}
+
+.firehose-reset {
+  position: absolute;
+  left: 202px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.firehose-auto {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--title-soft);
+}
+
+.firehose-pager {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 11px;
+}
+
+.firehose-pager button:disabled {
+  color: var(--text-muted);
+  cursor: default;
+  text-decoration: none;
+}
+
+.firehose-list {
+  margin: 4px 0;
+}
+
+.firehose-empty {
+  padding: 12px 0;
+}

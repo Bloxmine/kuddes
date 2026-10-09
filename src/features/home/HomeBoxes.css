@@ -1,0 +1,591 @@
+.box-tab-links {
+  color: var(--title-soft);
+}
+
+.box-tab-links button {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--title-soft);
+  font: inherit;
+  cursor: pointer;
+}
+
+.box-tab-links button:hover {
+  color: var(--link);
+}
+
+.box-tab-links .current,
+.box-tab-links.current {
+  color: var(--title);
+}
+
+.box-more {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.box-more-center {
+  text-align: center;
+}
+
+
+.wx-ask {
+  display: grid;
+  gap: 8px;
+}
+
+.wx-ask label {
+  color: var(--title-soft);
+  font-size: 12px;
+}
+
+/* The postcode and a round go-button inside one field */
+.wx-field {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.wx-field .text-box {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.wx-go {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  border: 0;
+  border-left: 1px solid var(--box-border);
+  background: var(--tint-2);
+  cursor: pointer;
+}
+
+.wx-go:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.wx {
+  display: grid;
+  gap: 8px;
+}
+
+.wx-now {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.wx-temp {
+  color: var(--title);
+  font: bold 34px/1 var(--font-title);
+}
+
+.wx-place {
+  display: grid;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.wx-place b {
+  overflow: hidden;
+  color: var(--title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wx-place span {
+  color: var(--title-soft);
+}
+
+.wx-rain {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+}
+
+.wx-rain-label,
+.wx-rain-pct {
+  flex: none;
+  color: var(--title-soft);
+}
+
+.wx-rain-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--tint-2);
+  overflow: hidden;
+}
+
+.wx-rain-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(to right, #8fd3ff, #2f86c9);
+}
+
+.wx-tip {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--tint-1);
+  color: var(--title);
+  font-weight: bold;
+}
+
+.wx-change {
+  justify-self: start;
+  font-size: 11px;
+}
+
+.weather-note {
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+/* Member boxes (MemberBoxes.tsx) */
+.home-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin: -4px 0 6px;
+  font-size: 11px;
+}
+
+.home-tools .link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* "Jij" (WelcomeBox): your photo, a greeting, the profile bar and your menu */
+.welcome-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.welcome-me > div:not(.avatar) {
+  display: grid;
+  min-width: 0;
+  font-size: 11px;
+}
+
+.welcome-name {
+  overflow: hidden;
+  color: var(--title);
+  font: bold 15px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.welcome-menu {
+  display: grid;
+  margin: 8px calc(-1 * var(--box-pad-x)) calc(-1 * var(--box-pad-y));
+  padding: 0;
+  border-top: 1px solid var(--box-sctn-border);
+  list-style: none;
+}
+
+.welcome-menu li + li {
+  border-top: 1px dotted var(--box-sctn-border);
+}
+
+.welcome-menu a,
+.welcome-menu button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 5px var(--box-pad-x);
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: bold 12px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.welcome-menu a:hover,
+.welcome-menu button:hover {
+  background: var(--tint-1);
+  text-decoration: none;
+}
+
+.welcome-badge {
+  min-width: 16px;
+  margin-left: auto;
+  padding: 0 5px;
+  border-radius: 8px;
+  background: var(--highlight);
+  color: #fff;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.profile-progress {
+  margin-top: 8px;
+}
+
+.profile-progress-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  font-size: 11px;
+}
+
+.profile-progress-hdr b {
+  color: var(--title);
+}
+
+.profile-progress-hdr a {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.profile-progress-bar {
+  height: 7px;
+  margin-top: 4px;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background: var(--tint-1);
+  overflow: hidden;
+}
+
+.profile-progress-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(var(--brand-light), var(--brand));
+}
+
+.birthdays ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.birthdays li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.birthdays li:last-child {
+  border-bottom: 0;
+}
+
+.birthdays li.today {
+  margin: 0 -6px;
+  padding: 6px;
+  border-radius: 8px;
+  background: linear-gradient(var(--note-bg), color-mix(in srgb, #f7c948 32%, var(--surface)));
+}
+
+.birthdays li > div {
+  display: grid;
+  font-size: 12px;
+}
+
+.birthday-knuffel {
+  font-size: 11px;
+}
+
+/* On a phone the menu goes in two columns, so WieWatWaar isn't far down */
+@media (max-width: 860px) {
+  .welcome-menu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .welcome-menu li + li {
+    border-top: 0;
+  }
+}
+
+/* "Smileys in de laatste 24 uur" (SmileysBox.tsx) */
+.smileys-today-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.smileys-today-list li {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+}
+
+.smileys-today-list span {
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+/* Foto's, Video's and Blogs in one box (MediaTabsBox) */
+.media-tabs-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 10px 0 0;
+  font-size: 11px;
+}
+
+/* Nieuw op Kuddes: round photos in a row, each with a quick hello */
+.newcomers-intro {
+  margin: 0 0 8px;
+  color: var(--title-soft);
+  font-size: 12px;
+}
+
+.newcomers {
+  --fade-left: 0px;
+  --fade-right: 0px;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  list-style: none;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  /* One row; where there are more than fit it swipes sideways, fading at that edge (scrollFades.ts) */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+}
+
+.newcomers::-webkit-scrollbar {
+  display: none;
+}
+
+.newcomers[data-fade~='left'] {
+  --fade-left: 32px;
+}
+
+.newcomers[data-fade~='right'] {
+  --fade-right: 32px;
+}
+
+.newcomers li {
+  display: grid;
+  flex: 1 0 92px;
+  justify-items: center;
+  gap: 1px;
+  max-width: 130px;
+  min-width: 0;
+  text-align: center;
+  font-size: 11px;
+}
+
+.newcomer-face {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 3px 0 4px;
+  overflow: hidden;
+  border: 3px solid var(--surface);
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 1px var(--box-border),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.newcomer-face img,
+.newcomer-face span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  color: #fff;
+  font: bold 24px var(--font-title);
+}
+
+.newcomer-name {
+  max-width: 100%;
+  overflow: hidden;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.newcomer-hi {
+  margin-top: 3px;
+  padding: 1px 9px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--tint-1);
+  font-size: 10px;
+}
+
+.newcomer-hi:hover {
+  border-color: var(--link);
+  text-decoration: none;
+}
+
+/* Ideeënbus: one line per idea with its status */
+.idea-list {
+  display: grid;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.idea-list li + li {
+  border-top: 1px dotted var(--box-sctn-border);
+}
+
+.idea-list a {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 0;
+  color: var(--text);
+}
+
+.idea-list a:hover b {
+  color: var(--link);
+}
+
+.idea-list span {
+  display: grid;
+  min-width: 0;
+}
+
+.idea-list b {
+  overflow: hidden;
+  color: var(--title);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.idea-list small {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.idea-add {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Kuddes: the biggest or the newest, as a list */
+.kudde-sort {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 8px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.kudde-sort button {
+  flex: 1;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--title-soft);
+  font: bold 11px var(--font-title);
+  cursor: pointer;
+}
+
+.kudde-sort button.current {
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  color: var(--title);
+}
+
+.kudde-list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kudde-list a {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  color: var(--text);
+}
+
+.kudde-list a:hover {
+  background: var(--tint-1);
+  text-decoration: none;
+}
+
+.kudde-list-pic {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+}
+
+.kudde-list-text {
+  display: grid;
+  min-width: 0;
+}
+
+.kudde-list-text b {
+  overflow: hidden;
+  color: var(--link);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kudde-list-text small {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: capitalize;
+}
+
+.kudde-list-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  justify-content: center;
+  margin: 8px 0 0;
+  font-size: 11px;
+}
+
+/* Kuddes as tiles, two by two (the profile's Kuddes box) */
+.kudde-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}

@@ -1,0 +1,18 @@
+/* "Nodig je vrienden uit" under Online vrienden: one quiet line */
+.invite-link {
+  margin: 8px -2px -2px;
+  padding-top: 7px;
+  border-top: 1px solid var(--row-border, var(--box-sctn-border));
+  font-size: 11px;
+}
+
+.invite-link .link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+}
+
+.invite-link .link-button:hover {
+  color: var(--link);
+}

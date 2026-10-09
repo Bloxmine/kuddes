@@ -1,0 +1,158 @@
+/* The Kuddes Muziek gadget (MusicGadget.tsx): a cover with play buttons, then the songs */
+.mug {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mug-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mug-head-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mug-head-text b {
+  overflow: hidden;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mug-head-text small {
+  font-size: 11px;
+}
+
+.mug-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.mug-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mug-list button {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 5px;
+  border: 0;
+  border-bottom: 1px solid var(--row-border);
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mug-list li:last-child button {
+  border-bottom: 0;
+}
+
+.mug-list button:hover {
+  background: var(--tint-1);
+}
+
+.mug-list li.on button {
+  background: var(--tint-2);
+}
+
+/* The play icon shows on hover, and on the song that's on */
+.mug-list .farm-icon {
+  flex: none;
+  opacity: 0;
+}
+
+.mug-list button:hover .farm-icon,
+.mug-list button:focus-visible .farm-icon,
+.mug-list li.on .farm-icon {
+  opacity: 1;
+}
+
+.mug-num {
+  flex: none;
+  width: 16px;
+  color: var(--text-muted);
+  font: bold 11px var(--font-title);
+  text-align: center;
+}
+
+.mug-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.mug-text b,
+.mug-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mug-text b {
+  font-size: 12px;
+}
+
+li.on .mug-text b {
+  color: var(--link);
+}
+
+.mug-text small {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.mug-time {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mug-more {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mug-more .farm-icon {
+  margin-right: 4px;
+  vertical-align: -3px;
+}
+
+/* A narrow column: the cover goes above the buttons */
+@container gadget (max-width: 260px) {
+  .gadget .mug-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gadget .mug-head .mu-cover {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1;
+  }
+
+  .gadget .mug-time {
+    display: none;
+  }
+}

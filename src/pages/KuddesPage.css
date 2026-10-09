@@ -1,0 +1,737 @@
+.page-intro {
+  margin: 4px 0 16px;
+  color: var(--title-soft);
+  font-size: 14px;
+}
+
+.kuddes-page-grid {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.kudde-hero {
+  display: flex;
+  overflow: hidden;
+}
+
+.kudde-hero-img {
+  position: relative;
+  flex: none;
+  width: 260px;
+  min-height: 170px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* The owner's button on the picture: shows when you point at it (always on touch screens) */
+.kudde-hero-change {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.kudde-hero-img:hover .kudde-hero-change,
+.kudde-hero-change:focus-within {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .kudde-hero-change {
+    opacity: 1;
+  }
+}
+
+.kudde-hero-change .form-error {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.kudde-image-edit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.kudde-image-preview {
+  flex: none;
+  width: 160px;
+  height: 104px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background-size: cover;
+  background-position: center;
+}
+
+.kudde-image-actions {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+}
+
+.kudde-hero-info {
+  padding: 18px 22px;
+}
+
+.kudde-hero-info p {
+  margin: 4px 0 12px;
+}
+
+.kudde-hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.kudde-description {
+  white-space: pre-line;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .kudde-hero {
+    flex-direction: column;
+  }
+
+  .kudde-hero-img {
+    width: 100%;
+    min-height: 140px;
+  }
+}
+
+.kudde-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 8px 4px;
+}
+
+.kudde-members li {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.kudde-subcategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--tint-1);
+}
+
+.kudde-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Rows like the Hyves "Populairste spots": every other one tinted */
+.kudde-item {
+  display: flex;
+  gap: 16px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.kudde-item:nth-child(even) {
+  background: var(--tint-1);
+}
+
+.kudde-item:last-child {
+  border-bottom: 0;
+}
+
+.kudde-item-img {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.kudde-item-img img,
+.kudde-item-img span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  color: #fff;
+  font: bold 28px var(--font-title);
+}
+
+.kudde-item-info {
+  display: grid;
+  align-content: start;
+  gap: 1px;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.kudde-item-name {
+  font: bold 16px var(--font-title);
+}
+
+.kudde-item-lock {
+  margin-left: 4px;
+  vertical-align: -2px;
+}
+
+.kudde-item-address {
+  color: var(--text);
+  font-style: italic;
+}
+
+.kudde-item-desc {
+  overflow: hidden;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.kudde-list-empty {
+  padding: 16px 14px;
+}
+
+.kudde-about {
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.kudde-new {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.kudde-new:hover {
+  text-decoration: none;
+}
+
+/* New / edit */
+.new-kudde {
+  max-width: 760px;
+}
+
+.kudde-category-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.kudde-category-picker button {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 8px 4px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: linear-gradient(var(--surface), var(--tint-1));
+  color: var(--text);
+  font: bold 11px var(--font-body);
+  cursor: pointer;
+}
+
+.kudde-category-picker button:hover,
+.kudde-category-picker button.current {
+  border-color: var(--brand);
+}
+
+.kudde-category-picker button.current {
+  background: linear-gradient(var(--tint-2), var(--tint-3));
+  color: var(--title);
+}
+
+.kudde-visibility {
+  display: grid;
+  gap: 6px;
+  margin: 4px 0 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.kudde-visibility legend {
+  padding: 0 4px;
+  font-weight: bold;
+}
+
+.kudde-visibility label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  cursor: pointer;
+}
+
+/* Kudde page */
+.kudde-hero-category {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 2px !important;
+  font-size: 12px;
+}
+
+.kudde-hero-category a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kudde-closed {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 8px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--tint-2);
+  color: var(--title);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.kudde-contact {
+  display: grid;
+  gap: 2px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+
+.kudde-contact li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kudde-hero-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* A Kudde with its own design ("Pimp deze Kudde"): like a gepimpt profile */
+.kudde-page {
+  margin-top: 12px;
+  padding: 1px 0 12px;
+}
+
+.kudde-page.skinned {
+  background: var(--profile-bg);
+  color: var(--text);
+}
+
+.kudde-page.skinned:not(.profile-preview) {
+  /* The design's own background, in a layer that fades in at the top and out
+     at the bottom, so it blends into the page (or a seasonal night sky)
+     instead of starting with a hard edge. The layer is behind the content;
+     isolation keeps it above the site's own background decorations. */
+  position: relative;
+  isolation: isolate;
+  background: none;
+}
+
+.kudde-page.skinned:not(.profile-preview)::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--profile-bg);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+  pointer-events: none;
+  content: '';
+}
+
+/* The title bar's pattern and font carry over to the block with the name */
+.kudde-page .kudde-hero-info {
+  flex: 1;
+  background: var(--profile-hdr-bg, none);
+}
+
+.kudde-page .kudde-hero-info h1 {
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--profile-name-pad, 0);
+  border-radius: 10px;
+  background: var(--profile-name-plate, none);
+  color: var(--profile-name-color, var(--title));
+  font-family: var(--profile-name-font, var(--font-title));
+  text-shadow: var(--profile-name-shadow, none);
+  overflow-wrap: anywhere;
+  /* "Neon": a flicker now and then (headerVars) */
+  animation: var(--profile-name-anim, none);
+}
+
+/* On a pattern, the text under the name gets a light chip to stay readable */
+.kudde-page .kudde-hero-info > :not(h1) {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 8px;
+  background: var(--profile-tab-bg, none);
+}
+
+.kudde-page.skinned .kudde-hero-info > :not(h1) {
+  padding: 2px 8px;
+}
+
+/* The small preview in "Pimp deze Kudde" */
+.profile-preview .kudde-hero-img {
+  width: 34%;
+  min-height: 90px;
+}
+
+.profile-preview .kudde-hero-info {
+  padding: 10px 12px;
+}
+
+.profile-preview .kudde-hero-info h1 {
+  font-size: 18px;
+}
+
+/* Over deze Kudde: what they do, when, opening hours, where */
+.kudde-about section {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--box-sctn-border);
+  font-size: 13px;
+}
+
+.kudde-about section:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.kudde-about h3 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 3px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.kudde-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  font-size: 12px;
+}
+
+.kudde-edit-sub {
+  margin: 14px 0 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--box-sctn-border);
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+/* The Kudde's Foto's box */
+.kp-upload {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: calc(-2px - var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px)) 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--alt-bg);
+  font-size: 11px;
+}
+
+.kp-upload input[type='file'] {
+  max-width: 100%;
+  font-size: 11px;
+}
+
+.kp-upload .text-box {
+  flex: 1;
+  min-width: 120px;
+}
+
+.kp-upload .form-error {
+  flex-basis: 100%;
+}
+
+.kp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kp-grid button {
+  display: block;
+  width: 100%;
+  padding: 2px;
+  border: 1px solid var(--box-border);
+  border-radius: 3px;
+  background: var(--surface);
+  cursor: zoom-in;
+}
+
+.kp-grid button:hover {
+  border-color: var(--brand);
+}
+
+.kp-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.kp-more {
+  margin-top: 8px;
+}
+
+.kp-by {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* A yes/no setting in "Kudde bewerken" */
+.kudde-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 0 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.kudde-toggle input {
+  flex: none;
+  margin-top: 2px;
+}
+
+.kudde-toggle small {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+.kudde-toggle:has(input:disabled) {
+  cursor: default;
+  opacity: 0.7;
+}
+
+/* "Fotografie-Kudde" in the form, and its badge on the Kudde */
+.kudde-photography {
+  align-items: center;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.kudde-photography > span {
+  display: grid;
+}
+
+.kudde-photography-badge {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #2b2f33;
+  color: #fff !important;
+  font: bold 11px var(--font-title);
+}
+
+.kp-album-select {
+  flex: 0 1 160px;
+  min-width: 0;
+}
+
+/* A photography Kudde: photos from your own photography page */
+.kp-from-photography {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  margin: 0 0 10px;
+  font-size: 12px;
+}
+
+.kp-from-photography .btn {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+/* The directory: sorting and list or grid, in the list's header */
+.kudde-bar-tools {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.kudde-view {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: 6px;
+  padding: 2px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.kudde-view button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.kudde-view button.current {
+  background: var(--tint-3);
+  opacity: 1;
+}
+
+/* The grid: a card per Kudde, its picture big */
+.kudde-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 14px;
+  list-style: none;
+}
+
+.kudde-card a {
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+}
+
+.kudde-card a:hover {
+  text-decoration: none;
+}
+
+.kudde-card-img {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+  transition:
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+
+.kudde-card a:hover .kudde-card-img {
+  box-shadow: 0 4px 12px rgba(19, 50, 79, 0.18);
+  transform: translateY(-1px);
+}
+
+.kudde-card-img > img,
+.kudde-card-img > span:first-child {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  object-fit: cover;
+  color: rgba(255, 255, 255, 0.9);
+  font: bold 48px var(--font-title);
+}
+
+.kudde-card-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #2b2f33;
+}
+
+.kudde-card-text {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.kudde-card-text b {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  overflow: hidden;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kudde-card-text small {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .kudde-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .kudde-bar-tools {
+    flex-wrap: wrap;
+  }
+}
+
+/* "Beheerd door" above the members */
+.kudde-managers {
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+
+/* The moving background fades like the design's own background does */
+.kudde-page.skinned:not(.profile-preview) > .bgfx {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--design-fade-top, 140px), #000 calc(100% - 120px), transparent 100%);
+}

@@ -1,0 +1,93 @@
+/* Bejeweled 3 (Bejeweled.tsx): the game across the page, records and high scores below */
+.bj-box .box-con {
+  overflow: hidden;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* The game is drawn for 16:10 (1920×1200); on a phone it switches to its portrait layout */
+.bj-stage {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  max-height: calc(100vh - 150px);
+  margin: 0 auto;
+  background: #000;
+}
+
+.bj-stage:not(.full) {
+  width: min(100%, (100vh - 150px) * 1.6);
+}
+
+.bj-stage iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.bj-stage.full {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+}
+
+.bj-help {
+  margin: 0;
+  padding: 6px var(--box-pad-x, 12px);
+  font-size: 11px;
+}
+
+.bj-below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 0 12px;
+  align-items: start;
+}
+
+.bj-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.bj-mode {
+  padding: 2px 9px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--tint-1);
+  color: var(--link);
+  font: bold 11px var(--font-body);
+  cursor: pointer;
+}
+
+.bj-mode.current {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.bj-badges-link {
+  margin: 8px 0 0;
+  font-size: 11px;
+}
+
+.bj-badges-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 860px) {
+  .bj-below {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* A phone held upright: the game's portrait layout (1200×1660) */
+@media (max-width: 700px) and (orientation: portrait) {
+  .bj-stage:not(.full) {
+    width: 100%;
+    aspect-ratio: 12 / 16.6;
+    max-height: calc(100vh - 110px);
+  }
+}

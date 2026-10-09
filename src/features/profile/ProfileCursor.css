@@ -1,0 +1,22 @@
+/* An animated cursor from someone's profile (ProfileCursor.tsx): the real
+   pointer hides while the GIF follows the mouse, except where you type */
+:root[data-gif-cursor],
+:root[data-gif-cursor] * {
+  cursor: none !important;
+}
+
+:root[data-gif-cursor] :is(input, textarea, select, [contenteditable='true'], iframe) {
+  cursor: auto !important;
+}
+
+.gif-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483647;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  transform-origin: 0 0;
+  will-change: transform;
+}

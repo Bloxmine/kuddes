@@ -1,0 +1,173 @@
+.social {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.social-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.social-respect {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  color: var(--title-soft);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.social-respect:hover:not(:disabled) {
+  border-color: var(--note-border);
+  background: var(--note-bg);
+}
+
+.social-respect.respected {
+  border-color: var(--note-border);
+  background: linear-gradient(to bottom, var(--note-bg), color-mix(in srgb, #f7c948 35%, var(--surface)));
+  color: var(--note-text);
+}
+
+.social-respect:disabled {
+  cursor: default;
+}
+
+.social-comment-toggle,
+.social-tally {
+  border: 0;
+  background: none;
+  color: var(--title-soft);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.social-comment-toggle:hover {
+  color: var(--link);
+}
+
+.social-respecters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+.social-respecters-avatars {
+  display: flex;
+}
+
+.social-respecters-avatars .avatar {
+  width: auto !important;
+  margin-right: -6px;
+}
+
+.social-respecters-avatars .avatar-link {
+  padding: 1px;
+  border-radius: 50%;
+}
+
+.social-respecters-avatars .avatar-img {
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50%;
+  font-size: 9px;
+}
+
+.social-comments {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+  background: var(--alt-bg);
+}
+
+.social-comment {
+  display: flex;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+
+.social-comment .avatar,
+.social-form .avatar {
+  width: auto !important;
+}
+
+.social-comment .avatar-img,
+.social-form .avatar-img {
+  width: 26px !important;
+  height: 26px !important;
+  font-size: 10px;
+}
+
+.social-comment-remove {
+  margin-left: 4px;
+  vertical-align: -3px;
+  opacity: 0.6;
+}
+
+.social-comment-remove:hover {
+  opacity: 1;
+}
+
+.social-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.social-form .text-box {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+}
+
+/* The reaction box: one line, the smiley button inside it on the right */
+.social-input {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.social-input .text-box {
+  width: 100%;
+  padding-right: 30px;
+}
+
+.social-smiley-btn {
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+  opacity: 0.75;
+  transform: translateY(-50%);
+}
+
+.social-smiley-btn:hover,
+.social-smiley-btn[aria-expanded='true'] {
+  background: var(--tint-2);
+  opacity: 1;
+}
+
+.social-smiley-btn img.smiley {
+  max-width: 18px;
+  max-height: 18px;
+}

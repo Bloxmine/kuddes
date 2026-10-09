@@ -1,0 +1,1 @@
+ALTER TABLE "messenger_lines" ADD COLUMN "share" text;

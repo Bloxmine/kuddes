@@ -1,0 +1,11 @@
+# /etc/systemd/system/kuddes-backup.timer — runs the backup every night at 04:00.
+[Unit]
+Description=Kuddes backup, every night
+
+[Timer]
+OnCalendar=*-*-* 04:00:00
+RandomizedDelaySec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

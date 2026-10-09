@@ -1,0 +1,122 @@
+/* Beheer → Servers (FederationAdmin.tsx) and the "from another server" bits on profiles */
+.fd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0 12px;
+}
+
+.fd-h {
+  margin: 12px 0 6px;
+  color: var(--title);
+  font-size: 12px;
+}
+
+.fd-modes {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.fd-modes label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+}
+
+.fd-modes label.on {
+  border-color: var(--brand);
+  background: var(--tint-1);
+}
+
+.fd-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.fd-servers {
+  display: grid;
+  /* A long policy name in the select mustn't widen the list on a phone */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.fd-server {
+  padding: 8px 10px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+}
+
+.fd-server.geblokkeerd {
+  opacity: 0.75;
+}
+
+.fd-server.toegestaan {
+  border-color: var(--brand);
+}
+
+.fd-server-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  overflow-wrap: anywhere;
+}
+
+.fd-server-stats {
+  margin: 2px 0 6px;
+}
+
+.fd-server-actions,
+.fd-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.fd-server-actions select {
+  flex: 1 1 200px;
+  min-width: 0;
+  width: auto;
+}
+
+.fd-add select {
+  width: auto;
+  max-width: 100%;
+}
+
+.fd-add input {
+  flex: 1 1 160px;
+  width: auto;
+}
+
+/* On a profile of someone from another server */
+.fd-remote {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+  overflow-wrap: anywhere;
+}
+
+.fd-handle {
+  margin: -2px 0 4px;
+  color: var(--text-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+  user-select: all;
+}

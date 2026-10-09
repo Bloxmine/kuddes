@@ -1,0 +1,124 @@
+/* A call in Kuddes Messenger (CallWindow.tsx): a small window at the top right, on every page */
+.call-window {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  z-index: 950;
+  display: grid;
+  gap: 10px;
+  width: min(300px, calc(100vw - 24px));
+  padding: 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  background: linear-gradient(to bottom, var(--box-hdr-top), var(--surface));
+  box-shadow: 0 10px 30px rgba(19, 50, 79, 0.28);
+  color: var(--text);
+  animation: call-in 0.25s ease-out;
+}
+
+@keyframes call-in {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+
+.call-window.incoming .call-pic {
+  animation: call-ring 1.1s ease-in-out infinite;
+}
+
+@keyframes call-ring {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  10%,
+  30% {
+    transform: rotate(-8deg);
+  }
+  20%,
+  40% {
+    transform: rotate(8deg);
+  }
+  50% {
+    transform: rotate(0);
+  }
+}
+
+.call-who {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.call-text {
+  display: grid;
+  min-width: 0;
+}
+
+.call-text b {
+  overflow: hidden;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.call-text small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.call-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.call-btn {
+  display: inline-flex;
+  flex: 1;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.call-btn.on {
+  background: var(--tint-3);
+}
+
+.call-btn.accept {
+  border-color: #3f8f22;
+  background: linear-gradient(to bottom, #8fd36b, #4e9d33);
+  color: #fff;
+}
+
+.call-btn.end {
+  border-color: #b8322a;
+  background: linear-gradient(to bottom, #f07a6f, #d0402f);
+  color: #fff;
+}
+
+.call-note {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.call-note .icon-button {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .call-window,
+  .call-window.incoming .call-pic {
+    animation: none;
+  }
+}

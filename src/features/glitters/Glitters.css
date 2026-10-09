@@ -1,0 +1,363 @@
+/* Glitterplaatjes: the cards on /glitterplaatjes (the page around them is components/catalog), uploading, the picker */
+
+/* Cards: the plaatje big, with the heart on it, the details below */
+.gl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 14px;
+  list-style: none;
+  transition: opacity 0.15s;
+}
+
+.gl-grid.loading {
+  opacity: 0.6;
+}
+
+.gl-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gl-img {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: radial-gradient(circle at 50% 40%, var(--surface), var(--tint-2));
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.gl-card:hover .gl-img {
+  box-shadow: 0 4px 12px rgba(19, 50, 79, 0.16);
+  transform: translateY(-1px);
+}
+
+.gl-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gl-heart,
+.gl-delete {
+  position: absolute;
+  top: 7px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--box-border);
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(19, 50, 79, 0.15);
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.gl-heart {
+  right: 7px;
+}
+
+.gl-heart:hover {
+  transform: scale(1.1);
+}
+
+.gl-heart.on {
+  border-color: #e8a0b4;
+  background: #fff0f4;
+}
+
+.gl-delete {
+  left: 7px;
+  opacity: 0;
+}
+
+.gl-delete.gl-edit-tags {
+  left: 41px;
+}
+
+.gl-card:hover .gl-delete,
+.gl-delete:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .gl-delete {
+    opacity: 0.85;
+  }
+}
+
+.gl-info {
+  display: grid;
+  gap: 3px;
+  padding: 7px 2px 0;
+}
+
+.gl-name {
+  overflow: hidden;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-by {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  font-size: 11px;
+}
+
+.gl-by .avatar {
+  width: auto !important;
+}
+
+.gl-by .avatar-link {
+  padding: 1px;
+}
+
+.gl-by .avatar-img {
+  width: 20px;
+  height: 20px;
+  font-size: 9px;
+}
+
+.gl-by a {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gl-uses-n {
+  display: inline-flex;
+  flex: none;
+  gap: 3px;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.gl-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-width: 0;
+}
+
+.gl-tag {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  justify-self: start;
+  max-width: 100%;
+  padding: 1px 7px 1px 3px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--tint-1);
+  color: var(--text-muted);
+  font: bold 10px/16px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gl-tag:hover {
+  background: var(--tint-3);
+  color: var(--title);
+}
+
+/* ------------------------------------------------------------ upload */
+.gl-tag-pick {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.gl-tag-pick legend {
+  padding: 0;
+  margin-bottom: 3px;
+  color: var(--title-soft);
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.gl-tag-pick .hint {
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 10px;
+}
+
+.gl-tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.gl-tag-chip {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 3px 9px 3px 5px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.gl-tag-chip:hover:not(:disabled) {
+  border-color: var(--brand);
+}
+
+.gl-tag-chip.on {
+  border-color: var(--brand);
+  background: var(--tint-3);
+  color: var(--title);
+}
+
+.gl-tag-chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.gl-tags-preview {
+  justify-self: center;
+  max-width: 100%;
+  max-height: 140px;
+}
+
+.gl-upload {
+  display: grid;
+  gap: 10px;
+}
+
+.gl-drop {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  place-items: center;
+  min-height: 150px;
+  padding: 16px;
+  border: 2px dashed var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+  color: var(--text-muted);
+  text-align: center;
+  cursor: pointer;
+}
+
+.gl-drop:hover,
+.gl-drop:focus-within {
+  border-color: var(--brand);
+}
+
+.gl-drop.has-file img {
+  max-width: 100%;
+  max-height: 220px;
+}
+
+.gl-drop input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------ picker */
+.gl-picker-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.gl-picker-bar select {
+  height: 30px;
+}
+
+.gl-picker-search {
+  flex: 0 1 220px;
+}
+
+.gl-picker-search input {
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+}
+
+.gl-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gl-pick-grid button {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 4px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+  cursor: pointer;
+}
+
+.gl-pick-grid button:hover,
+.gl-pick-grid button:focus-visible {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+.gl-pick-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gl-picker-pages {
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* In knuffels and on the timeline */
+.glitter-img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 320px);
+  height: auto;
+  max-height: 320px;
+  margin: 4px 0;
+}
+
+
+
+
+/* ------------------------------------------------------------ mobile */
+@media (max-width: 760px) {
+  .gl-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+}

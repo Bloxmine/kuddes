@@ -1,0 +1,126 @@
+/* A box with an open menu or popover lies above the boxes after it: with a
+   see-through (blurred) design every box is its own layer, and the menu
+   would otherwise open underneath the next box */
+.box:has(.dropdown.open, .di-cal, .smiley-picker, .fm-reaction-picker, .recipient-results) {
+  position: relative;
+  z-index: 5;
+}
+
+.box {
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  /* Own themes and designs can make boxes see-through and blur what's behind */
+  /* A texture under the box colour (--box-tex), and an own glow (--box-glow), from boxLookVars */
+  background: var(--box-tex, linear-gradient(transparent, transparent)), var(--box-bg, var(--surface));
+  backdrop-filter: var(--box-filter, none);
+  margin: 0 0 12px;
+  box-shadow:
+    0 1px 3px rgba(19, 50, 79, 0.06),
+    var(--box-glow, 0 0 0 transparent);
+}
+
+.box-hdr {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-height: 34px;
+  border-bottom: 1px solid var(--box-hdr-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--box-hdr-image, linear-gradient(to bottom, var(--box-hdr-top) 0%, var(--box-hdr-bottom) 100%));
+}
+
+.box-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+  padding: 6px 12px 5px;
+  font: bold 14px/1.38 var(--font-title);
+  color: var(--title);
+}
+
+.box-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  font-size: 15px;
+  line-height: 18px;
+  justify-content: center;
+}
+
+.box-actns {
+  align-self: center;
+  padding: 0 14px 0 0;
+  font: bold 12px var(--font-title);
+}
+
+.box-con {
+  /* Parts that reach the edges of the box (a composer, an upload bar) pull out by exactly these */
+  --box-pad-y: 10px;
+  --box-pad-x: 12px;
+  padding: var(--box-pad-y) var(--box-pad-x);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.box-con-flush {
+  padding: 0;
+}
+
+.box-sctn {
+  margin: 12px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.box-sctn:first-child {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.box-sctn.alt {
+  background: var(--alt-bg);
+}
+
+/* Tabs in the box header: current tab is white and merges with the box body */
+.box-tabs {
+  display: flex;
+  padding: 4px 0 0 9px;
+  margin-bottom: -1px;
+  font: bold 13px/1.38 var(--font-title);
+}
+
+.box-tabs button {
+  display: block;
+  padding: 4px 10px 4px 12px;
+  border: 0;
+  border-left: 1px solid var(--box-border);
+  background: none;
+  color: var(--link);
+  font: inherit;
+  text-shadow: 0 1px 1px var(--surface);
+  cursor: pointer;
+}
+
+.box-tabs li:first-child button,
+.box-tabs li.current button,
+.box-tabs li.current + li button {
+  border-left-color: transparent;
+}
+
+.box-tabs button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  text-decoration: underline;
+}
+
+.box-tabs li.current button {
+  padding: 4px 15px 5px;
+  background: var(--surface);
+  border: 1px solid var(--box-hdr-border);
+  border-bottom-color: var(--surface);
+  border-radius: var(--radius) var(--radius) 0 0;
+  color: var(--accent);
+  text-decoration: none;
+  cursor: default;
+}

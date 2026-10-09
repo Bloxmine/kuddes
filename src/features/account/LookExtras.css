@@ -1,0 +1,66 @@
+/* Colours over a texture, glow and textures for boxes (LookExtras.tsx) */
+.overlay-controls {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px dashed var(--box-border);
+  border-radius: 8px;
+}
+
+.overlay-styles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.box-extras {
+  margin-top: 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+  overflow: hidden;
+}
+
+.box-extras-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  background: none;
+  color: var(--title);
+  font: 12px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.box-extras-bar > span:first-of-type {
+  flex: 1;
+  min-width: 0;
+}
+
+.box-extras-bar:hover {
+  background: var(--tint-2);
+}
+
+.box-extras-body {
+  display: grid;
+  gap: 8px;
+  padding: 8px 10px 10px;
+  border-top: 1px solid var(--box-border);
+  background: var(--surface);
+}
+
+.box-extras-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+}
+
+.box-extras-note {
+  margin: 0;
+  font-size: 11px;
+}

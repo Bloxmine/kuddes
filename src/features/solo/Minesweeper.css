@@ -1,0 +1,204 @@
+/* Mijnenveger (Minesweeper.tsx): the grey Windows window with Farm-Fresh pictures */
+.ms {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.ms-levels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.ms-levels button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--tint-1);
+  color: var(--link);
+  font: bold 12px var(--font-body);
+  cursor: pointer;
+}
+
+.ms-levels button .muted {
+  font-weight: normal;
+  font-size: 10px;
+}
+
+.ms-levels button.current,
+.ms-levels .ms-flagmode.on {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.ms-levels button.current .muted {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* The window: raised grey with sunken parts, like Windows 98 */
+.ms-window {
+  --raise: #fff;
+  --sink: #7b7b7b;
+  display: grid;
+  gap: 8px;
+  max-width: 100%;
+  padding: 8px;
+  border: 3px solid;
+  border-color: var(--raise) var(--sink) var(--sink) var(--raise);
+  background: #c0c0c0;
+}
+
+.ms-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 6px;
+  border: 2px solid;
+  border-color: var(--sink) var(--raise) var(--raise) var(--sink);
+}
+
+.ms-led {
+  padding: 0 4px;
+  border: 1px solid;
+  border-color: var(--sink) var(--raise) var(--raise) var(--sink);
+  background: #000;
+  color: #ff2a1a;
+  font: 600 26px/1.15 'Oswald', 'Arial Narrow', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+  text-shadow: 0 0 6px rgba(255, 42, 26, 0.6);
+}
+
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/oswald-600-latin.woff2') format('woff2');
+}
+
+.ms-face {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 3px solid;
+  border-color: var(--raise) var(--sink) var(--sink) var(--raise);
+  background: #c0c0c0;
+  cursor: pointer;
+}
+
+.ms-face:active {
+  border-color: var(--sink) var(--raise) var(--raise) var(--sink);
+}
+
+.ms-field-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 3px solid;
+  border-color: var(--sink) var(--raise) var(--raise) var(--sink);
+}
+
+.ms-field {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell));
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.ms-cell {
+  display: grid;
+  place-items: center;
+  width: var(--cell);
+  height: var(--cell);
+  padding: 0;
+  border: 3px solid;
+  border-color: var(--raise) var(--sink) var(--sink) var(--raise);
+  background: #c0c0c0;
+  font: bold calc(var(--cell) * 0.62) / 1 'Arial Black', Arial, sans-serif;
+  cursor: pointer;
+}
+
+.ms-cell .farm-icon {
+  width: calc(var(--cell) * 0.62);
+  height: calc(var(--cell) * 0.62);
+}
+
+.ms-cell.open {
+  border: 0;
+  border-top: 1px solid var(--sink);
+  border-left: 1px solid var(--sink);
+  cursor: default;
+}
+
+.ms-cell.boom {
+  background: #ff2a1a;
+}
+
+/* The classic colours of the numbers */
+.ms-cell.n1 {
+  color: #0000ff;
+}
+
+.ms-cell.n2 {
+  color: #007b00;
+}
+
+.ms-cell.n3 {
+  color: #ff0000;
+}
+
+.ms-cell.n4 {
+  color: #00007b;
+}
+
+.ms-cell.n5 {
+  color: #7b0000;
+}
+
+.ms-cell.n6 {
+  color: #007b7b;
+}
+
+.ms-cell.n7 {
+  color: #000;
+}
+
+.ms-cell.n8 {
+  color: #7b7b7b;
+}
+
+/* A flag where there was no mine */
+.ms-cross {
+  position: relative;
+  display: grid;
+}
+
+.ms-cross::after {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, transparent 45%, #ff0000 45% 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, #ff0000 45% 55%, transparent 55%);
+  content: '';
+}
+
+.ms-won .ms-face {
+  background: #d8e8c8;
+}
+
+.ms-result {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 20px;
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "kuddes" ADD COLUMN "photos_shareable" boolean DEFAULT true NOT NULL;

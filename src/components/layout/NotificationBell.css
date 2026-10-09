@@ -1,0 +1,160 @@
+/* The bell in the top bar (NotificationBell.tsx) */
+.notif-bell .dropdown-panel {
+  width: 360px;
+  padding: 0;
+  /* The tail matches the header it points into */
+  --bubble-tail: var(--box-hdr-top);
+}
+
+/* Rounded like the bubble, without clipping its tail */
+.notif-panel {
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.notif-panel {
+  display: grid;
+  max-height: min(560px, calc(100vh - 90px));
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.notif-hdr {
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: linear-gradient(to bottom, var(--box-hdr-top), var(--surface));
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+/* Friend and relation requests: on top, in a soft colour */
+.notif-requests {
+  display: grid;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--note-bg);
+}
+
+.notif-requests a {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 14px;
+  color: var(--note-text);
+  font: bold 12px var(--font-title);
+}
+
+.notif-requests a:hover {
+  background: color-mix(in srgb, var(--note-text) 8%, transparent);
+  text-decoration: none;
+}
+
+.notif-list {
+  margin: 0;
+  padding: 4px 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.notif-list a {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 14px;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.notif-list a:hover {
+  background: var(--tint-1);
+  text-decoration: none;
+}
+
+/* Not seen before this time: a tint and a dot */
+.notif-list a.new {
+  background: color-mix(in srgb, var(--brand) 7%, transparent);
+}
+
+.notif-list a.new .notif-text > span:first-child::after {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: var(--brand);
+  vertical-align: middle;
+  content: '';
+}
+
+.notif-pic {
+  position: relative;
+  flex: none;
+}
+
+.notif-pic .avatar {
+  width: auto !important;
+}
+
+.notif-pic .avatar-img {
+  width: 32px !important;
+  height: 32px !important;
+  font-size: 12px;
+}
+
+.notif-kind {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+}
+
+.notif-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.notif-text b {
+  color: var(--title);
+}
+
+.notif-text q {
+  display: block;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notif-text time {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.notif-empty {
+  margin: 0;
+  padding: 18px 16px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.notif-foot {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-top: 1px solid var(--box-sctn-border);
+  font: bold 12px var(--font-title);
+}
+
+/* On a phone the bell isn't at the edge: the list spans the screen under the bar */
+@media (max-width: 600px) {
+  .notif-bell .dropdown-panel {
+    position: fixed;
+    top: 50px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+  }
+}

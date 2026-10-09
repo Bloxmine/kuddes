@@ -1,0 +1,348 @@
+/*
+ * Moving backgrounds (BackgroundEffect.tsx). Every piece is an <i> that only
+ * moves (translate); its look is the ::before, which has a little motion of
+ * its own (sway, flutter, blink). --hn is the height in pixels, so the travel
+ * and the speed (--v, px per second) don't depend on how tall the page is.
+ */
+.bgfx {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+.bgfx-fixed {
+  position: fixed;
+}
+
+.bgfx i {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: 0;
+  height: 0;
+  will-change: transform;
+}
+
+.bgfx i::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  content: '';
+}
+
+/* "Minder beweging" and a system setting for it: no moving backgrounds at all */
+[data-reduce-motion] .bgfx {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bgfx {
+    display: none;
+  }
+}
+
+/* Phones: fewer pieces, for the battery */
+@media (max-width: 700px) {
+  .bgfx:not(.bgfx-mini) i:nth-child(n + 31) {
+    display: none;
+  }
+}
+
+/* The small version in the picker */
+.bgfx-mini {
+  position: absolute;
+  z-index: 0;
+}
+
+/* ---------------------------------------------------------------- motion */
+@keyframes bgfx-fall {
+  from {
+    transform: translate3d(0, -40px, 0);
+  }
+  to {
+    transform: translate3d(var(--dx), calc(var(--hn) * 1px + 40px), 0);
+  }
+}
+
+@keyframes bgfx-rise {
+  from {
+    transform: translate3d(0, calc(var(--hn) * 1px + 40px), 0);
+  }
+  to {
+    transform: translate3d(var(--dx), -40px, 0);
+  }
+}
+
+@keyframes bgfx-sway {
+  from {
+    transform: translateX(-12px);
+  }
+  to {
+    transform: translateX(12px);
+  }
+}
+
+@keyframes bgfx-flutter {
+  from {
+    transform: translateX(-16px) rotate(-70deg);
+  }
+  to {
+    transform: translateX(16px) rotate(70deg);
+  }
+}
+
+@keyframes bgfx-blink {
+  from {
+    opacity: 0.1;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes bgfx-glint {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(90deg);
+  }
+}
+
+@keyframes bgfx-wander {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(var(--ax), var(--ay), 0);
+  }
+  50% {
+    transform: translate3d(var(--bx), var(--by), 0);
+  }
+  75% {
+    transform: translate3d(calc(var(--ax) * -0.6), calc(var(--by) * -0.8), 0);
+  }
+}
+
+@keyframes bgfx-glow {
+  from {
+    opacity: 0.05;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bgfx-flip {
+  to {
+    transform: rotate3d(1, 0.6, 0.3, 360deg);
+  }
+}
+
+@keyframes bgfx-shoot {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  2% {
+    opacity: 1;
+  }
+  8%,
+  100% {
+    opacity: 0;
+    transform: translate3d(-280px, 190px, 0);
+  }
+}
+
+/* ------------------------------------------------------------------ kinds */
+/* Knipperende sterren */
+.bgfx-sterren i {
+  top: var(--y);
+}
+
+.bgfx-sterren i::before {
+  width: calc(var(--s) * 2.6px);
+  height: calc(var(--s) * 2.6px);
+  border-radius: 50%;
+  background: var(--c, #fff4c2);
+  box-shadow: 0 0 calc(var(--s) * 5px) var(--c, #fff4c2);
+  animation: bgfx-blink calc(var(--d) * 1s) ease-in-out var(--t) infinite alternate;
+}
+
+/* Every fifth is a bigger, pointed star */
+.bgfx-sterren i:nth-child(5n)::before {
+  width: calc(var(--s) * 9px);
+  height: calc(var(--s) * 9px);
+  border-radius: 0;
+  background: var(--c, #fff4c2);
+  box-shadow: none;
+  filter: drop-shadow(0 0 3px var(--c, #fff4c2));
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+}
+
+/* Sneeuw */
+.bgfx-sneeuw i {
+  animation: bgfx-fall calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-sneeuw i::before {
+  width: calc(var(--s) * 4px);
+  height: calc(var(--s) * 4px);
+  border-radius: 50%;
+  background: var(--c, #fff);
+  opacity: var(--o);
+  /* A thin shadow, so flakes show on a light page too */
+  box-shadow: 0 0 3px rgba(70, 110, 170, 0.55);
+  animation: bgfx-sway calc(var(--d) * 1s) ease-in-out infinite alternate;
+}
+
+/* Regen */
+.bgfx-regen i {
+  --dx: calc(var(--hn) * -0.13px);
+  animation: bgfx-fall calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-regen i::before {
+  width: 1.5px;
+  height: calc(var(--s) * 18px);
+  background: linear-gradient(to bottom, transparent, var(--c, #b9d4f2));
+  opacity: var(--o);
+  transform: rotate(7.5deg);
+}
+
+/* Vuurvliegjes */
+.bgfx-vuurvliegjes i {
+  top: var(--y);
+  animation: bgfx-wander calc(var(--d) * 1s) ease-in-out var(--t) infinite;
+}
+
+.bgfx-vuurvliegjes i::before {
+  width: calc(var(--s) * 5px);
+  height: calc(var(--s) * 5px);
+  border-radius: 50%;
+  background: var(--c, #fff27a);
+  box-shadow:
+    0 0 6px 2px var(--c, #fff27a),
+    0 0 14px 5px color-mix(in srgb, var(--c, #fff27a) 45%, transparent);
+  animation: bgfx-glow calc(var(--g) * 1s) ease-in-out var(--t) infinite alternate;
+}
+
+/* Bubbels */
+.bgfx-bubbels i {
+  animation: bgfx-rise calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-bubbels i::before {
+  width: calc(var(--s) * 14px);
+  height: calc(var(--s) * 14px);
+  border: 1px solid color-mix(in srgb, var(--c, #fff) 80%, transparent);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--c, #fff) 60%, transparent), color-mix(in srgb, var(--c, #fff) 8%, transparent) 70%);
+  opacity: var(--o);
+  animation: bgfx-sway calc(var(--d) * 1.4s) ease-in-out infinite alternate;
+}
+
+/* Zwevende hartjes */
+.bgfx-hartjes i {
+  animation: bgfx-rise calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-hartjes i::before {
+  width: calc(var(--s) * 17px);
+  height: calc(var(--s) * 17px);
+  background: var(--c, #ff6f9c);
+  opacity: var(--o);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8-5.3-9.7-10.3C1 7 3.5 4 6.8 4 9 4 11 5.2 12 7c1-1.8 3-3 5.2-3 3.3 0 5.8 3 4.5 6.7C20 15.7 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-8-5.3-9.7-10.3C1 7 3.5 4 6.8 4 9 4 11 5.2 12 7c1-1.8 3-3 5.2-3 3.3 0 5.8 3 4.5 6.7C20 15.7 12 21 12 21z'/%3E%3C/svg%3E") center / contain no-repeat;
+  animation: bgfx-sway calc(var(--d) * 1.2s) ease-in-out infinite alternate;
+}
+
+/* Confetti */
+.bgfx-confetti i {
+  animation: bgfx-fall calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-confetti i::before {
+  width: calc(var(--s) * 6px);
+  height: calc(var(--s) * 11px);
+  background: hsl(var(--h) 90% 58%);
+  opacity: var(--o);
+  animation: bgfx-flip calc(var(--d) * 0.6s) linear infinite;
+}
+
+/* Herfstbladeren */
+.bgfx-bladeren i {
+  animation: bgfx-fall calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-bladeren i::before {
+  width: calc(var(--s) * 15px);
+  height: calc(var(--s) * 9px);
+  border-radius: 0 100% 0 100%;
+  background: hsl(var(--h) 80% 46%);
+  opacity: var(--o);
+  animation: bgfx-flutter calc(var(--d) * 0.9s) ease-in-out infinite alternate;
+}
+
+/* Bloemblaadjes */
+.bgfx-bloesem i {
+  animation: bgfx-fall calc(var(--hn) * 1s / var(--v)) linear var(--t) infinite;
+}
+
+.bgfx-bloesem i::before {
+  width: calc(var(--s) * 9px);
+  height: calc(var(--s) * 12px);
+  border-radius: 100% 0 100% 0;
+  background: var(--c, #ffc4d8);
+  opacity: var(--o);
+  animation: bgfx-flutter calc(var(--d) * 1.2s) ease-in-out infinite alternate;
+}
+
+/* Vallende sterren: a streak now and then */
+.bgfx-vallendesterren i {
+  top: var(--y);
+  left: calc(30% + var(--x) * 0.7);
+  animation: bgfx-shoot calc(var(--d) * 1s) linear var(--t) infinite;
+}
+
+.bgfx-vallendesterren i:nth-child(odd) {
+  top: calc(var(--y) * 0.5);
+}
+
+.bgfx-vallendesterren i::before {
+  width: calc(var(--s) * 90px);
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--c, #fff), transparent);
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--c, #fff) 60%, transparent);
+  transform: rotate(-34deg);
+  transform-origin: left center;
+}
+
+/* Glitter */
+.bgfx-glitter i {
+  top: var(--y);
+}
+
+.bgfx-glitter i::before {
+  width: calc(var(--s) * 10px);
+  height: calc(var(--s) * 10px);
+  background: var(--c, hsl(var(--h) 100% 78%));
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  animation: bgfx-glint calc(var(--d) * 1s) ease-in-out var(--t) infinite;
+}
+
+/* Multi-coloured glitter unless a colour was chosen */
+.bgfx-glitter:not([style*='--c']) i::before {
+  background: hsl(var(--h) 100% 78%);
+}

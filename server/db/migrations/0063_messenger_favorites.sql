@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "messenger_favorites" integer[] DEFAULT '{}'::int[] NOT NULL;

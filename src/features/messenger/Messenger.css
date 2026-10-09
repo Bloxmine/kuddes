@@ -1,0 +1,1585 @@
+/*
+ * Kuddes Messenger, laid out like Windows Live Messenger 2009 (glass title
+ * bars, a scene at the top, framed display pictures lit in the status
+ * colour, "Naam zegt:" above the lines) but in the site's own colours, so
+ * every theme, dark ones too, gets its own Messenger.
+ */
+.wlm-dock,
+.wlm-page {
+  --wlm-font: 'Segoe UI', Tahoma, var(--font-body);
+  --wlm-glass-top: color-mix(in srgb, var(--brand) 9%, var(--surface));
+  --wlm-glass-bottom: color-mix(in srgb, var(--brand) 30%, var(--surface));
+  --wlm-edge: color-mix(in srgb, var(--brand-darker) 55%, #1a1a1a);
+  --wlm-line: color-mix(in srgb, var(--brand) 28%, var(--surface));
+  --wlm-hover-top: color-mix(in srgb, var(--brand) 7%, var(--surface));
+  --wlm-hover-bottom: color-mix(in srgb, var(--brand) 20%, var(--surface));
+  --wlm-hover-border: color-mix(in srgb, var(--brand) 50%, var(--surface));
+  --wlm-muted: var(--text-muted);
+  font-family: var(--wlm-font);
+}
+
+/* ------------------------------------------------------------ the dock */
+
+.wlm-dock {
+  position: fixed;
+  right: 14px;
+  bottom: 0;
+  z-index: 55;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: calc(100vw - 28px);
+  pointer-events: none;
+}
+
+.wlm-dock > * {
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------------ windows */
+
+.wlm-window {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--wlm-edge);
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background: linear-gradient(to bottom, var(--wlm-glass-top), var(--wlm-glass-bottom) 60px, var(--wlm-glass-bottom));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #fff 55%, transparent),
+    0 4px 22px rgba(0, 0, 0, 0.32);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.wlm-list-window {
+  width: 290px;
+  height: min(540px, calc(100vh - 80px));
+}
+
+.wlm-conv-window {
+  width: 400px;
+  height: min(500px, calc(100vh - 80px));
+}
+
+.wlm-titlebar {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 27px;
+  padding-left: 8px;
+  /* The shine over the top half, like Aero glass */
+  background: linear-gradient(to bottom, color-mix(in srgb, #fff 45%, transparent), color-mix(in srgb, #fff 12%, transparent) 50%, transparent 51%);
+}
+
+.wlm-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 27px;
+  color: var(--title);
+  font-size: 12px;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--surface) 90%, transparent);
+}
+
+.wlm-title-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlm-caption {
+  display: flex;
+  flex: none;
+  margin-right: 5px;
+  border: 1px solid color-mix(in srgb, #000 45%, transparent);
+  border-top: 0;
+  border-radius: 0 0 5px 5px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 60%, transparent);
+}
+
+.wlm-cap {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 19px;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid color-mix(in srgb, #000 30%, transparent);
+  background: linear-gradient(to bottom, color-mix(in srgb, #fff 70%, var(--wlm-glass-top)), color-mix(in srgb, #fff 20%, var(--wlm-glass-bottom)) 50%, var(--wlm-glass-bottom) 51%, color-mix(in srgb, #fff 35%, var(--wlm-glass-bottom)));
+  color: color-mix(in srgb, var(--title) 85%, #000);
+  cursor: pointer;
+}
+
+.wlm-cap:first-child {
+  border-left: 0;
+}
+
+.wlm-cap svg {
+  fill: currentColor;
+  stroke: currentColor;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6));
+}
+
+.wlm-cap:hover {
+  filter: brightness(1.12) saturate(1.2);
+}
+
+.wlm-cap-close {
+  width: 44px;
+  background: linear-gradient(to bottom, #eaa597, #d4735f 50%, #c24a36 51%, #d7775c);
+  color: #fff;
+}
+
+.wlm-cap-close svg {
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.35));
+}
+
+.wlm-cap-close:hover {
+  background: linear-gradient(to bottom, #f5b8aa, #e8715a 50%, #d9402a 51%, #ef8c66);
+}
+
+.wlm-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0 5px;
+  overflow: hidden;
+  border: 1px solid var(--wlm-line);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: var(--surface);
+}
+
+/* The scene at the top: soft circles of light in the site's colours */
+.wlm-scene {
+  background:
+    radial-gradient(circle at 88% -30%, color-mix(in srgb, var(--brand-light) 60%, transparent) 0 70px, transparent 71px),
+    radial-gradient(circle at 70% 120%, color-mix(in srgb, var(--brand) 22%, transparent) 0 46px, transparent 47px),
+    radial-gradient(circle at 100% 60%, color-mix(in srgb, var(--surface) 55%, transparent) 0 30px, transparent 31px),
+    radial-gradient(circle at 56% 10%, color-mix(in srgb, var(--brand-light) 30%, transparent) 0 18px, transparent 19px),
+    linear-gradient(to bottom, var(--tint-3), var(--surface));
+}
+
+/* ------------------------------------------------------------ display pictures */
+
+.wlm-dp {
+  --tone-light: #9be067;
+  --tone-dark: #3f9e1c;
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  border-radius: 9px;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.1) 48%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(to bottom, var(--tone-light), var(--tone-dark));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 0 0 1px color-mix(in srgb, var(--tone-dark) 70%, #000),
+    0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.wlm-dp.tone-busy {
+  --tone-light: #f7907b;
+  --tone-dark: #c8321e;
+}
+
+.wlm-dp.tone-away {
+  --tone-light: #ffd27a;
+  --tone-dark: #df8a0e;
+}
+
+.wlm-dp.tone-offline {
+  --tone-light: #e2e5e8;
+  --tone-dark: #9aa1a8;
+}
+
+.wlm-dp img,
+.wlm-dp-initials {
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  background: var(--surface);
+  object-fit: cover;
+}
+
+.wlm-dp-initials {
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ------------------------------------------------------------ contact list */
+
+.wlm-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.wlm-me {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 10px 8px;
+}
+
+.wlm-me-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.wlm-me-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: baseline;
+  color: var(--title);
+  font-size: 14px;
+}
+
+.wlm-status-pick {
+  position: relative;
+}
+
+.wlm-status-btn,
+.wlm-note {
+  padding: 1px 3px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--wlm-muted);
+  font: inherit;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.wlm-status-btn:hover,
+.wlm-note:hover {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-note {
+  overflow: hidden;
+  max-width: 100%;
+  margin-left: -4px;
+  color: var(--text);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlm-note.empty {
+  color: var(--wlm-muted);
+}
+
+.wlm-note .smiley,
+.wlm-contact-note .smiley,
+.wlm-conv-note .smiley {
+  max-height: 15px;
+  width: auto;
+  vertical-align: -3px;
+}
+
+.wlm-note-input {
+  width: 100%;
+  padding: 2px 4px;
+  border: 1px solid var(--wlm-hover-border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 11.5px;
+}
+
+.wlm-menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  z-index: 10;
+  min-width: 180px;
+  max-height: 260px;
+  margin: 0;
+  padding: 3px;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--text) 35%, var(--surface));
+  border-radius: 3px;
+  background: var(--surface);
+  box-shadow: 2px 3px 8px rgba(0, 0, 0, 0.25);
+  list-style: none;
+}
+
+.wlm-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlm-menu button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wlm-menu button:hover,
+.wlm-menu button[aria-selected='true'] {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-menu-title {
+  margin: 2px 6px 4px;
+  color: var(--wlm-muted);
+  font-size: 11px;
+}
+
+.wlm-tools {
+  display: flex;
+  gap: 2px;
+  padding: 0 8px 6px;
+}
+
+.wlm-tools a,
+.wlm-tools button,
+.wlm-add {
+  display: inline-flex;
+  gap: 2px;
+  align-items: center;
+  padding: 3px 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--link);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.wlm-tools a:hover,
+.wlm-tools button:hover:not(:disabled),
+.wlm-add:hover {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-search {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 5px 8px;
+  border-top: 1px solid var(--wlm-line);
+  border-bottom: 1px solid var(--wlm-line);
+  background: linear-gradient(to bottom, var(--tint-1), var(--tint-2));
+}
+
+.wlm-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  border: 1px solid color-mix(in srgb, var(--text) 25%, var(--surface));
+  border-radius: 2px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+}
+
+.wlm-search input::placeholder {
+  color: var(--wlm-muted);
+  font-style: italic;
+}
+
+.wlm-groups {
+  flex: 1;
+  min-height: 0;
+  padding: 4px 4px 10px;
+  overflow-y: auto;
+}
+
+.wlm-group h3 {
+  margin: 4px 0 1px;
+}
+
+.wlm-group h3 button {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: color-mix(in srgb, var(--title) 80%, var(--surface));
+  font: bold 11.5px var(--wlm-font);
+  text-align: left;
+  cursor: pointer;
+}
+
+.wlm-arrow {
+  width: 10px;
+  color: var(--wlm-muted);
+}
+
+.wlm-group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlm-contact {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  width: 100%;
+  padding: 3px 6px 3px 16px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.wlm-contact:hover,
+.wlm-contact.active {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-contact.unread .wlm-contact-name {
+  font-weight: bold;
+}
+
+.wlm-buddy {
+  flex: none;
+}
+
+.wlm-contact-name {
+  flex: none;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wlm-contact-status {
+  flex: none;
+  color: var(--wlm-muted);
+  font-size: 11px;
+}
+
+.wlm-contact-note {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--wlm-muted);
+  text-overflow: ellipsis;
+}
+
+.wlm-contact-note::before {
+  content: '- ';
+}
+
+.wlm-unread {
+  margin-left: auto;
+}
+
+/* The star at the end of a row: pin a friend to your favourites */
+.wlm-contact-row {
+  position: relative;
+}
+
+.wlm-contact-row .wlm-contact {
+  padding-right: 26px;
+}
+
+.wlm-pin {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-50%);
+}
+
+.wlm-pin .farm-icon {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.wlm-contact-row:hover .wlm-pin,
+.wlm-pin:focus-visible,
+.wlm-pin.pinned {
+  opacity: 1;
+}
+
+.wlm-pin.pinned .farm-icon,
+.wlm-pin:hover:not(:disabled) .farm-icon {
+  filter: none;
+  opacity: 1;
+}
+
+.wlm-pin:disabled {
+  cursor: default;
+}
+
+/* No hover on a touchscreen: the star is always there, just faint */
+@media (hover: none) {
+  .wlm-pin {
+    opacity: 0.5;
+  }
+}
+
+/* ------------------------------------------------------------ favourites: side by side */
+.wlm-favs {
+  --fade-left: 0px;
+  --fade-right: 0px;
+  display: flex !important;
+  gap: 2px;
+  padding: 2px 6px 6px 14px !important;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent);
+}
+
+.wlm-favs[data-fade~='left'] {
+  --fade-left: 28px;
+}
+
+.wlm-favs[data-fade~='right'] {
+  --fade-right: 28px;
+}
+
+.wlm-favs li {
+  position: relative;
+  flex: none;
+}
+
+.wlm-favs li.dragging {
+  opacity: 0.4;
+}
+
+.wlm-fav {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  width: 64px;
+  padding: 3px 2px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.wlm-fav:hover,
+.wlm-fav.active {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-fav-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlm-fav.unread .wlm-fav-name {
+  font-weight: bold;
+}
+
+.wlm-fav-unread {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.wlm-fav-unpin {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--wlm-hover-border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--wlm-muted);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.wlm-favs li:hover .wlm-fav-unpin,
+.wlm-fav-unpin:focus-visible {
+  opacity: 1;
+}
+
+.wlm-fav-unpin:hover {
+  color: var(--error-text);
+}
+
+.wlm-empty {
+  margin: 12px 10px;
+  color: var(--wlm-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------ conversation */
+
+.wlm-conv {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.wlm-conv-loading {
+  justify-content: center;
+}
+
+.wlm-conv-head {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px 8px 8px 10px;
+  border-bottom: 1px solid var(--wlm-line);
+}
+
+.wlm-conv-who {
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.wlm-conv-name {
+  color: var(--title);
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.wlm-conv-name:hover {
+  text-decoration: underline;
+}
+
+.wlm-conv-status {
+  color: var(--wlm-muted);
+  font-size: 11.5px;
+}
+
+.wlm-conv-note {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlm-conv-tools,
+.wlm-format {
+  display: flex;
+  flex: none;
+  gap: 1px;
+  align-items: center;
+}
+
+.wlm-tool {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  padding: 3px 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 11.5px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.wlm-tool:hover,
+.wlm-tool[aria-expanded='true'] {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-tool:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.wlm-drop {
+  position: relative;
+}
+
+.wlm-conv-tools .wlm-menu {
+  right: 0;
+  left: auto;
+}
+
+.wlm-games li button {
+  white-space: nowrap;
+}
+
+.wlm-conv-main {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  min-height: 0;
+  padding: 8px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+}
+
+.wlm-dps {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wlm-conv-right {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.wlm-log {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 4px 8px 8px;
+  overflow-y: auto;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, var(--surface));
+  border-radius: 3px;
+  background: var(--surface);
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+
+.wlm-day {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 8px 0 2px;
+  color: var(--wlm-muted);
+  font-size: 10.5px;
+}
+
+.wlm-day::before,
+.wlm-day::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--wlm-line);
+}
+
+.wlm-says {
+  margin: 7px 0 1px;
+  color: var(--wlm-muted);
+  font-size: 11.5px;
+}
+
+.wlm-msg {
+  margin: 0 0 1px 12px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.wlm-glitter {
+  display: block;
+  margin: 3px 0 4px;
+}
+
+.wlm-glitter .glitter-img {
+  max-width: min(220px, 100%);
+  height: auto;
+  border-radius: 4px;
+}
+
+.wlm-pending-glitter {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--wlm-line);
+  font-size: 11px;
+}
+
+.wlm-pending-glitter .glitter-img {
+  max-width: 64px;
+  max-height: 48px;
+  width: auto;
+  height: auto;
+}
+
+.wlm-pending-glitter .wlm-task-close {
+  margin-left: auto;
+}
+
+.wlm-msg .smiley {
+  vertical-align: middle;
+}
+
+.wlm-event {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin: 8px 0 4px;
+  color: var(--wlm-muted);
+  font-size: 11.5px;
+}
+
+.wlm-nudge-line {
+  color: color-mix(in srgb, var(--title) 55%, var(--wlm-muted));
+  font-weight: bold;
+}
+
+.wlm-invite {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 8px 0;
+  padding: 8px 10px;
+  border: 1px solid var(--wlm-hover-border);
+  border-radius: 4px;
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-invite b {
+  display: block;
+  color: var(--title);
+}
+
+.wlm-invite-sub {
+  display: block;
+  color: var(--wlm-muted);
+  font-size: 11px;
+}
+
+.wlm-invite-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.wlm-link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.wlm-link-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.wlm-invite .strong,
+.wlm-link-btn.strong {
+  font-weight: bold;
+}
+
+.wlm-older {
+  display: block;
+  margin: 4px auto 0;
+  font-size: 11px;
+}
+
+.wlm-compose {
+  position: relative;
+  flex: none;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, var(--surface));
+  border-radius: 3px;
+  background: var(--surface);
+}
+
+.wlm-format {
+  padding: 1px 3px;
+  border-bottom: 1px solid var(--wlm-line);
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+}
+
+.wlm-log-wrap {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* The smileys cover the message area (and the display pictures make room) */
+.wlm-conv-main.picking .wlm-dps {
+  display: none;
+}
+
+.wlm-smileys {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+}
+
+.wlm-smileys .smiley-picker {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+}
+
+.wlm-smileys .smiley-picker-tabs {
+  padding-right: 34px;
+}
+
+.wlm-smileys .smiley-search {
+  width: 120px;
+  min-width: 0;
+}
+
+.wlm-smileys .smiley-picker-body {
+  flex: 1;
+  grid-template-columns: 96px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+}
+
+/* The MSN tab has no categories: its emoticons get the whole width */
+.wlm-smileys .smiley-picker-body.msn {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.wlm-smileys .smiley-cats {
+  overflow-y: auto;
+}
+
+.wlm-smileys .smiley-cats button {
+  padding: 3px 8px;
+}
+
+.wlm-smileys .smiley-grid {
+  max-height: none;
+  min-height: 0;
+}
+
+.wlm-smileys-close {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--title);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.wlm-smileys-close:hover {
+  border-color: var(--wlm-hover-border);
+  background: var(--surface);
+}
+
+.wlm-type {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  padding: 4px;
+}
+
+.wlm-type textarea {
+  flex: 1;
+  min-width: 0;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: 12.5px var(--wlm-font);
+  resize: none;
+}
+
+.wlm-type textarea:focus {
+  outline: none;
+}
+
+.wlm-compose:focus-within {
+  border-color: var(--wlm-hover-border);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+.wlm-send {
+  align-self: flex-end;
+  padding: 4px 10px;
+  border: 1px solid color-mix(in srgb, var(--text) 38%, var(--surface));
+  border-radius: 3px;
+  background: linear-gradient(to bottom, var(--surface), color-mix(in srgb, var(--text) 6%, var(--surface)) 50%, color-mix(in srgb, var(--text) 12%, var(--surface)) 51%, color-mix(in srgb, var(--text) 8%, var(--surface)));
+  color: var(--text);
+  font: 12px var(--wlm-font);
+  cursor: pointer;
+}
+
+.wlm-send:hover:not(:disabled) {
+  border-color: var(--wlm-hover-border);
+  background: linear-gradient(to bottom, var(--wlm-hover-top), var(--wlm-hover-bottom));
+}
+
+.wlm-send:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.wlm-statusbar {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  align-items: center;
+  min-height: 22px;
+  padding: 3px 10px;
+  overflow: hidden;
+  border-top: 1px solid var(--wlm-line);
+  background: linear-gradient(to bottom, var(--tint-1), var(--tint-2));
+  color: var(--wlm-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.wlm-status-error {
+  color: var(--error-text);
+}
+
+/* A nudge: the whole window shakes */
+.wlm-window:has(.wlm-shaking),
+.wlm-shaking.full {
+  animation: kuddes-nudge 0.07s linear 9;
+}
+
+/* A nudge shakes the whole screen (shakeScreen in messengerStore.ts): fast little jolts, like MSN */
+html.kuddes-nudge body {
+  animation: kuddes-nudge 0.07s linear 9;
+}
+
+@keyframes kuddes-nudge {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-6px, 2px);
+  }
+  50% {
+    transform: translate(5px, -3px);
+  }
+  75% {
+    transform: translate(-3px, -2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wlm-window:has(.wlm-shaking),
+  .wlm-shaking.full {
+    animation: none;
+    outline: 3px solid var(--highlight);
+  }
+}
+
+/* ------------------------------------------------------------ taskbar buttons */
+
+.wlm-taskbutton {
+  position: relative;
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  height: 34px;
+  padding: 0 14px 0 10px;
+  border: 1px solid var(--wlm-edge);
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, #fff 50%, transparent), color-mix(in srgb, #fff 15%, transparent) 50%, transparent 51%),
+    linear-gradient(to bottom, var(--wlm-glass-top), var(--wlm-glass-bottom));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #fff 55%, transparent),
+    0 -1px 10px rgba(0, 0, 0, 0.18);
+  color: var(--title);
+  font: 12px var(--wlm-font);
+  cursor: pointer;
+}
+
+.wlm-main-button:hover,
+.wlm-chat-button:hover {
+  filter: brightness(1.06);
+}
+
+.wlm-task-count {
+  color: var(--wlm-muted);
+}
+
+.wlm-task-badge {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.wlm-tabs {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 6px;
+  align-items: flex-end;
+  min-width: 0;
+  /* Room above and to the right for the badge of a new message (the row scrolls, so it would clip it), without moving the tabs */
+  margin: -10px -8px 0 0;
+  padding: 10px 8px 0 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  pointer-events: none;
+  /* Above the Messenger button next to it, which would cover the badge's corner */
+  position: relative;
+  z-index: 1;
+}
+
+.wlm-tabs > * {
+  pointer-events: auto;
+}
+
+.wlm-chat-button {
+  flex: none;
+  gap: 0;
+  padding: 0;
+}
+
+.wlm-task-open {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  height: 100%;
+  max-width: 150px;
+  padding: 0 4px 0 10px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.wlm-task-open .wlm-task-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlm-task-close {
+  height: 100%;
+  padding: 0 8px 0 4px;
+  border: 0;
+  background: none;
+  color: var(--wlm-muted);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.wlm-task-close:hover {
+  color: var(--error-text);
+}
+
+/* A new line in a minimised conversation: the button flashes orange, like the taskbar did */
+.wlm-taskbutton.flashing,
+.wlm-page-tab.flashing {
+  animation: wlm-flash 1.1s ease-in-out 6 alternate;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.15) 50%, transparent 51%),
+    linear-gradient(to bottom, #ffd38a, #f29a2e);
+  color: #4a2a00;
+}
+
+@keyframes wlm-flash {
+  from {
+    filter: brightness(1);
+  }
+  to {
+    filter: brightness(1.2) saturate(1.3);
+  }
+}
+
+/* ------------------------------------------------------------ /messenger */
+
+.wlm-page {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 16px;
+  width: min(var(--page-width), calc(100% - 32px));
+  height: max(540px, calc(100vh - 190px));
+  margin: 18px auto;
+}
+
+/* (.page, loaded later, would otherwise reset the margin under the top bar) */
+.wlm-page.page {
+  margin: 18px auto;
+}
+
+.wlm-page .wlm-window {
+  width: auto;
+  height: auto;
+  min-height: 0;
+  border-bottom: 1px solid var(--wlm-edge);
+  border-radius: 8px;
+}
+
+.wlm-page .wlm-body {
+  margin-bottom: 5px;
+  border-bottom: 1px solid var(--wlm-line);
+  border-radius: 4px;
+}
+
+.wlm-page-tabs {
+  display: flex;
+  flex: none;
+  gap: 3px;
+  padding: 5px 6px 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--wlm-line);
+  background: linear-gradient(to bottom, var(--tint-1), var(--tint-2));
+}
+
+.wlm-page-tab {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  margin-bottom: -1px;
+  border: 1px solid var(--wlm-line);
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(to bottom, var(--tint-1), var(--tint-3));
+}
+
+.wlm-page-tab.current {
+  border-bottom-color: var(--tint-3);
+  background: var(--tint-3);
+}
+
+.wlm-page-tab > button:first-child {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 5px 4px 5px 9px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: 12px var(--wlm-font);
+  cursor: pointer;
+}
+
+.wlm-page-tab.current > button:first-child {
+  font-weight: bold;
+}
+
+.wlm-page-tab .wlm-task-close {
+  padding: 0 7px 0 2px;
+}
+
+.wlm-page-tab .wlm-task-badge {
+  position: static;
+}
+
+.wlm-page-empty {
+  display: grid;
+  flex: 1;
+  place-content: center;
+  justify-items: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.wlm-page-empty h1 {
+  margin: 10px 0 4px;
+  color: var(--title);
+  font: 22px var(--wlm-font);
+}
+
+.wlm-page-empty p {
+  max-width: 380px;
+  color: var(--wlm-muted);
+}
+
+.wlm-conv.full .wlm-log {
+  font-size: 13.5px;
+}
+
+/* ------------------------------------------------------------ phones */
+
+@media (max-width: 700px) {
+  .wlm-dock {
+    right: 0;
+    left: 0;
+    max-width: none;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 0;
+  }
+
+  .wlm-dock .wlm-window {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: min(78vh, calc(100vh - 60px));
+    border-radius: 10px 10px 0 0;
+  }
+
+  /* An open conversation lies over the list */
+  .wlm-dock .wlm-conv-window {
+    z-index: 2;
+  }
+
+  .wlm-main-button {
+    margin: 0 10px calc(10px + env(safe-area-inset-bottom));
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    justify-content: center;
+    border: 1px solid var(--wlm-edge);
+    border-radius: 50%;
+  }
+
+  .wlm-main-button .wlm-task-label,
+  .wlm-main-button .wlm-task-count {
+    display: none;
+  }
+
+  .wlm-main-button .wlm-task-badge {
+    top: -4px;
+    right: -4px;
+  }
+
+  .wlm-dock .wlm-tabs {
+    flex-direction: column;
+    gap: 6px;
+    margin: 0 10px 8px;
+  }
+
+  .wlm-dock .wlm-chat-button {
+    height: 40px;
+    border-bottom: 1px solid var(--wlm-edge);
+    border-radius: 20px;
+  }
+
+  .wlm-dock .wlm-chat-button .wlm-task-label {
+    display: none;
+  }
+
+  .wlm-dock .wlm-chat-button .wlm-task-open {
+    padding-left: 4px;
+  }
+
+  .wlm-conv-window .wlm-dps {
+    display: none;
+  }
+
+  .wlm-tool-label {
+    display: none;
+  }
+
+  .wlm-page,
+  .wlm-page.page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(460px, 1fr);
+    height: auto;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+  }
+
+  .wlm-page .wlm-list-window .wlm-groups {
+    max-height: 260px;
+  }
+
+  .wlm-page .wlm-dps {
+    display: none;
+  }
+}
+
+/* Sharing a page from Kuddes (the "Delen" tool) */
+.wlm-share-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  align-items: center;
+  margin: 0 0 4px;
+  padding: 6px;
+  border: 1px solid var(--wlm-edge);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.wlm-share-panel .text-box {
+  flex: 1;
+  min-width: 160px;
+}
+
+.wlm-share-panel .muted {
+  width: 100%;
+  font-size: 10px;
+}
+
+.wlm-pending-share {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.wlm-msg .share-card {
+  margin-top: 4px;
+}
+
+/* The new-group button sits with the links */
+.wlm-tools button {
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.wlm-tools button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+/* Group chats (GroupConversation.tsx): the name is a button to rename it */
+.wlm-group-name {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: text;
+}
+
+.wlm-group-name-input {
+  width: min(240px, 60%);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Everyone in the group, in place of the two display pictures */
+.wlm-members {
+  justify-content: flex-start;
+  width: 92px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.wlm-group.full .wlm-members {
+  width: 120px;
+}
+
+.wlm-members ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlm-members li {
+  position: relative;
+}
+
+.wlm-members a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--text);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.wlm-members a:hover .wlm-member-name {
+  text-decoration: underline;
+}
+
+.wlm-members .wlm-dp {
+  flex: none;
+}
+
+.wlm-member-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wlm-members .wlm-task-close {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  display: none;
+}
+
+.wlm-members li:hover .wlm-task-close,
+.wlm-members li:focus-within .wlm-task-close {
+  display: block;
+}
+
+.wlm-group-form .field {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.wlm-group-form .field-label {
+  margin: 0 0 4px;
+  color: var(--title);
+  font-weight: bold;
+}

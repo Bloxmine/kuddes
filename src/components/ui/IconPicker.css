@@ -1,0 +1,118 @@
+/* The pop-out icon picker (IconPicker.tsx) */
+.icon-pick {
+  position: relative;
+  display: inline-block;
+}
+
+.icon-pick-button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.icon-pick-none {
+  width: 20px;
+  height: 20px;
+  border: 1px dashed var(--btn-border-dark);
+  border-radius: 4px;
+}
+
+.icon-pick-panel {
+  /* Placed by IconPicker.tsx, next to its button */
+  position: fixed;
+  z-index: 120;
+  width: min(380px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.icon-pick-bar {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid var(--box-border);
+  background: var(--tint-1);
+}
+
+.icon-pick-bar .text-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.icon-pick-clear {
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.icon-pick-clear.current {
+  border-color: var(--brand);
+  background: var(--tint-3);
+}
+
+.icon-pick-groups {
+  max-height: 280px;
+  padding: 2px 8px 8px;
+  overflow-y: auto;
+}
+
+.icon-pick-groups h4 {
+  margin: 8px 2px 4px;
+  color: var(--title-soft);
+  font: bold 11px var(--font-title);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.icon-pick-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.icon-pick-grid button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.icon-pick-grid button:hover {
+  border-color: var(--box-border);
+  background: var(--tint-1);
+}
+
+.icon-pick-grid button.current {
+  border-color: var(--brand);
+  background: var(--tint-3);
+}
+
+/* Phones: a panel along the bottom of the screen (toolbars there scroll sideways and would cut it off) */
+@media (max-width: 700px) {
+  .icon-pick-panel {
+    top: auto;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: 12px;
+    width: auto;
+  }
+
+  .icon-pick-groups {
+    max-height: 50vh;
+  }
+}

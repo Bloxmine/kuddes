@@ -1,0 +1,370 @@
+/*
+ * Site themes, set as <html data-theme="…">. Each theme only sets its brand
+ * colours and text; tints, borders and box headers are mixed from these in
+ * global.css. Keep the list in sync with shared/themes.ts.
+ */
+
+:root[data-theme='rood'] {
+  --brand: #dd4b39;
+  --brand-light: #f08a7c;
+  --brand-dark: #b23121;
+  --brand-darker: #8f2517;
+  --link: #c0392b;
+  --cta-top: #e8604f;
+  --text: #2b1d1b;
+  --title: #5a1a12;
+}
+
+:root[data-theme='roze'] {
+  --brand: #e3438f;
+  --brand-light: #f5a3cb;
+  --brand-dark: #b81d6a;
+  --brand-darker: #941454;
+  --link: #c2176f;
+  --cta-top: #ec5fa3;
+  --text: #2e1a26;
+  --title: #5e1240;
+}
+
+:root[data-theme='zon'] {
+  --brand: #f2a33a;
+  --brand-light: #ffcf6e;
+  --brand-dark: #c46a06;
+  --brand-darker: #9c5200;
+  --link: #b85f00;
+  --cta-top: #f8b84a;
+  --text: #33260f;
+  --title: #4a2a00;
+}
+
+/* Dark: slate header and surfaces, with the blue buttons and links of the default */
+:root[data-theme='donker'] {
+  color-scheme: dark;
+  --brand: #3b4b52;
+  --brand-light: #58707a;
+  --brand-dark: #2f7fc4;
+  --brand-darker: #23649e;
+  --link: #7cc0f2;
+  --cta-top: #4b9ee0;
+  --text: #d8e0dd;
+  --title: #eef3f1;
+  --surface: #1e2428;
+  --page-bg: #14191c;
+  --tint-1: #232a2f;
+  --tint-2: #283036;
+  --tint-3: #2e373e;
+  --box-hdr-top: #2b343a;
+  --box-hdr-bottom: #222a2f;
+  --box-border: #36424a;
+  --box-hdr-border: #3c4952;
+  --box-sctn-border: #313c43;
+  --focus-ring: rgba(124, 192, 242, 0.35);
+}
+
+/* Seasonal colours: only through the festive effects (Instellingen →
+   Feestelijk, html[data-festive-colors], see FestiveEffects.tsx) */
+:root[data-festive-colors='kerst'] {
+  --brand: #c8262e;
+  --brand-light: #e8666b;
+  --brand-dark: #1d7a3d;
+  --brand-darker: #15602f;
+  --link: #b3202a;
+  --cta-top: #3aa35f;
+  --text: #2b1b1b;
+  --title: #6b0f16;
+  --page-bg: #fdf7f1;
+}
+
+:root[data-festive-colors='winter'] {
+  --brand: #6fa8d6;
+  --brand-light: #d6ecfa;
+  --brand-dark: #2f6fa3;
+  --brand-darker: #245a86;
+  --link: #1f5f96;
+  --cta-top: #7fb9e4;
+  --text: #1b2733;
+  --title: #163c5c;
+  --page-bg: #f3f8fc;
+}
+
+:root[data-festive-colors='halloween'] {
+  color-scheme: dark;
+  --brand: #3b1f50;
+  --brand-light: #6d3f8f;
+  --brand-dark: #e8741c;
+  --brand-darker: #b8560d;
+  --link: #ff9a3c;
+  --cta-top: #f7a14a;
+  --text: #eadcf2;
+  --title: #ffd29c;
+  --surface: #1f1528;
+  --page-bg: #140c1b;
+  --tint-1: #271b32;
+  --tint-2: #2d2039;
+  --tint-3: #352642;
+  --box-hdr-top: #33223f;
+  --box-hdr-bottom: #261a30;
+  --box-border: #46305a;
+  --box-hdr-border: #503665;
+  --box-sctn-border: #3b294b;
+  --focus-ring: rgba(255, 154, 60, 0.4);
+}
+
+:root[data-festive-colors='herfst'] {
+  --brand: #b8612a;
+  --brand-light: #e8a36b;
+  --brand-dark: #8a4a1c;
+  --brand-darker: #6b3812;
+  --link: #9c4a1a;
+  --cta-top: #d98a45;
+  --text: #2e2118;
+  --title: #5a2f10;
+  --page-bg: #fbf5ec;
+}
+
+:root[data-festive-colors='lente'] {
+  --brand: #e582ab;
+  --brand-light: #fbd3e3;
+  --brand-dark: #4f9e4a;
+  --brand-darker: #3c7d38;
+  --link: #c24d80;
+  --cta-top: #7cc774;
+  --text: #2e1f26;
+  --title: #7a2350;
+  --page-bg: #fff8fb;
+}
+
+:root[data-festive-colors='valentijn'] {
+  --brand: #e0405e;
+  --brand-light: #ffc2d1;
+  --brand-dark: #c81d3a;
+  --brand-darker: #a01530;
+  --link: #c21f44;
+  --cta-top: #f0607c;
+  --text: #2e1a1f;
+  --title: #7a1430;
+  --page-bg: #fff5f7;
+}
+
+:root[data-festive-colors='pasen'] {
+  --brand: #a58fd8;
+  --brand-light: #e6dcfb;
+  --brand-dark: #5aa44a;
+  --brand-darker: #468a38;
+  --link: #7156b8;
+  --cta-top: #7cc774;
+  --text: #2a2533;
+  --title: #4a3380;
+  --page-bg: #fdfbee;
+}
+
+:root[data-festive-colors='sinterklaas'] {
+  --brand: #c8102e;
+  --brand-light: #f08a96;
+  --brand-dark: #b8860b;
+  --brand-darker: #936b06;
+  --link: #b00e28;
+  --cta-top: #d9a520;
+  --text: #2e1a16;
+  --title: #7a0a1c;
+  --page-bg: #fdf6ec;
+}
+
+:root[data-festive-colors='zomer'] {
+  --brand: #1fa2c4;
+  --brand-light: #a6e3f2;
+  --brand-dark: #e8841c;
+  --brand-darker: #c46a06;
+  --link: #0f7fa0;
+  --cta-top: #f7a33b;
+  --text: #1f2a2e;
+  --title: #0b5a70;
+  --page-bg: #fffaf0;
+}
+
+/* Seasonal colours on the dark theme: dark surfaces tinted with the season,
+   and its colours for the header, buttons and links. Without these a season
+   would put its light text and page colour on the dark boxes. */
+:root[data-theme='donker'][data-festive-colors='kerst'] {
+  color-scheme: dark;
+  --brand: #7a1a20;
+  --brand-light: #a8323a;
+  --brand-dark: #2f9e57;
+  --brand-darker: #1d7a3d;
+  --link: #ff8f94;
+  --cta-top: #4cc27a;
+  --text: #ecdede;
+  --title: #ffcfcf;
+  --surface: #231a1b;
+  --page-bg: #160f10;
+  --tint-1: #2a1f20;
+  --tint-2: #302425;
+  --tint-3: #3a2a2b;
+  --box-hdr-top: #37262a;
+  --box-hdr-bottom: #2a1d20;
+  --box-border: #4a3034;
+  --box-hdr-border: #553539;
+  --box-sctn-border: #3d2a2d;
+  --focus-ring: rgba(255, 143, 148, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='winter'] {
+  color-scheme: dark;
+  --brand: #2c4d6b;
+  --brand-light: #4f7aa0;
+  --brand-dark: #3b8fd1;
+  --brand-darker: #2c73ad;
+  --link: #9fd0f5;
+  --cta-top: #5aaae8;
+  --text: #dde8f2;
+  --title: #eef6ff;
+  --surface: #1a222b;
+  --page-bg: #10161d;
+  --tint-1: #1f2833;
+  --tint-2: #242e3a;
+  --tint-3: #2b3744;
+  --box-hdr-top: #283440;
+  --box-hdr-bottom: #1f2933;
+  --box-border: #33424f;
+  --box-hdr-border: #3a4b5a;
+  --box-sctn-border: #2e3b47;
+  --focus-ring: rgba(159, 208, 245, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='herfst'] {
+  color-scheme: dark;
+  --brand: #6b3812;
+  --brand-light: #a3602a;
+  --brand-dark: #d9803a;
+  --brand-darker: #b8612a;
+  --link: #f0a868;
+  --cta-top: #e89a55;
+  --text: #ecdccb;
+  --title: #ffd3a6;
+  --surface: #241b15;
+  --page-bg: #17110c;
+  --tint-1: #2b211a;
+  --tint-2: #31261e;
+  --tint-3: #3a2d23;
+  --box-hdr-top: #372a20;
+  --box-hdr-bottom: #2a2019;
+  --box-border: #4a3829;
+  --box-hdr-border: #56412f;
+  --box-sctn-border: #3e3024;
+  --focus-ring: rgba(240, 168, 104, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='lente'] {
+  color-scheme: dark;
+  --brand: #7a3656;
+  --brand-light: #b0587f;
+  --brand-dark: #5bb455;
+  --brand-darker: #449140;
+  --link: #ff9ec6;
+  --cta-top: #7ccf74;
+  --text: #eedde5;
+  --title: #ffd0e4;
+  --surface: #241a1f;
+  --page-bg: #170f13;
+  --tint-1: #2b2026;
+  --tint-2: #31252c;
+  --tint-3: #3a2c34;
+  --box-hdr-top: #372830;
+  --box-hdr-bottom: #2a1e24;
+  --box-border: #4a3440;
+  --box-hdr-border: #563c4a;
+  --box-sctn-border: #3e2d36;
+  --focus-ring: rgba(255, 158, 198, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='valentijn'] {
+  color-scheme: dark;
+  --brand: #6e1a36;
+  --brand-light: #a8325a;
+  --brand-dark: #e0405e;
+  --brand-darker: #c02846;
+  --link: #ff9ab5;
+  --cta-top: #f0607c;
+  --text: #f0dde3;
+  --title: #ffd0dd;
+  --surface: #251820;
+  --page-bg: #180e14;
+  --tint-1: #2c1d26;
+  --tint-2: #33222c;
+  --tint-3: #3c2834;
+  --box-hdr-top: #3a2530;
+  --box-hdr-bottom: #2c1c25;
+  --box-border: #4d3040;
+  --box-hdr-border: #58384a;
+  --box-sctn-border: #402a36;
+  --focus-ring: rgba(255, 154, 181, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='pasen'] {
+  color-scheme: dark;
+  --brand: #4a3a78;
+  --brand-light: #7a64b0;
+  --brand-dark: #5bb455;
+  --brand-darker: #449140;
+  --link: #c9b6f2;
+  --cta-top: #7ccf74;
+  --text: #e6e2ee;
+  --title: #fff0b8;
+  --surface: #1d1d2b;
+  --page-bg: #121220;
+  --tint-1: #232334;
+  --tint-2: #29293b;
+  --tint-3: #313146;
+  --box-hdr-top: #2e2c44;
+  --box-hdr-bottom: #232233;
+  --box-border: #3c3a56;
+  --box-hdr-border: #454262;
+  --box-sctn-border: #33324a;
+  --focus-ring: rgba(201, 182, 242, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='sinterklaas'] {
+  color-scheme: dark;
+  --brand: #6e0a1a;
+  --brand-light: #a01830;
+  --brand-dark: #c8961e;
+  --brand-darker: #a37812;
+  --link: #f2c94c;
+  --cta-top: #deac30;
+  --text: #ecdcd6;
+  --title: #ffe2a0;
+  --surface: #1c1922;
+  --page-bg: #111018;
+  --tint-1: #221e29;
+  --tint-2: #28232f;
+  --tint-3: #302a38;
+  --box-hdr-top: #3a1a24;
+  --box-hdr-bottom: #2a141b;
+  --box-border: #43323e;
+  --box-hdr-border: #553040;
+  --box-sctn-border: #362c38;
+  --focus-ring: rgba(242, 201, 76, 0.35);
+}
+
+:root[data-theme='donker'][data-festive-colors='zomer'] {
+  color-scheme: dark;
+  --brand: #13586b;
+  --brand-light: #2388a3;
+  --brand-dark: #e8841c;
+  --brand-darker: #c46a06;
+  --link: #7fd8ef;
+  --cta-top: #f7a33b;
+  --text: #dfe9ec;
+  --title: #ffe0a8;
+  --surface: #182127;
+  --page-bg: #0f161b;
+  --tint-1: #1d282f;
+  --tint-2: #222e36;
+  --tint-3: #293741;
+  --box-hdr-top: #203440;
+  --box-hdr-bottom: #192830;
+  --box-border: #2e424e;
+  --box-hdr-border: #354c5a;
+  --box-sctn-border: #2a3a44;
+  --focus-ring: rgba(127, 216, 239, 0.35);
+}

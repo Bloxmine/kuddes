@@ -1,0 +1,473 @@
+/*
+ * Kuddes Presentatie (PresentatiePage.tsx, SlideView.tsx): slides as
+ * PowerPoint 2007 shows them. The window around them is the shared Office
+ * window (office/Office.css). Slides are drawn at 960×540 and scaled.
+ */
+
+/* ------------------------------------------------------------ a slide */
+.ps-frame {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    3px 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ps-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+}
+
+/* Dragging things around shouldn't select the text on the slide */
+.ps-editing .ps-slide {
+  user-select: none;
+}
+
+.ps-el {
+  position: absolute;
+}
+
+.ps-el.editable {
+  cursor: move;
+}
+
+.ps-el.editable.ps-el-text,
+.ps-el.editable:has(.ps-text-edit) {
+  cursor: text;
+}
+
+/* A layout's box shows its dotted edge in the editor, as in PowerPoint */
+.ps-editing .ps-el-text:not(.on) {
+  outline: 1px dashed transparent;
+}
+
+.ps-editing .ps-el-text:not(.on):hover,
+.ps-editing .ps-el-text:not(.on):has(.placeholder) {
+  outline-color: rgba(0, 0, 0, 0.35);
+}
+
+.ps-el.on {
+  outline: 2px solid #f29436;
+  outline-offset: 0;
+}
+
+.ps-el-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.ps-shape,
+.ps-shape svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.ps-text {
+  position: absolute;
+  inset: 0;
+  padding: 6px 10px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+
+.ps-text.mid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ps-text ul {
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: disc;
+}
+
+.ps-text li {
+  margin: 0 0 0.25em;
+}
+
+.ps-text.placeholder {
+  opacity: 0.45;
+}
+
+.ps-text-edit {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: rgba(255, 255, 255, 0.08);
+  resize: none;
+}
+
+/* The eight handles to resize with, the same size at any zoom */
+.ps-handle {
+  position: absolute;
+  z-index: 3;
+  width: calc(9px * var(--ps-inv, 1));
+  height: calc(9px * var(--ps-inv, 1));
+  border: calc(1px * var(--ps-inv, 1)) solid #6d6d6d;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.ps-handle.nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+
+.ps-handle.n {
+  top: 0;
+  left: 50%;
+  cursor: ns-resize;
+}
+
+.ps-handle.ne {
+  top: 0;
+  left: 100%;
+  cursor: nesw-resize;
+}
+
+.ps-handle.e {
+  top: 50%;
+  left: 100%;
+  cursor: ew-resize;
+}
+
+.ps-handle.se {
+  top: 100%;
+  left: 100%;
+  cursor: nwse-resize;
+}
+
+.ps-handle.s {
+  top: 100%;
+  left: 50%;
+  cursor: ns-resize;
+}
+
+.ps-handle.sw {
+  top: 100%;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.ps-handle.w {
+  top: 50%;
+  left: 0;
+  cursor: ew-resize;
+}
+
+/* ------------------------------------------------------------ the window's parts */
+.ps-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ps-list {
+  flex: none;
+  width: 196px;
+  margin: 0;
+  padding: 10px 8px 10px 4px;
+  overflow-y: auto;
+  border-right: 1px solid var(--ofc-group-border);
+  background: linear-gradient(90deg, var(--ofc-ribbon-mid), var(--ofc-ribbon-top));
+  list-style: none;
+}
+
+.ps-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.ps-num {
+  width: 18px;
+  color: var(--ofc-text);
+  font-size: 11px;
+  text-align: right;
+}
+
+.ps-list button {
+  padding: 2px;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  background: none;
+}
+
+.ps-list button:hover {
+  border-color: var(--ofc-hover-border);
+}
+
+.ps-list button.on {
+  border-color: #f29436;
+  background: #ffe9b8;
+}
+
+.ps-center {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Exactly the space that's left (the slide is sized to it, so it mustn't grow with it) */
+.ps-stage {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 0;
+}
+
+.ps-notes {
+  flex: none;
+  height: 70px;
+  padding: 6px 10px;
+  border: 0;
+  border-top: 1px solid var(--ofc-group-border);
+  outline: 0;
+  background: #fff;
+  color: #000;
+  font: 12px Calibri, Carlito, sans-serif;
+  resize: none;
+}
+
+.ps-sorter {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 18px;
+}
+
+.ps-sort-item {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 3px solid transparent;
+  border-radius: 4px;
+  background: none;
+}
+
+.ps-sort-item.on {
+  border-color: #f29436;
+}
+
+.ps-sort-item span {
+  color: #fff;
+  font-size: 12px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* ------------------------------------------------------------ ribbon galleries */
+.ps-themes,
+.ps-transitions {
+  display: flex;
+  gap: 3px;
+  padding: 2px;
+  border: 1px solid var(--ofc-group-border);
+  background: #fff;
+}
+
+.ps-themes button,
+.ps-transitions button {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 66px;
+  padding: 3px 2px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.ps-themes button:hover,
+.ps-transitions button:hover {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 45%, var(--ofc-hover-bottom));
+}
+
+.ps-themes button.on,
+.ps-transitions button.on {
+  border-color: var(--ofc-press-border);
+  background: linear-gradient(var(--ofc-press-top), var(--ofc-press-mid) 45%, var(--ofc-press-bottom));
+}
+
+.ps-themes small,
+.ps-transitions small {
+  max-width: 100%;
+  overflow: hidden;
+  color: #333;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ps-theme-sample {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.ps-theme-sample i {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  height: 3px;
+}
+
+/* Each transition's sample plays its own movement on hover */
+.ps-tr-sample {
+  position: relative;
+  width: 56px;
+  height: 36px;
+  overflow: hidden;
+  border: 1px solid #9a9a9a;
+  background: #dbe5f1;
+}
+
+.ps-tr-sample::after {
+  position: absolute;
+  inset: 0;
+  background: #4f81bd;
+  content: '';
+}
+
+.ps-transitions button:hover .ps-tr-sample.vervagen::after {
+  animation: ps-fade 0.8s both;
+}
+
+.ps-transitions button:hover .ps-tr-sample.duwen::after {
+  animation: ps-push 0.8s both;
+}
+
+.ps-transitions button:hover .ps-tr-sample.wissen::after {
+  animation: ps-wipe 0.8s both;
+}
+
+.ps-transitions button:hover .ps-tr-sample.zoomen::after {
+  animation: ps-zoom 0.8s both;
+}
+
+.ps-transitions button:hover .ps-tr-sample.draaien::after {
+  animation: ps-spin 0.8s both;
+}
+
+.ps-tr-sample.geen::after {
+  background: linear-gradient(135deg, transparent 46%, #c00000 46% 54%, transparent 54%), #dbe5f1;
+}
+
+/* ------------------------------------------------------------ the slideshow */
+.ps-show {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+  outline: 0;
+  cursor: none;
+}
+
+.ps-show .ps-frame {
+  box-shadow: none;
+}
+
+.ps-show-end {
+  color: #fff;
+  font: 16px "Segoe UI", Tahoma, sans-serif;
+  cursor: default;
+}
+
+.tr-vervagen {
+  animation: ps-fade 0.6s both;
+}
+
+.tr-duwen {
+  animation: ps-push 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.tr-wissen {
+  animation: ps-wipe 0.7s ease-out both;
+}
+
+.tr-zoomen {
+  animation: ps-zoom 0.6s ease-out both;
+}
+
+.tr-draaien {
+  animation: ps-spin 0.8s ease-out both;
+}
+
+@keyframes ps-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ps-push {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes ps-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes ps-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+@keyframes ps-spin {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ps-show-slide {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .ps-list {
+    width: 120px;
+  }
+
+  .ps-notes {
+    height: 50px;
+  }
+}

@@ -1,0 +1,45 @@
+# /etc/caddy/Caddyfile — Caddy gets and renews the HTTPS certificate for
+# kuddes.nl by itself, and passes everything on to the app on 127.0.0.1:8787.
+
+www.kuddes.nl {
+	redir https://kuddes.nl{uri} permanent
+}
+
+kuddes.nl {
+	encode zstd gzip
+
+	# Uploads: videos up to 100 MB, songs up to 40 MB (plus a cover), everything else is small (photos max 8 MB)
+	@video path_regexp ^/api/videos/[^/]+/file$
+	request_body @video {
+		max_size 110MB
+	}
+	@music path /api/tracks
+	request_body @music {
+		max_size 50MB
+	}
+	# The rest (made exclusive, so the small limit can't also apply to the uploads above)
+	@other {
+		not path_regexp ^/api/videos/[^/]+/file$
+		not path /api/tracks
+	}
+	request_body @other {
+		max_size 12MB
+	}
+
+	reverse_proxy 127.0.0.1:8787 {
+		# The chat, the game rooms and Kuddes Radio stream: pass everything on right away
+		flush_interval -1
+	}
+
+	# The app sends its own security headers; hide the server software
+	header -Server
+
+	log {
+		output file /var/log/caddy/kuddes.log {
+			roll_size 20MiB
+			roll_keep 10
+			# The privacy statement promises at most 14 days of IP addresses
+			roll_keep_for 336h
+		}
+	}
+}

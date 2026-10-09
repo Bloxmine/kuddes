@@ -1,0 +1,250 @@
+/* Boxes in the member's own columns (BoxLayout.tsx) */
+.layout-grid {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.layout-col {
+  min-width: 0;
+}
+
+/* A column whose boxes all render nothing takes no space */
+.layout-col:empty {
+  display: none;
+}
+
+/*
+ * Narrower screens stack the columns. Each column's width (a flex basis like
+ * 300px) would then become its height and its boxes would spill over the next
+ * ones, so a stacked column just takes the height of what's in it.
+ */
+@media (max-width: 860px) {
+  .layout-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .layout-col {
+    flex: none !important;
+    width: auto !important;
+  }
+}
+
+/* Edit mode */
+.layout-edit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 10px 12px;
+  border-color: var(--brand);
+  background: linear-gradient(var(--tint-1), var(--tint-2));
+  position: sticky;
+  top: 6px;
+  z-index: 20;
+}
+
+.layout-edit-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.layout-edit-bar-text b {
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.layout-edit-bar-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.layout-edit-bar .form-error {
+  width: 100%;
+}
+
+.layout-tray {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border: 1px dashed var(--box-border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 12px;
+}
+
+.layout-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--tint-1);
+  color: var(--title);
+  font: bold 11px var(--font-body);
+  cursor: pointer;
+}
+
+.layout-chip:hover {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.layout-col-edit {
+  align-self: stretch;
+  min-height: 120px;
+  padding: 6px;
+  border: 2px dashed var(--box-border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+.layout-col-empty {
+  margin: 30px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.layout-slot {
+  margin-bottom: 8px;
+  border: 1px solid var(--brand);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: grab;
+}
+
+.layout-slot.dragging {
+  opacity: 0.45;
+}
+
+.layout-slot-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--box-border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: linear-gradient(var(--cta-top), var(--cta-bottom));
+  color: #fff;
+  font-size: 11px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.layout-slot-bar b {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.layout-grip {
+  letter-spacing: -2px;
+  opacity: 0.8;
+}
+
+.layout-slot-actions {
+  display: flex;
+  gap: 1px;
+}
+
+.layout-slot-actions .icon-button {
+  background: rgba(255, 255, 255, 0.85);
+  opacity: 1;
+}
+
+.layout-slot-actions .icon-button:disabled {
+  opacity: 0.35;
+}
+
+/* Shrunk previews keep the columns manageable while arranging */
+.layout-slot-body {
+  max-height: 220px;
+  overflow: hidden;
+  padding: 6px;
+  pointer-events: none;
+  mask-image: linear-gradient(black 70%, transparent);
+}
+
+.layout-slot-body > .box {
+  margin: 0;
+}
+
+.layout-slot-body:empty::after {
+  content: 'Deze box is nu leeg en wordt niet getoond.';
+  display: block;
+  padding: 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.layout-drop-line {
+  height: 4px;
+  margin: 0 0 8px;
+  border-radius: 2px;
+  background: var(--highlight);
+}
+
+/*
+ * On a phone: the bar stays under the top bar (which sticks too) but small,
+ * without the explanation, so the boxes get the screen; shorter previews,
+ * and the move buttons big enough to tap (dragging doesn't work by touch).
+ */
+@media (max-width: 760px) {
+  .layout-edit-bar {
+    top: 64px;
+    gap: 6px 10px;
+    padding: 6px 8px;
+  }
+
+  .layout-edit-bar-text p,
+  .layout-edit-bar-text .farm-icon {
+    display: none;
+  }
+
+  .layout-edit-bar-text b {
+    font-size: 13px;
+  }
+
+  .layout-edit-bar-actions {
+    gap: 6px;
+  }
+
+  .layout-edit-bar-actions .btn {
+    padding: 3px 9px;
+  }
+
+  .layout-slot-body {
+    max-height: 120px;
+  }
+
+  .layout-slot-bar {
+    padding: 3px 4px;
+  }
+
+  .layout-slot-actions {
+    gap: 3px;
+  }
+
+  .layout-slot-actions .icon-button {
+    min-width: 30px;
+    min-height: 28px;
+  }
+
+  .layout-col-edit {
+    min-height: 60px;
+  }
+}

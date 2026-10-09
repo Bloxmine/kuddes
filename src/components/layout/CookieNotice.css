@@ -1,0 +1,32 @@
+.cookie-notice {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 1000;
+  width: min(440px, calc(100vw - 28px));
+  padding: 14px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.cookie-notice p {
+  margin: 6px 0 10px;
+}
+
+.cookie-notice > b {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.cookie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

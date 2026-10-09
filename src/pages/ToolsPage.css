@@ -1,0 +1,163 @@
+/* Tools (ToolsPage.tsx): the programs that are there, and the ones on their way */
+/* The programs on the left, your files on the right */
+.tl-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.tl-programs {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tl-programs > li {
+  margin: 0;
+  padding: 16px;
+}
+
+.tl-app {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* The program's icon on a glossy tile, like a desktop shortcut */
+.tl-app-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--box-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.3) 48%, rgba(255, 255, 255, 0) 50%),
+    linear-gradient(var(--tint-1), var(--tint-3));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.tl-app-icon .farm-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.tl-app-icon.small {
+  width: 48px;
+  height: 48px;
+  border-radius: 11px;
+}
+
+.tl-app-icon.small .farm-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.tl-app-text h2 {
+  margin: 0 0 4px;
+  color: var(--title);
+  font: bold 20px var(--font-title);
+}
+
+.tl-app-text p {
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.tl-docs {
+  margin: 0;
+  padding: 14px;
+}
+
+.tl-docs h2 {
+  margin: 0 0 8px;
+  color: var(--title);
+  font: bold 15px var(--font-title);
+}
+
+.tl-docs ul {
+  display: grid;
+  gap: 2px;
+  max-height: 520px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.tl-docs a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+.tl-docs a:hover {
+  background: var(--tint-1);
+  text-decoration: none;
+}
+
+.tl-docs a .farm-icon {
+  grid-row: span 2;
+}
+
+.tl-docs b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tl-docs .muted {
+  font-size: 11px;
+}
+
+.tl-more h2 {
+  margin: 0 0 10px;
+  color: var(--title);
+  font: bold 18px var(--font-title);
+}
+
+.tl-more ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tl-more li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 0;
+  padding: 14px;
+}
+
+.tl-more h3 {
+  margin: 0 0 4px;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.tl-more p {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .tl-top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

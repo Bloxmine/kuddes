@@ -1,0 +1,21 @@
+/* "Wie is er nu?": your friends who are online, on Overzicht and Home */
+.online-friends ul {
+  display: grid;
+}
+
+.online-friends li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.online-friends li:last-child {
+  border-bottom: 0;
+}
+
+.online-friends li > div:not(.avatar) {
+  display: grid;
+  font-size: 13px;
+}

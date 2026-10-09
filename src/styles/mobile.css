@@ -1,0 +1,168 @@
+/*
+ * Phones and small tablets. Loaded after every other stylesheet (see
+ * main.tsx), so these rules win over the desktop layout.
+ */
+@media (max-width: 760px) {
+  /* Text fields at 16px, or iPhones zoom in on every tap */
+  input.text-box,
+  select.text-box,
+  textarea.text-box,
+  input[type='search'],
+  input[type='text'],
+  input[type='email'],
+  input[type='password'] {
+    font-size: 16px;
+  }
+
+  /*
+   * Tab bars and rows of buttons stay on one line and swipe sideways, instead
+   * of stacking. An edge fades out where there's more to see (data-fade is
+   * kept up to date by src/lib/scrollFades.ts; keep the two lists the same).
+   */
+  .hscroll,
+  .timeline-tabs,
+  .agenda-tabs,
+  .vt-tabs,
+  .box-tabs,
+  .profile-menu,
+  .smiley-picker-tabs,
+  .profile-hdr-optns,
+  .composer-tools,
+  .kudde-hero-actions,
+  .rc-actions,
+  .fe-toolbar,
+  .ct-pills,
+  .ct-filters,
+  .ct-sort {
+    --fade-left: 0px;
+    --fade-right: 0px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+  }
+
+  [data-fade~='left'] {
+    --fade-left: 28px;
+  }
+
+  [data-fade~='right'] {
+    --fade-right: 28px;
+  }
+
+  .hscroll::-webkit-scrollbar,
+  .timeline-tabs::-webkit-scrollbar,
+  .agenda-tabs::-webkit-scrollbar,
+  .vt-tabs::-webkit-scrollbar,
+  .box-tabs::-webkit-scrollbar,
+  .profile-menu::-webkit-scrollbar,
+  .smiley-picker-tabs::-webkit-scrollbar,
+  .profile-hdr-optns::-webkit-scrollbar,
+  .composer-tools::-webkit-scrollbar,
+  .kudde-hero-actions::-webkit-scrollbar,
+  .rc-actions::-webkit-scrollbar,
+  .fe-toolbar::-webkit-scrollbar,
+  .ct-pills::-webkit-scrollbar,
+  .ct-filters::-webkit-scrollbar,
+  .ct-sort::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hscroll > *,
+  .timeline-tabs > *,
+  .agenda-tabs > *,
+  .vt-tabs > *,
+  .box-tabs > *,
+  .profile-menu > *,
+  .smiley-picker-tabs > *,
+  .profile-hdr-optns > *,
+  .composer-tools > *,
+  .kudde-hero-actions > *,
+  .rc-actions > *,
+  .fe-toolbar > *,
+  .ct-pills > *,
+  .ct-filters > *,
+  .ct-sort > * {
+    flex: none;
+    white-space: nowrap;
+  }
+
+  /* The fade would hide an open menu too (a mask covers everything inside the row) */
+  .composer-tools:has(.dropdown.open) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* A menu in a swiping row would be cut off by it: it opens as a sheet at the bottom of the screen */
+  .composer-tools .dropdown-panel {
+    position: fixed;
+    top: auto;
+    right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    left: 8px;
+    z-index: 60;
+    max-height: 60vh;
+    overflow-y: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  /* The WieWatWaar box: its tools swipe, the count and Plaatsen sit below on the right */
+  .composer-bar {
+    flex-wrap: wrap;
+  }
+
+  .composer-bar .composer-tools {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  /* Wide tables scroll inside their box instead of widening the page */
+  .bh-table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gl-toasts {
+    left: 8px;
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    width: calc(100vw - 16px);
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  /* Profile header: the tabs swipe inside the width of the page */
+  .profile-hdr-info {
+    flex: 1 1 100%;
+  }
+
+  .profile-hdr-info > :last-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .profile-hdr-optns {
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+}
+
+/* A swiping row can't set the width of what it's in: the forum editor (a
+   grid) would otherwise grow as wide as its whole toolbar */
+@media (max-width: 760px) {
+  .fe-editor,
+  .fe-editor > *,
+  .composer-editor,
+  .field > * {
+    min-width: 0;
+  }
+}

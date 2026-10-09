@@ -1,0 +1,48 @@
+/* An embed that waits for the cookie choice (ExternalBlocked.tsx) */
+.ext-blocked {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  padding: 16px 12px;
+  border: 1px dashed var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.ext-blocked p {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+
+.ext-blocked b {
+  color: var(--title);
+}
+
+.ext-blocked-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.ext-blocked .btn {
+  padding: 3px 10px;
+  font-size: 12px;
+}
+
+.ext-blocked.compact {
+  display: flex;
+  gap: 8px;
+  justify-items: start;
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.ext-blocked.compact p {
+  flex: 1;
+}

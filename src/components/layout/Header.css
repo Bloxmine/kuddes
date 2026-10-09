@@ -1,0 +1,576 @@
+/* Above page content and its menus (30), below the report button (50) and overlays */
+.site-hdr {
+  position: relative;
+  z-index: 35;
+}
+
+/* Loose from the top of the window (.page, loaded later, would reset the margin) */
+.site-hdr.page {
+  margin-top: 14px;
+}
+
+/*
+ * A floating card, loose from the top of the window: the logo, the menus and
+ * your own buttons on one glossy row in the brand colour.
+ */
+.topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  padding: 0 12px 0 18px;
+  border-radius: 16px;
+  /*
+   * Glossy, like a sheet of glass over the colour: a bright top half with a
+   * crisp edge, and a soft light coming back up from the bottom. Sized to the
+   * bar's own 58px row, so it stays put when the menus wrap below it.
+   * --bar-image: an own theme's pattern (shared/customization.ts), under the shine.
+   */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0, rgba(255, 255, 255, 0.2) 28px, rgba(255, 255, 255, 0.04) 29px, rgba(255, 255, 255, 0) 30px) 0 0 / 100% 58px no-repeat,
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 70%) 0 0 / 100% 58px no-repeat,
+    var(--bar-image, linear-gradient(transparent, transparent)),
+    linear-gradient(to bottom, var(--brand-light) 0%, var(--brand) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+    0 10px 26px rgba(19, 50, 79, 0.22);
+}
+
+.topbar-logo {
+  flex: none;
+  line-height: 0;
+}
+
+.topbar-logo img {
+  display: block;
+  width: 88px;
+  height: auto;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+/* The search drops down under the bar while the magnifier is open */
+.topbar-search {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 8px;
+  z-index: 32;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(460px, calc(100% - 16px));
+  padding: 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 12px 30px rgba(19, 50, 79, 0.18);
+  color: var(--text-muted);
+}
+
+.topbar-search .icon {
+  position: absolute;
+  left: 20px;
+  pointer-events: none;
+}
+
+.topbar-search input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px 0 36px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--tint-1);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.topbar-search input:focus {
+  outline: 0;
+  border-color: var(--brand);
+  background: var(--surface);
+}
+
+.topbar-search .btn {
+  height: 36px;
+  border-radius: 10px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.topbar-icon,
+.topbar-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.topbar-icon:hover,
+.topbar-avatar:hover,
+.dropdown.open > .topbar-icon,
+.dropdown.open > .topbar-avatar {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.15);
+  text-decoration: none;
+}
+
+.topbar-avatar {
+  padding: 0 6px 0 2px;
+}
+
+/* Square, in a little white frame like the avatars on the site */
+.topbar-avatar .avatar-link {
+  padding: 1px;
+  border-color: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+}
+
+.topbar-avatar .avatar-img {
+  border-radius: 2px;
+}
+
+/* The picture sits in the middle of the bar, with your online status on its corner */
+.topbar-avatar-pic {
+  position: relative;
+  display: flex;
+}
+
+.topbar-avatar .avatar {
+  display: flex;
+  width: auto !important;
+}
+
+.topbar-avatar .avatar-img {
+  /* Also the coloured placeholder, which has its size inline */
+  width: 28px !important;
+  height: 28px !important;
+  font-size: 11px;
+}
+
+.topbar-avatar .avatar-link {
+  display: block;
+}
+
+.topbar-avatar-status {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 12px;
+  height: 12px;
+  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+/* The four statuses as icons in a row, with a line between them; yours is tinted */
+.topbar-statuses {
+  display: flex;
+  padding: 2px 8px;
+}
+
+.dropdown-panel .topbar-statuses .dropdown-item {
+  flex: 1;
+  justify-content: center;
+  padding: 6px 0;
+  border-radius: 6px;
+}
+
+.dropdown-panel .topbar-statuses .dropdown-item + .dropdown-item {
+  position: relative;
+}
+
+.dropdown-panel .topbar-statuses .dropdown-item + .dropdown-item::before {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  border-left: 1px solid var(--box-sctn-border);
+  content: '';
+}
+
+.dropdown-panel .topbar-statuses .dropdown-item[aria-pressed='true'] {
+  background: var(--tint-2);
+}
+
+.topbar-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  min-width: 16px;
+  margin-left: 4px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--highlight);
+  color: #fff;
+  font-size: 10px;
+  line-height: 16px;
+  text-align: center;
+}
+
+/*
+ * A counter on the Farm-Fresh red ball (bullet_red): the ball fills the middle
+ * half of the icon, so at 200% it covers the badge (wider numbers make it an oval).
+ */
+.badge.farm-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 0;
+  background: url('/icons/32/bullet_red.png') 50% 53% / 200% 200% no-repeat;
+  color: #fff;
+  font-weight: bold;
+  line-height: 18px;
+  text-shadow: 0 1px 1px rgba(110, 0, 0, 0.6);
+}
+
+.status-dot {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #5cd65c;
+  box-shadow:
+    inset 0 -1px 1px rgba(0, 0, 0, 0.25),
+    0 0 0 2px rgba(255, 255, 255, 0.45);
+}
+
+.status-dot.offline {
+  background: #aaa;
+}
+
+/* The menus, in the bar after the logo; narrower screens give them their own row (below) */
+.catnav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+}
+
+.catnav-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.catnav-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: none;
+  color: #fff;
+  font: bold 13px var(--font-title);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}
+
+.catnav-title .icon:last-child {
+  opacity: 0.7;
+}
+
+/*
+ * A thin line between the menus and between your own buttons. The menus draw
+ * theirs as a background: positioning them would cut off their dropdowns in
+ * the scrolling row on narrower screens.
+ */
+.catnav-items > li + li {
+  margin-left: 4px;
+  padding-left: 5px;
+  background: linear-gradient(var(--divider, rgba(255, 255, 255, 0.35)), var(--divider, rgba(255, 255, 255, 0.35))) 0 50% / 1px 18px no-repeat;
+}
+
+.topbar-actions > *,
+.topbar-wide > * {
+  position: relative;
+}
+
+.topbar-actions > .notif-bell {
+  display: flex;
+}
+
+/* (.topbar-wide only groups what phones hide, so its buttons count as the bar's own) */
+.topbar-actions > * + :not(.topbar-wide)::before,
+.topbar-wide > *::before {
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.35);
+  content: '';
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.catnav-title:hover,
+.dropdown.open > .catnav-title {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* The section you're in: pressed into the bar */
+.catnav .current .catnav-title {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.08));
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/*
+ * Narrower screens (an iPad, a small laptop) that don't have the ☰ menu yet:
+ * the menus stay on one line in the bar and swipe sideways (fading at the
+ * edge where there's more). The menus hang from the whole row instead of
+ * from the scrolling part, which would cut them off.
+ */
+@media (max-width: 1100px) {
+  /* The menus stay in the bar, between the logo and your buttons */
+  .catnav {
+    position: relative;
+  }
+
+  .catnav-items {
+    --fade-left: 0px;
+    --fade-right: 0px;
+    flex: 1;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-left), #000 calc(100% - var(--fade-right)), transparent 100%);
+  }
+
+  .catnav-items::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The fade would hide an open menu too (a mask covers everything inside the row) */
+  .catnav-items:has(.dropdown.open) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .catnav-items[data-fade~='left'] {
+    --fade-left: 28px;
+  }
+
+  .catnav-items[data-fade~='right'] {
+    --fade-right: 28px;
+  }
+
+  .catnav-items > li {
+    flex: none;
+  }
+
+  .catnav-title {
+    white-space: nowrap;
+  }
+
+  /* Positioned against .catnav, not the scrolling row (an overflow box clips what's positioned inside it) */
+  .catnav-items .dropdown {
+    position: static;
+  }
+
+  /* Under its tab (placeMenu in Header.tsx measures where that is now), kept inside the bar */
+  .catnav .dropdown-panel {
+    left: var(--menu-x, auto);
+    max-width: calc(100vw - 24px);
+  }
+
+}
+
+/* Only on phones: the ☰ menu */
+.topbar-burger {
+  display: none;
+}
+
+.topbar-wide {
+  display: contents;
+}
+
+@media (max-width: 760px) {
+  /* On a phone it stays in view while you scroll, still floating a little below the top */
+  .site-hdr,
+  .site-hdr.page {
+    position: sticky;
+    top: calc(6px + env(safe-area-inset-top));
+    z-index: 35;
+    margin-top: 6px;
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  .site-hdr .topbar {
+    border-radius: 14px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 4px;
+    min-height: 52px;
+    padding: 4px 8px;
+    padding-top: 4px;
+  }
+
+  .topbar-burger {
+    display: inline-flex;
+  }
+
+  .topbar-logo img {
+    width: 76px;
+  }
+
+  .topbar-actions {
+    gap: 4px;
+  }
+
+  .topbar-actions > * + :not(.topbar-wide)::before {
+    left: -2px;
+  }
+
+  .topbar-icon,
+  .topbar-avatar {
+    min-width: 40px;
+    height: 40px;
+    justify-content: center;
+    padding: 0 6px;
+  }
+
+  .topbar-avatar .icon {
+    display: none;
+  }
+
+  .topbar-wide,
+  .catnav {
+    display: none;
+  }
+
+  .topbar-search {
+    top: calc(100% + 6px);
+    right: 6px;
+    left: 6px;
+    width: auto;
+  }
+
+  .topbar-search input {
+    height: 40px;
+    font-size: 16px; /* no zooming in on iPhone */
+  }
+
+  .topbar-actions > .btn {
+    padding: 5px 10px;
+  }
+}
+
+.topbar-actions > .btn {
+  padding: 5px 14px;
+  border-radius: 7px;
+  font: bold 13px/18px var(--font-title);
+}
+
+/* The category menus: a speech bubble with sections, an icon per row and a chevron, just under the bar */
+.catnav .dropdown-panel {
+  top: calc(100% + 8px);
+  min-width: 260px;
+  padding: 10px 8px;
+}
+
+.mega-section + .mega-section {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.mega-section h3 {
+  padding: 2px 10px 4px;
+  color: var(--brand-dark);
+  font: bold 11px var(--font-title);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.mega-menu a {
+  gap: 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.mega-menu a .icon:first-child {
+  color: var(--brand-dark);
+}
+
+.mega-menu a span {
+  flex: 1;
+}
+
+.mega-chevron {
+  opacity: 0.45;
+}
+
+/* Two columns: the sections side by side, each its own little card */
+.mega-menu.wide {
+  columns: 2 220px;
+  column-gap: 8px;
+}
+
+.catnav .dropdown-panel:has(.mega-menu.wide) {
+  width: min(520px, calc(100vw - 24px));
+}
+
+.mega-menu.wide .mega-section {
+  margin: 0 0 8px;
+  padding: 6px 2px 4px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, var(--tint-1), transparent 60%);
+  break-inside: avoid;
+}
+
+.mega-menu.wide .mega-section:last-child {
+  margin-bottom: 0;
+}
+
+.mega-menu.wide .mega-chevron {
+  display: none;
+}
+
+/* Invisible bridge over the gap, so moving the mouse down doesn't close the menu */
+.catnav-title {
+  position: relative;
+}
+
+.catnav .dropdown.open > .catnav-title::after {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 22px;
+  content: '';
+}

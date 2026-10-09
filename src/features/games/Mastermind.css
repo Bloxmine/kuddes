@@ -1,0 +1,275 @@
+/* Mastermind (MastermindBoard.tsx): a dark plastic board with glossy pegs, like the real one */
+
+.mmd {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.mmd-roles {
+  margin: 0;
+  text-align: center;
+}
+
+.mmd-board {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  border-radius: 14px;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 30%),
+    linear-gradient(135deg, #3b2f2a, #1f1714);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* The hidden code, behind its little shield */
+.mmd-shield {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #6d5a4f, #4a3b33);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+.mmd-hidden {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2a211d;
+  color: #c8b7aa;
+  font: bold 14px var(--font-title);
+}
+
+.mmd-rows {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mmd-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mmd-row.current {
+  background: rgba(255, 220, 120, 0.16);
+  box-shadow: 0 0 0 1px rgba(255, 220, 120, 0.45);
+}
+
+.mmd-row.cracked {
+  background: rgba(120, 220, 120, 0.18);
+}
+
+.mmd-n {
+  width: 18px;
+  color: #a8968a;
+  font: bold 11px var(--font-title);
+  text-align: right;
+}
+
+.mmd-holes {
+  display: flex;
+  gap: 8px;
+}
+
+/* A peg: a glossy ball in its colour; an empty hole is a dark dip */
+.mmd-peg {
+  --peg: #444;
+  display: inline-block;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 38%),
+    radial-gradient(circle at 50% 60%, var(--peg), color-mix(in srgb, var(--peg) 55%, #000));
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.5),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.mmd-peg.empty {
+  background: radial-gradient(circle at 50% 40%, #120d0b, #2c2320);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+  transform: scale(0.6);
+}
+
+button.mmd-peg {
+  cursor: pointer;
+}
+
+button.mmd-peg:hover {
+  filter: brightness(1.1);
+}
+
+.mmd-peg.selected {
+  outline: 3px solid #ffd76a;
+  outline-offset: 2px;
+}
+
+.mmd-peg.empty.selected {
+  transform: scale(0.8);
+}
+
+.mmd-peg.big {
+  position: relative;
+  width: 38px;
+  height: 38px;
+}
+
+.mmd-key-hint {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--box-border);
+  color: var(--text-muted);
+  font: bold 9px var(--font-body);
+}
+
+/* The pins: a small grid next to the row */
+.mmd-keys {
+  display: grid;
+  grid-template-columns: repeat(2, 9px);
+  gap: 3px;
+  padding: 3px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.mmd-keys.n5 {
+  grid-template-columns: repeat(3, 9px);
+}
+
+.mmd-pin {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #120d0b;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+  vertical-align: middle;
+}
+
+.mmd-pin.black {
+  background: radial-gradient(circle at 35% 30%, #777, #0d0d0d);
+  box-shadow: 0 0 0 1px #9a9a9a;
+}
+
+.mmd-pin.white {
+  background: radial-gradient(circle at 35% 30%, #fff, #cfcfcf);
+  box-shadow: 0 0 0 1px #777;
+}
+
+/* Filling in a row */
+.mmd-action {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  width: min(460px, 100%);
+  padding: 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--tint-1);
+}
+
+.mmd-action h3 {
+  margin: 0;
+  color: var(--title);
+  font: bold 15px var(--font-title);
+}
+
+.mmd-action > p {
+  margin: 0;
+  text-align: center;
+}
+
+.mmd-editor {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.mmd-editor-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3b2f2a, #1f1714);
+}
+
+.mmd-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.mmd-wait,
+.mmd-end {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  font-weight: bold;
+}
+
+.mmd-end {
+  color: var(--title);
+  font-size: 15px;
+}
+
+.mmd-legend {
+  margin: 0;
+  font-size: 11px;
+}
+
+/* The game list's picture */
+.gh-mastermind-art {
+  display: grid;
+  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3b2f2a, #1f1714);
+}
+
+.gh-mastermind-art .mmd-row {
+  gap: 6px;
+  padding: 2px 4px;
+}
+
+.gh-mastermind-art .mmd-peg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 480px) {
+  .mmd-peg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mmd-holes,
+  .mmd-editor-row {
+    gap: 6px;
+  }
+}

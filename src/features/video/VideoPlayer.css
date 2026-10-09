@@ -1,0 +1,319 @@
+/* The Kuddes video player: glossy bar in the site colours, round buttons like the music gadget */
+.bv-player {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #111;
+  border-radius: 6px;
+  background: #000;
+  aspect-ratio: 16 / 9;
+  outline-offset: 2px;
+  user-select: none;
+}
+
+.bv-player:focus-visible {
+  outline: 2px solid var(--brand);
+}
+
+.bv-player.fullscreen {
+  border: 0;
+  border-radius: 0;
+  aspect-ratio: auto;
+}
+
+.bv-player video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+  cursor: pointer;
+}
+
+.bv-player.idle,
+.bv-player.idle video {
+  cursor: none;
+}
+
+/* Big glossy play button in the middle */
+.bv-big-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  margin: -37px 0 0 -37px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 51%),
+    linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.bv-big-play:hover {
+  transform: scale(1.07);
+}
+
+.compact .bv-big-play {
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+}
+
+.bv-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 42px;
+  height: 42px;
+  margin: -21px 0 0 -21px;
+  border: 4px solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--brand-light);
+  border-radius: 50%;
+  animation: bv-spin 0.8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes bv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bv-flash {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font: bold 13px var(--font-body);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.bv-unsupported {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  background: rgba(10, 20, 30, 0.86);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+}
+
+.bv-unsupported p {
+  max-width: 440px;
+  margin: 0;
+}
+
+.compact .bv-unsupported {
+  font-size: 11px;
+}
+
+/* Controls */
+.bv-controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.bv-player.idle .bv-controls {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.bv-track {
+  position: relative;
+  height: 9px;
+  margin: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.6);
+  background: linear-gradient(to bottom, #2a2d30, #45494d);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.bv-track:hover {
+  height: 11px;
+}
+
+.bv-track-buffered,
+.bv-track-played {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.bv-track-buffered {
+  background: linear-gradient(to bottom, #6c7176, #585c61);
+}
+
+.bv-track-played {
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 51%),
+    linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+}
+
+.bv-track-knob {
+  position: absolute;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff, #d4d8dc);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.bv-track:hover .bv-track-knob,
+.bv-player:focus-within .bv-track-knob {
+  opacity: 1;
+}
+
+.bv-track-tip {
+  position: absolute;
+  bottom: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font: bold 11px var(--font-body);
+  transform: translateX(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* The glossy bar: the site's brand colour with a highlight on the top half */
+.bv-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 8px;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(0, 0, 0, 0.1) 51%, rgba(0, 0, 0, 0.18) 100%),
+    linear-gradient(to bottom, var(--brand-dark), var(--brand-darker));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.compact .bv-bar {
+  height: 30px;
+  gap: 4px;
+  padding: 0 5px;
+}
+
+.bv-btn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #fafbfc, #cdd3d6);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.bv-btn:hover {
+  background: linear-gradient(to bottom, #fff, #e3e8ea);
+}
+
+.bv-btn:active {
+  background: linear-gradient(to bottom, #cdd3d6, #fafbfc);
+}
+
+.bv-btn-main {
+  width: 30px;
+  height: 30px;
+}
+
+.compact .bv-btn {
+  width: 22px;
+  height: 22px;
+}
+
+.compact .bv-btn-main {
+  width: 24px;
+  height: 24px;
+}
+
+.bv-time {
+  margin-left: 4px;
+  font: bold 12px var(--font-body);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.bv-time span {
+  opacity: 0.75;
+}
+
+.compact .bv-time {
+  font-size: 10px;
+}
+
+.bv-spacer {
+  flex: 1;
+}
+
+.bv-volume {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bv-volume input[type='range'] {
+  width: 70px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #fff var(--vol), rgba(0, 0, 0, 0.35) var(--vol));
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  appearance: none;
+  cursor: pointer;
+}
+
+.bv-volume input[type='range']::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff, #d4d8dc);
+  appearance: none;
+}
+
+.bv-volume input[type='range']::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff, #d4d8dc);
+}
+
+.compact .bv-volume input[type='range'] {
+  display: none;
+}

@@ -1,0 +1,239 @@
+/* Poker (PokerBoard.tsx): the green table with seats round it */
+.pk {
+  display: grid;
+  gap: 10px;
+}
+
+.pk-table {
+  position: relative;
+  display: grid;
+  grid-template: 'top top top' auto 'left felt right' minmax(210px, auto) 'bottom bottom bottom' auto / auto minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  justify-items: center;
+  padding: 8px;
+}
+
+.pk-felt {
+  grid-area: felt;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 210px;
+  border: 10px solid #6b3f1f;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 50% 40%, #2f9a52, #1a6b35 70%);
+  box-shadow:
+    inset 0 0 30px rgba(0, 0, 0, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.pk-center {
+  --card-w: clamp(38px, 7vw, 56px);
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 16px;
+}
+
+.pk-board {
+  display: flex;
+  gap: 5px;
+}
+
+.pk-pot {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: #fff;
+}
+
+.pk-pot .muted,
+.pk-blinds {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+}
+
+.pk-seat {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  padding: 4px;
+  transition: opacity 0.2s;
+}
+
+.pk-seat.top {
+  grid-area: top;
+}
+
+.pk-seat.left {
+  grid-area: left;
+}
+
+.pk-seat.right {
+  grid-area: right;
+}
+
+.pk-seat.bottom {
+  grid-area: bottom;
+}
+
+.pk-seat.folded .pk-hole,
+.pk-seat.out {
+  opacity: 0.45;
+}
+
+.pk-hole {
+  display: flex;
+  gap: 3px;
+  min-height: calc(var(--card-w) * 1.4);
+}
+
+.pk-hole .pc-card.best {
+  box-shadow:
+    0 0 0 3px #ffd76a,
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.pk-plate {
+  position: relative;
+  display: grid;
+  min-width: 110px;
+  padding: 4px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #3b3b40, #202024);
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
+
+.pk-plate span {
+  color: #ffd76a;
+  font-size: 11px;
+}
+
+.pk-seat.acting .pk-plate {
+  box-shadow: 0 0 0 3px #ffd76a;
+}
+
+.pk-seat.won .pk-plate {
+  background: linear-gradient(to bottom, #3f9e1c, #2a7012);
+}
+
+.pk-dealer {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #999;
+  border-radius: 50%;
+  background: #fff;
+  color: #222 !important;
+  font: bold 11px var(--font-body);
+}
+
+.pk-handname {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #ffd76a;
+  color: #3b2a00;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.pk-bet {
+  min-height: 20px;
+}
+
+.pk-chips {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 1px 8px 1px 2px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.pk-chips.big {
+  font-size: 14px;
+}
+
+.pk-chip {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#fff 0 15deg, #d8322f 15deg 45deg);
+  box-shadow: inset 0 0 0 3px #d8322f;
+}
+
+.pk-result {
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--note-border);
+  border-radius: 8px;
+  background: var(--note-bg);
+  color: var(--note-text);
+  font-weight: bold;
+  text-align: center;
+}
+
+.pk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--tint-1);
+}
+
+.pk-raise {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.pk-raise input[type='range'] {
+  width: min(200px, 60vw);
+}
+
+.pk-wait {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.pk-log {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+  list-style: none;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .pk-table {
+    grid-template: 'top top' auto 'left right' auto 'felt felt' auto 'bottom bottom' auto / 1fr 1fr;
+  }
+
+  .pk-felt {
+    border-width: 6px;
+    border-radius: 40px;
+  }
+}

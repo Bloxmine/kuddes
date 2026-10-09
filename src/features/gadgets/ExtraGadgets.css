@@ -1,0 +1,525 @@
+/* Mario Kart Wii, Tekstvak, Uitgelichte foto, Bezoekersteller and Citaat (ExtraGadgets.tsx) */
+
+/* ------------------------------------------------------------------ Mario Kart Wii licence */
+.mkw {
+  overflow: hidden;
+  border: 2px solid #d8d8d8;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, #ffffff, #eef3f8);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  color: #1b2733;
+  font: 12px/1.4 Verdana, Geneva, sans-serif;
+}
+
+.mkw-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  padding: 8px 10px;
+  background:
+    /* speed lines */
+    repeating-linear-gradient(100deg, transparent 0 14px, rgba(255, 255, 255, 0.07) 14px 16px),
+    linear-gradient(100deg, #ff4a2e, #e8231f 35%, #b40f0f 70%, #6e0606);
+  color: #fff;
+}
+
+/* The chequered flag, slanted and fading in from the red */
+.mkw-flag {
+  position: absolute;
+  top: -12px;
+  right: -26px;
+  bottom: -12px;
+  width: 46%;
+  background: repeating-conic-gradient(#fff 0 25%, #151515 0 50%) 0 0 / 14px 14px;
+  box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.6);
+  -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.35) 25%, #000 70%);
+  mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.35) 25%, #000 70%);
+  transform: skewX(-24deg);
+  pointer-events: none;
+}
+
+.mkw-logo,
+.mkw-licence {
+  position: relative;
+  z-index: 1;
+}
+
+.mkw-logo {
+  font: italic bold 15px/1 'Arial Black', Impact, sans-serif;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.mkw-logo b {
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: #fff;
+  color: #1a8ad8;
+  text-shadow: none;
+  transform: skewX(-8deg);
+}
+
+.mkw-licence {
+  padding: 1px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  background: rgba(120, 0, 0, 0.55);
+  font: bold 10px/16px var(--font-body);
+  text-transform: uppercase;
+}
+
+.mkw-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: linear-gradient(100deg, transparent 60%, rgba(26, 138, 216, 0.1));
+}
+
+.mkw-driver {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px #1a8ad8,
+    0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.mkw-driver img {
+  width: 64px;
+  height: 64px;
+}
+
+.mkw-driver.w-licht {
+  background: radial-gradient(circle at 35% 30%, #b6f0b2, #3aa936);
+}
+
+.mkw-driver.w-middel {
+  background: radial-gradient(circle at 35% 30%, #b0dcff, #1a6fc4);
+}
+
+.mkw-driver.w-zwaar {
+  background: radial-gradient(circle at 35% 30%, #ffc0ae, #c42b17);
+}
+
+.mkw-who {
+  display: grid;
+  flex: 1 1 100px;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mkw-who b {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font: bold 16px var(--font-title);
+}
+
+.mkw-rank {
+  width: auto;
+  height: 20px;
+}
+
+.mkw-who > span {
+  color: #5a6570;
+  font-size: 11px;
+}
+
+.mkw-ride {
+  color: #1b2733 !important;
+  font-weight: bold;
+}
+
+.mkw-vehicle {
+  flex: none;
+  width: auto;
+  max-width: 96px;
+  height: auto;
+  max-height: 50px;
+  filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* A slanted chequered strip under the driver, like the finish line */
+.mkw-strip {
+  height: 8px;
+  margin: 0 -6px 8px;
+  background: repeating-conic-gradient(#151515 0 25%, #fff 0 50%) 0 0 / 8px 8px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  transform: skewX(-24deg);
+}
+
+@media (max-width: 380px) {
+  .mkw-vehicle {
+    max-width: 64px;
+  }
+}
+
+.mkw-points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 0 10px 8px;
+}
+
+.mkw-points div {
+  display: grid;
+  justify-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  background: linear-gradient(to bottom, #1a8ad8, #0d5a9c);
+  color: #fff;
+}
+
+.mkw-points span {
+  font: bold 10px var(--font-body);
+  opacity: 0.85;
+}
+
+.mkw-points b {
+  font: bold 22px/1.1 'Arial Black', Impact, sans-serif;
+}
+
+.mkw-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 0;
+  padding: 8px 10px;
+  border-top: 1px dashed #c8d2dc;
+  font-size: 11px;
+}
+
+.mkw-facts dt {
+  color: #5a6570;
+  font-weight: bold;
+}
+
+.mkw-facts dd {
+  margin: 0;
+}
+
+.mkw-cup,
+.mkw-wheel {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+/* The cup icons are tiny pixel art: keep them sharp */
+.mkw-cup {
+  image-rendering: pixelated;
+}
+
+.mkw-wheel {
+  width: 16px;
+  height: auto;
+}
+
+.mkw-code {
+  font: bold 13px ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  letter-spacing: 1px;
+  user-select: all;
+}
+
+.mkw-online {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 5px 10px;
+  background: #e5f3ff;
+  color: #0d5a9c;
+  font: bold 11px var(--font-body);
+}
+
+/* ------------------------------------------------------------------ Tekstvak */
+.tekstvak {
+  margin: calc(-1 * var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px));
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.tekstvak p {
+  margin: 0;
+}
+
+.tekstvak a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ Uitgelichte foto */
+.uitgelicht {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.uitgelicht-img {
+  display: block;
+  max-width: 100%;
+  cursor: zoom-in;
+}
+
+.uitgelicht img {
+  display: block;
+  max-width: 100%;
+  max-height: 420px;
+  height: auto;
+}
+
+.uitgelicht figcaption {
+  font-size: 12px;
+  text-align: center;
+}
+
+.frame-polaroid .uitgelicht-img {
+  padding: 8px 8px 38px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  transform: rotate(-2deg);
+}
+
+.frame-polaroid figcaption {
+  margin-top: -36px;
+  color: #333;
+  font: 15px 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', cursive;
+  transform: rotate(-2deg);
+}
+
+.frame-lijst .uitgelicht-img {
+  padding: 10px;
+  border: 8px solid #7a4a1e;
+  border-image: linear-gradient(135deg, #a8703a, #5c3412, #a8703a, #5c3412) 1;
+  background: #f5efe3;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.35), 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.frame-geen img {
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------------ Bezoekersteller */
+.teller {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.teller-digits {
+  display: flex;
+  gap: 2px;
+}
+
+.teller-digits span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 36px;
+  font: bold 24px/1 ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+.teller-kilometer .teller-digits {
+  padding: 3px;
+  border-radius: 4px;
+  background: #222;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.teller-kilometer .teller-digits span {
+  border-radius: 2px;
+  background: linear-gradient(to bottom, #3b3b3b 0%, #111 50%, #2a2a2a 51%, #151515 100%);
+  color: #f2f2f2;
+}
+
+.teller-kilometer .teller-digits span.last {
+  background: linear-gradient(to bottom, #f4f4f4 0%, #d8d8d8 50%, #c9c9c9 51%, #eee 100%);
+  color: #c41a1a;
+}
+
+.teller-led .teller-digits {
+  padding: 6px 8px;
+  border: 2px solid #333;
+  border-radius: 4px;
+  background: #140404;
+}
+
+.teller-led .teller-digits span {
+  width: 20px;
+  color: #ff3b2f;
+  text-shadow: 0 0 6px rgba(255, 59, 47, 0.8);
+}
+
+.teller-klassiek .teller-digits span {
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-2));
+  color: var(--title);
+}
+
+.teller-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* ------------------------------------------------------------------ Citaat */
+.citaat {
+  margin: 0;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.citaat p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.citaat footer {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.citaat-krijtbord {
+  border: 8px solid #7a4a1e;
+  border-radius: 4px;
+  background: radial-gradient(ellipse at 30% 30%, #3f5e45, #2a4230);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.45);
+  color: #f4f4ec;
+  font-family: 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', cursive;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.citaat-briefje {
+  position: relative;
+  background: #fff7a8;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  color: #3a2a00;
+  font-family: 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', cursive;
+  transform: rotate(-1.5deg);
+}
+
+.citaat-briefje::before {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 70px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transform: translateX(-50%) rotate(2deg);
+  content: '';
+}
+
+.citaat-neon {
+  border-radius: 8px;
+  background: #120a1c;
+  color: #ffd6fa;
+  font-family: var(--font-title);
+}
+
+.citaat-neon p {
+  font-weight: bold;
+  text-shadow:
+    0 0 4px #ff4fd8,
+    0 0 12px #ff4fd8,
+    0 0 24px #b400ff;
+}
+
+.citaat-neon footer {
+  color: #8ff3ff;
+  text-shadow: 0 0 6px #00d8ff;
+}
+
+/* Editors */
+.settings-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.mkw-pick-group {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.mkw-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.mkw-pick button {
+  display: grid;
+  justify-items: center;
+  padding: 2px;
+  border: 2px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+  cursor: pointer;
+}
+
+.mkw-pick button:hover {
+  border-color: var(--link);
+}
+
+.mkw-pick button[aria-checked='true'] {
+  border-color: #e8231f;
+  background: color-mix(in srgb, #e8231f 12%, var(--surface));
+  box-shadow: 0 0 0 2px color-mix(in srgb, #e8231f 35%, transparent);
+}
+
+.mkw-pick img {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+.mkw-pick.vehicles button {
+  width: 84px;
+}
+
+.mkw-pick.vehicles img {
+  width: auto;
+  max-width: 76px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.mkw-pick.vehicles span {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--text);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tekstvak-preview {
+  padding: 10px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.photo-pick button.current {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}

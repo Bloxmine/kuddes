@@ -1,0 +1,961 @@
+/* Muziek (pages/MusicPage.tsx, MusicParts.tsx, PlayerBar.tsx): song lists, the charts, the player bar */
+
+/* Genre colours for covers without an image and banners without a photo */
+.g-pop { --g: #e2559b; }
+.g-rock { --g: #b8402f; }
+.g-hiphop { --g: #6d5bd0; }
+.g-dance { --g: #1fa3c4; }
+.g-edm { --g: #0fb5a6; }
+.g-dnb { --g: #c2410c; }
+.g-rnb { --g: #9a4fb8; }
+.g-indie { --g: #3d9a6b; }
+.g-akoestisch { --g: #b98235; }
+.g-metal { --g: #3b3f45; }
+.g-nederlandstalig { --g: #e3702a; }
+.g-klassiek { --g: #8a6b46; }
+.g-jazz { --g: #2f5d8c; }
+.g-lofi { --g: #6b8aa3; }
+.g-ambient { --g: #4f8a8b; }
+.g-anders { --g: #5a6b7d; }
+
+.mu-cover {
+  flex: none;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.mu-cover.plain {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--g, var(--brand)) 70%, white), var(--g, var(--brand)));
+}
+
+.mu-main {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.mu-section {
+  margin: 0;
+  padding: 0;
+}
+
+.mu-section-tools,
+.mu-hero-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+.mu-hero-tools {
+  align-self: center;
+  padding: 0;
+}
+
+.mu-shuffle {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------ songs */
+.mu-tracks,
+.mu-chart {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+}
+
+.mu-tracks li,
+.mu-chart li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 5px 14px;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.mu-tracks li:last-child,
+.mu-chart li:last-child {
+  border-bottom: 0;
+}
+
+.mu-tracks li:hover,
+.mu-chart li:hover {
+  background: var(--tint-1);
+}
+
+.mu-tracks li.on,
+.mu-chart li.on {
+  background: var(--tint-2);
+}
+
+.mu-num {
+  flex: none;
+  width: 20px;
+  color: var(--text-muted);
+  font: bold 13px var(--font-title);
+  text-align: center;
+}
+
+.mu-play {
+  position: relative;
+  flex: none;
+  display: grid;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.mu-play:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.mu-play-icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.mu-play:hover .mu-play-icon,
+.mu-play:focus-visible .mu-play-icon,
+li.on .mu-play-icon {
+  opacity: 1;
+}
+
+.mu-track-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.mu-track-text b,
+.mu-track-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mu-track-text b {
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+li.on .mu-track-text b {
+  color: var(--link);
+}
+
+.mu-track-text small {
+  font-size: 11px;
+}
+
+.mu-status {
+  margin-left: 6px;
+  color: var(--note-text);
+}
+
+.mu-status.failed {
+  color: var(--error-text);
+}
+
+.mu-plays,
+.mu-likes,
+.mu-time,
+.mu-week {
+  display: inline-flex;
+  flex: none;
+  gap: 3px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.mu-time {
+  min-width: 34px;
+  justify-content: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+.mu-like-btn {
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+}
+
+.mu-like-btn:hover {
+  border-color: var(--box-border);
+  background: var(--surface);
+}
+
+.mu-like-btn.liked {
+  color: #d23c6c;
+  font-weight: bold;
+}
+
+.mu-icon-btn {
+  display: inline-flex;
+  flex: none;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 5px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.mu-icon-btn:hover:not(:disabled) {
+  border-color: var(--box-border);
+  background: var(--tint-1);
+}
+
+.mu-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.mu-icon-btn.active {
+  border-color: var(--box-border);
+  background: var(--tint-2);
+  color: var(--link);
+}
+
+.mu-icon-btn small {
+  font-size: 10px;
+}
+
+/* Playing: three little bars going up and down */
+.mu-eq {
+  display: inline-flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 12px;
+}
+
+.mu-eq i {
+  width: 3px;
+  background: var(--link);
+  animation: mu-eq 0.9s ease-in-out infinite alternate;
+}
+
+.mu-eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.mu-eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes mu-eq {
+  from {
+    height: 3px;
+  }
+  to {
+    height: 12px;
+  }
+}
+
+/* ------------------------------------------------------------ the charts */
+.mu-rank {
+  flex: none;
+  width: 28px;
+  color: var(--title);
+  font: bold 20px var(--font-title);
+  text-align: center;
+}
+
+.mu-chart.compact .mu-rank {
+  font-size: 15px;
+}
+
+.mu-rank.top1 {
+  color: #d39a00;
+}
+
+.mu-rank.top2 {
+  color: #8d99a6;
+}
+
+.mu-rank.top3 {
+  color: #b06a3b;
+}
+
+.mu-move {
+  flex: none;
+  width: 38px;
+  font: bold 10px var(--font-title);
+  text-align: center;
+}
+
+.mu-move.up {
+  color: var(--success-text);
+}
+
+.mu-move.down {
+  color: var(--error-text);
+}
+
+.mu-move.same {
+  color: var(--text-muted);
+}
+
+.mu-move.new {
+  padding: 1px 0;
+  border-radius: 3px;
+  background: var(--highlight);
+  color: #fff;
+  font-size: 9px;
+}
+
+.mu-week small {
+  font-size: 10px;
+}
+
+.mu-chart.compact .mu-week small {
+  display: none;
+}
+
+/* ------------------------------------------------------------ artists */
+.mu-artists {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mu-artist a {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  color: var(--text);
+}
+
+.mu-artist a:hover {
+  background: var(--tint-1);
+  text-decoration: none;
+}
+
+.mu-artist a > span {
+  display: grid;
+  min-width: 0;
+}
+
+.mu-artist b {
+  overflow: hidden;
+  color: var(--title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mu-artist small {
+  font-size: 11px;
+}
+
+.ph-side .mu-tracks li {
+  gap: 7px;
+  padding: 4px 0;
+}
+
+.ph-side .mu-tracks .mu-plays,
+.ph-side .mu-tracks .mu-likes,
+.ph-side .mu-tracks .mu-icon-btn {
+  display: none;
+}
+
+/* The artist page */
+.mu-banner-plain {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--g) 80%, black), color-mix(in srgb, var(--g) 35%, #11161c)) !important;
+}
+
+.mu-artist-bar {
+  padding: 8px 12px;
+}
+
+.mu-artist-bar .mu-section-tools {
+  padding: 0;
+}
+
+.mu-page .ph-layout {
+  margin-top: 14px;
+}
+
+.mu-bio {
+  margin: 0 0 8px;
+  white-space: pre-line;
+}
+
+.mu-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--box-sctn-border);
+  color: var(--text-muted);
+  font-size: 11px;
+  list-style: none;
+}
+
+.mu-stats b {
+  color: var(--title);
+  font-size: 14px;
+}
+
+/* ------------------------------------------------------------ forms */
+.mu-form {
+  display: grid;
+  gap: 10px;
+}
+
+.mu-upload-page > .box {
+  max-width: 760px;
+}
+
+.mu-drop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 18px;
+  border: 2px dashed var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+}
+
+.mu-drop.picked {
+  border-style: solid;
+  background: var(--success-bg);
+}
+
+.mu-drop > span {
+  display: grid;
+  flex: 1;
+  min-width: 180px;
+}
+
+.mu-drop b {
+  overflow-wrap: anywhere;
+}
+
+.mu-upload-fields {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.mu-upload-text {
+  display: grid;
+  flex: 1;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mu-cover-pick {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-2);
+  cursor: pointer;
+}
+
+.mu-cover-pick > img:not(.farm-icon) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mu-cover-pick small {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 3px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+}
+
+.mu-upload-progress {
+  display: grid;
+  gap: 3px;
+}
+
+.mu-upload-progress progress {
+  width: 100%;
+}
+
+/* ------------------------------------------------------------ the player bar */
+body.has-player {
+  padding-bottom: 72px;
+}
+
+/* The Messenger windows, game pop-ups and the cookie notice sit on top of the bar, not behind it */
+body.has-player .wlm-dock {
+  bottom: 68px;
+}
+
+body.has-player .gl-toasts {
+  bottom: 84px;
+}
+
+body.has-player .cookie-notice {
+  bottom: 82px;
+}
+
+.mu-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 56;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  height: 68px;
+  padding: 0 16px;
+  border-top: 1px solid var(--box-border);
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.mu-bar-now {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mu-bar-controls {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+}
+
+.mu-bar-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.mu-bar-play {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--cta-border);
+  border-radius: 50%;
+  background: linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+  cursor: pointer;
+}
+
+.mu-bar-play:hover {
+  filter: brightness(1.08);
+}
+
+.mu-progress {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+}
+
+.mu-progress small {
+  min-width: 32px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.mu-progress input {
+  flex: 1;
+  height: 4px;
+  accent-color: var(--brand-dark);
+}
+
+.mu-bar-side {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mu-volume {
+  width: 90px;
+  accent-color: var(--brand-dark);
+}
+
+/* The queue opens upward from the bar */
+.mu-queue {
+  position: absolute;
+  right: 12px;
+  bottom: 74px;
+  width: min(340px, calc(100vw - 24px));
+  max-height: min(60dvh, 460px);
+  margin: 0;
+  overflow-y: auto;
+  padding: 0;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+}
+
+.mu-queue header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--surface);
+}
+
+.mu-queue ol {
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+}
+
+.mu-queue button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mu-queue button:hover {
+  background: var(--tint-1);
+}
+
+.mu-queue li.on button {
+  background: var(--tint-2);
+}
+
+.mu-queue li.past {
+  opacity: 0.55;
+}
+
+/* ------------------------------------------------------------ smaller screens */
+@media (max-width: 760px) {
+  .mu-tracks .mu-plays,
+  .mu-chart .mu-week small {
+    display: none;
+  }
+
+  .mu-move {
+    width: 30px;
+  }
+
+  .mu-bar {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  /* Where in the song: a thin line along the top of the bar */
+  .mu-bar .mu-progress {
+    position: absolute;
+    top: -7px;
+    right: 0;
+    left: 0;
+    max-width: none;
+  }
+
+  .mu-progress small,
+  .mu-bar-now .mu-likes,
+  .mu-volume,
+  .mu-bar-side .mu-icon-btn:first-child,
+  .mu-bar-buttons .mu-icon-btn:first-child,
+  .mu-bar-buttons .mu-icon-btn:last-child {
+    display: none;
+  }
+
+  .mu-upload-fields {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mu-eq i {
+    animation: none;
+    height: 8px;
+  }
+}
+
+/* Listening to Kuddes Radio in the bar */
+.mu-live-badge {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: #d8342c;
+  color: #fff;
+  font: bold 9px var(--font-title);
+  letter-spacing: 0.06em;
+  vertical-align: 1px;
+  animation: mu-live 1.6s ease-in-out infinite;
+}
+
+.mu-live-badge.off {
+  background: var(--text-muted);
+  animation: none;
+}
+
+@keyframes mu-live {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.mu-live-cover {
+  --g: #d8342c;
+  width: 44px;
+  height: 44px;
+}
+
+.mu-live-info {
+  font-size: 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mu-live-badge {
+    animation: none;
+  }
+}
+
+/* Your bands: "+ Nieuw" in the box title, and choosing the band when uploading */
+.mu-box-action {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.mu-band-pick {
+  display: flex;
+  gap: 6px;
+}
+
+.mu-band-pick select {
+  flex: 1;
+  min-width: 0;
+}
+
+/* A band's own picture, and choosing it */
+.mu-bandpic {
+  flex: none;
+  border: 3px solid #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
+}
+
+.mu-band-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.mu-band-head-fields {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+  justify-items: start;
+  min-width: 0;
+}
+
+.mu-band-head-fields > .field,
+.mu-band-head-fields > label {
+  width: 100%;
+}
+
+.mu-bandpic-pick {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-2);
+  cursor: pointer;
+}
+
+.mu-bandpic-pick > img:not(.farm-icon) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mu-bandpic-pick small {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+}
+
+/* A song's title opens its details (description, release, credits) under the row */
+.mu-tracks li {
+  flex-wrap: wrap;
+}
+
+.mu-title-btn {
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mu-title-btn:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+li.on .mu-title-btn {
+  color: var(--link);
+}
+
+.mu-details,
+.mu-details-empty {
+  flex: 1 1 100%;
+  margin: 2px 0 4px 54px;
+  font-size: 12px;
+}
+
+.mu-details {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.mu-details p {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin: 0;
+}
+
+.mu-details .mu-details-text {
+  display: block;
+  white-space: pre-line;
+}
+
+.mu-credits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 4px 12px;
+  margin: 0;
+}
+
+.mu-credits dt {
+  color: var(--text-muted);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mu-credits dd {
+  margin: 0;
+  font-weight: bold;
+}
+
+/* Editing: when it came out, and the credits */
+.mu-release {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mu-release select {
+  flex: 0 1 180px;
+}
+
+.mu-release input[type='number'] {
+  width: 90px;
+}
+
+.mu-credits-edit {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+
+.mu-credit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 6px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .mu-credit-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  }
+
+  .mu-credit-row input:nth-child(3) {
+    grid-column: 1 / 3;
+  }
+
+  .mu-details,
+  .mu-details-empty {
+    margin-left: 0;
+  }
+}

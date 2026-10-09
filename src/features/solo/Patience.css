@@ -1,0 +1,153 @@
+/* Patience (Patience.tsx): the green table, the stacks and the dragging */
+.pt {
+  display: grid;
+  gap: 10px;
+}
+
+.pt-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+}
+
+.pt-bar > span {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pt-bar-buttons {
+  flex-wrap: wrap;
+  gap: 6px !important;
+  margin-left: auto;
+}
+
+.pt-draw select {
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.pt-table {
+  --card-w: clamp(40px, calc((100vw - 90px) / 7.6), 84px);
+  --gap: clamp(4px, 1.2vw, 12px);
+  position: relative;
+  min-height: calc(var(--card-w) * 5.4);
+  padding: 14px;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(255, 255, 255, 0.12), transparent 65%),
+    #1e6b35;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pt-top {
+  display: flex;
+  gap: var(--gap);
+  margin-bottom: 18px;
+}
+
+.pt-gap {
+  flex: 1;
+}
+
+.pt-stock {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.pt-recycle,
+.pt-ace {
+  display: grid !important;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.5);
+  font: bold calc(var(--card-w) * 0.4) Georgia, serif;
+}
+
+/* The waste: with three, fanned out */
+.pt-waste {
+  position: relative;
+  width: calc(var(--card-w) * 1.6);
+  height: calc(var(--card-w) * 1.4);
+}
+
+.pt-waste-card {
+  position: absolute;
+  top: 0;
+  left: calc(var(--i) * var(--card-w) * 0.28);
+}
+
+.pt-grab,
+.pt-stack-card.up {
+  cursor: grab;
+  touch-action: none;
+}
+
+.pt-columns {
+  display: grid;
+  grid-template-columns: repeat(7, var(--card-w));
+  gap: var(--gap);
+  justify-content: space-between;
+}
+
+.pt-column {
+  position: relative;
+  min-height: calc(var(--card-w) * 1.4);
+}
+
+/* Face-down cards close together, face-up ones further apart */
+.pt-stack-card {
+  position: absolute;
+  top: calc(var(--down) * var(--card-w) * 0.12 + (var(--k) - var(--down)) * var(--card-w) * 0.3);
+  left: 0;
+}
+
+.pt-column {
+  padding-bottom: calc(var(--card-w) * 2);
+}
+
+.lifted {
+  opacity: 0;
+}
+
+.pt-drag {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.4));
+}
+
+.pt-drag .pt-stack-card {
+  top: calc(var(--k) * var(--card-w) * 0.3);
+}
+
+.pt-drag {
+  --card-w: clamp(40px, calc((100vw - 90px) / 7.6), 84px);
+}
+
+.pt-bounce {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.pt-finish,
+.pt-won {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.pt-won {
+  color: var(--title);
+  font: bold 15px var(--font-title);
+}

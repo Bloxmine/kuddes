@@ -1,0 +1,9 @@
+# /etc/systemd/system/kuddes-backup.service — one backup run (see backup.sh).
+[Unit]
+Description=Kuddes backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /opt/kuddes/deploy/backup.sh

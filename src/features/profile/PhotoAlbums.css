@@ -1,0 +1,193 @@
+/* Albums in the Foto's tab (PhotoAlbums.tsx) */
+.album-bar {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 2px 2px 6px;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.album-bar li {
+  flex: none;
+}
+
+.album-bar button {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 92px;
+  padding: 6px 4px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--title);
+  cursor: pointer;
+}
+
+.album-bar button:hover {
+  background: var(--tint-1);
+}
+
+.album-bar button.current {
+  border-color: var(--box-border);
+  background: linear-gradient(to bottom, var(--tint-1), var(--tint-3));
+}
+
+/* A little stack of prints */
+.album-cover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 3px;
+  border: 1px solid var(--box-border);
+  border-radius: 3px;
+  background: var(--surface);
+  box-shadow:
+    3px 3px 0 -1px var(--surface),
+    3px 3px 0 0 var(--box-border),
+    6px 6px 0 -1px var(--surface),
+    6px 6px 0 0 var(--box-border);
+}
+
+.album-cover > img:not(.farm-icon) {
+  /* Pinned to the frame: a tall or wide photo is cropped, never sticks out */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.album-icon {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+.album-new .album-cover {
+  border-style: dashed;
+  background: var(--tint-1);
+  box-shadow: none;
+}
+
+.album-bar b {
+  max-width: 100%;
+  overflow: hidden;
+  font: bold 12px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.album-bar small {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.album-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.album-head > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.album-head b {
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.album-head p {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+.album-form {
+  display: grid;
+  gap: 10px;
+}
+
+.album-form-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: end;
+}
+
+.photo-upload select.text-box {
+  flex: 0 1 160px;
+  min-width: 0;
+}
+
+.photo-upload-exif {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  align-items: center;
+  flex-basis: 100%;
+  font-size: 12px;
+}
+
+/* In the lightbox */
+.lightbox-album,
+.exif-line {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+.exif-line {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 4px 0 0;
+}
+
+.photo-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.photo-settings label {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.photo-settings select,
+.photo-settings-exif input {
+  height: 26px;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.photo-settings-exif {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.photo-settings-exif input {
+  width: 130px;
+}

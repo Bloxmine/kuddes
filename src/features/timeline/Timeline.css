@@ -1,0 +1,559 @@
+/* The page: from whom and what on top (components/catalog), the feed per day, who's online on the right */
+.timeline-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-areas: 'main aside';
+  gap: 14px;
+  align-items: start;
+}
+
+/* Mijn vrienden | Iedereen, where other pages have their search box */
+.timeline-scope {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--box-bg, var(--surface));
+  box-shadow: 0 1px 3px rgba(19, 50, 79, 0.06);
+}
+
+.timeline-scope button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+  cursor: pointer;
+}
+
+.timeline-scope button.current {
+  background: linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+  color: #fff;
+}
+
+.timeline-main {
+  grid-area: main;
+  min-width: 0;
+}
+
+/* Each day under its own label, on a line */
+.timeline-day-label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 16px 0 8px;
+  color: var(--title-soft);
+  font: bold 12px var(--font-title);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.timeline-day-label::before,
+.timeline-day-label::after {
+  flex: 1;
+  height: 1px;
+  background: var(--box-sctn-border);
+  content: '';
+}
+
+.timeline-day-label::before {
+  flex: 0 0 12px;
+}
+
+.timeline-day-label span {
+  padding: 2px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--box-bg, var(--surface));
+}
+
+.timeline-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.timeline-tabs button {
+  padding: 6px 8px 7px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--title-soft);
+  font: bold 14px var(--font-title);
+  cursor: pointer;
+}
+
+.timeline-tabs button:hover {
+  color: var(--link);
+}
+
+.timeline-tabs button.current {
+  border-bottom-color: var(--brand-dark);
+  color: var(--link);
+}
+
+.timeline-login {
+  margin-bottom: 12px;
+}
+
+.timeline-aside {
+  grid-area: aside;
+  min-width: 0;
+}
+
+/* One column, newest first, so it reads from top to bottom */
+.timeline-feed {
+  display: grid;
+  gap: 10px;
+}
+
+/* Normaal | Compact | Raster | Lijst, above the feed */
+.timeline-views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 12px 0 0;
+  font-size: 12px;
+}
+
+.timeline-views .muted {
+  margin-right: 2px;
+}
+
+.timeline-views button {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--box-bg, var(--surface));
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.timeline-views button:hover {
+  border-color: var(--link);
+}
+
+.timeline-views button.current {
+  border-color: var(--cta-border);
+  background: linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+  color: #fff;
+}
+
+/* Compact: smaller cards, pictures as small previews, reactions folded away */
+.timeline-feed.view-compact {
+  gap: 6px;
+}
+
+.view-compact .timeline-card-hdr {
+  align-items: center;
+  padding: 6px 10px 0;
+}
+
+.view-compact .timeline-card-body {
+  padding: 4px 10px 6px;
+}
+
+.view-compact .timeline-card.skinned .timeline-card-body {
+  margin: 6px;
+  padding: 6px 8px;
+}
+
+.view-compact .timeline-card-body .buzz-content {
+  font-size: 13px;
+}
+
+.view-compact :is(.timeline-photo img, .buzz-photo img, .timeline-avatar-photo img) {
+  width: auto;
+  max-width: 220px;
+  max-height: 140px;
+}
+
+.view-compact .buzz-photos {
+  max-width: 240px;
+}
+
+.view-compact .buzz-photos img {
+  width: 100%;
+  max-width: none;
+  max-height: none;
+}
+
+.view-compact :is(.timeline-recipe > img, .timeline-video-thumb) {
+  max-width: 200px;
+}
+
+/* Raster: the cards side by side, each picture cut to the same shape. They fit
+   together without gaps: each spans as many thin rows as it's tall (lib/masonry.ts) */
+.timeline-feed.view-raster {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-auto-rows: 4px;
+  row-gap: 0;
+  align-items: start;
+}
+
+.view-raster .timeline-card-hdr {
+  padding: 8px 10px 0;
+}
+
+.view-raster .timeline-card-title {
+  font-size: 12px;
+}
+
+.view-raster .timeline-card-body {
+  padding: 4px 10px 8px;
+}
+
+.view-raster .timeline-card-body .buzz-content {
+  font-size: 13px;
+}
+
+.view-raster :is(.timeline-photo img, .buzz-photo img) {
+  aspect-ratio: 4 / 3;
+  max-height: none;
+}
+
+.view-raster .timeline-recipe {
+  flex-direction: column;
+}
+
+.view-raster .timeline-recipe > img {
+  width: 100%;
+  height: 120px;
+}
+
+.view-raster .timeline-friends {
+  gap: 6px;
+}
+
+.view-raster .timeline-friends .avatar-img {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+/* Lijst: one line per item with a small picture; the arrow opens it in place */
+.timeline-feed.view-lijst {
+  gap: 0;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.view-lijst .timeline-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.view-lijst .timeline-card + .timeline-card {
+  border-top: 1px solid var(--row-border);
+}
+
+.view-lijst .timeline-card-hdr {
+  align-items: center;
+  padding: 6px 10px;
+}
+
+.view-lijst .timeline-card:not(.line) .timeline-card-hdr {
+  padding-bottom: 0;
+}
+
+.timeline-card-title .timeline-snippet {
+  margin: 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timeline-thumb {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.timeline-card {
+  margin: 0;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(19, 50, 79, 0.06);
+  overflow: hidden;
+}
+
+.timeline-card-hdr {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px 0;
+}
+
+
+.timeline-card-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.timeline-card-title .date {
+  font-size: 11px;
+}
+
+.timeline-name {
+  font-weight: bold;
+}
+
+.timeline-menu {
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--title-soft);
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.timeline-menu:hover {
+  background: var(--alt-bg);
+}
+
+.timeline-card-body {
+  padding: 6px 12px 10px 12px;
+  overflow-wrap: anywhere;
+}
+
+.timeline-card-body .buzz-content {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* WieWatWaars in the author's own profile design */
+.timeline-card.skinned {
+  border-color: transparent;
+  background: var(--card-bg);
+}
+
+.timeline-card.skinned .timeline-card-title,
+.timeline-card.skinned .timeline-card-title .date,
+.timeline-card.skinned .timeline-card-title a,
+.timeline-card.skinned .timeline-menu {
+  color: #fff;
+  /* A dark halo: readable on light skins (pink, white, pale blue) as well as dark ones */
+  text-shadow:
+    0 0 3px rgba(0, 0, 0, 0.75),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.timeline-card.skinned .timeline-card-body {
+  margin: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+
+.timeline-photo {
+  display: block;
+  color: var(--text);
+}
+
+.timeline-photo img,
+.timeline-avatar-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.timeline-photo span {
+  display: block;
+  margin-top: 4px;
+}
+
+.timeline-avatar-photo img {
+  width: 160px;
+  height: 160px;
+}
+
+.timeline-quote {
+  display: block;
+  padding: 8px 12px;
+  border-left: 3px solid var(--brand);
+  border-radius: 0 8px 8px 0;
+  background: var(--alt-bg);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.timeline-quote:hover {
+  text-decoration: none;
+  background: var(--tint-2);
+}
+
+.timeline-friends {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 6px 0;
+  font-size: 22px;
+}
+
+.timeline-kudde {
+  max-width: 220px;
+}
+
+.timeline-more {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 4px;
+}
+
+.timeline-empty {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 30px 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.timeline-empty p {
+  margin: 0;
+}
+
+.timeline-empty .farm-icon {
+  opacity: 0.7;
+}
+
+/* Narrower: who's online goes under the feed */
+@media (max-width: 860px) {
+  .timeline-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'main' 'aside';
+  }
+}
+
+@media (max-width: 760px) {
+  .timeline-views button span {
+    display: none;
+  }
+
+  .timeline-scope {
+    display: flex;
+    width: 100%;
+  }
+
+  .timeline-scope button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* A shared recipe: its photo with the name and time next to it */
+.timeline-recipe {
+  display: flex;
+  gap: 12px;
+  max-width: 460px;
+  padding: 8px;
+  border: 1px solid var(--row-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+  color: inherit;
+}
+
+.timeline-recipe:hover {
+  text-decoration: none;
+  border-color: var(--link);
+}
+
+.timeline-recipe > img {
+  flex: none;
+  width: 120px;
+  height: 90px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.timeline-recipe > span {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.timeline-recipe b {
+  color: var(--link);
+  font-size: 13px;
+}
+
+.timeline-recipe-intro {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* A review from Recensies: the cover on a little plank, the stars and the start of the review */
+.timeline-review-cover {
+  display: flex;
+  flex: none;
+  align-items: flex-end;
+  justify-content: center;
+  width: 110px;
+  height: 118px;
+  padding: 6px 4px 8px;
+  border-radius: 4px;
+  background:
+    linear-gradient(to bottom, transparent calc(100% - 8px), #b9895a calc(100% - 8px), #8d6239),
+    var(--tint-2);
+}
+
+.timeline-review .shelf-stars {
+  font-size: 14px;
+}
+
+/* A blog: a small thumbnail of its first picture */
+.timeline-blog img {
+  width: 72px;
+  height: 72px;
+}
+
+/* A song (play it right here) and a radio show that went live */
+.timeline-track .mu-play {
+  align-self: start;
+}
+
+.timeline-track .muted a {
+  color: inherit;
+}
+
+.timeline-radio-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #e86a5e, #b8241d);
+}

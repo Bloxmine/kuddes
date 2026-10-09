@@ -1,0 +1,1 @@
+ALTER TABLE "kudde_members" ADD COLUMN "rights" text[] DEFAULT '{}'::text[] NOT NULL;

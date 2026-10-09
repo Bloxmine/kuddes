@@ -1,0 +1,45 @@
+# /etc/systemd/system/kuddes.service — runs Kuddes as the unprivileged
+# "kuddes" user, restarts it when it stops, and locks it down.
+[Unit]
+Description=Kuddes
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=kuddes
+Group=kuddes
+WorkingDirectory=/opt/kuddes
+Environment=NODE_ENV=production
+# Node itself (not npm): nothing needs to write outside uploads/ and /tmp
+ExecStart=/usr/bin/node --env-file=/opt/kuddes/.env --import tsx server/index.ts
+Restart=always
+RestartSec=5
+# Give video conversions and open chat connections a moment to finish
+TimeoutStopSec=20
+
+# Hardening: the app can only write to its uploads folder
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/kuddes/uploads
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

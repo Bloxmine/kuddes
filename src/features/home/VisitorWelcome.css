@@ -1,0 +1,138 @@
+/* Home for visitors (VisitorWelcome.tsx): the welcome and the login box */
+.visitor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
+  margin-bottom: 12px;
+  padding: 18px 20px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 92% -10%, color-mix(in srgb, var(--brand) 22%, transparent) 0 30%, transparent 31%),
+    radial-gradient(circle at 70% 120%, color-mix(in srgb, var(--highlight) 14%, transparent) 0 25%, transparent 26%),
+    linear-gradient(to bottom, var(--surface), var(--tint-1));
+  box-shadow: var(--box-shadow, 0 1px 3px rgba(0, 0, 0, 0.08));
+}
+
+.visitor h1 {
+  margin: 0 0 4px;
+  color: var(--title);
+  font: bold 24px/1.2 var(--font-title);
+}
+
+.visitor-count {
+  margin: 0 0 12px;
+  color: var(--title-soft);
+  font-size: 13px;
+}
+
+.visitor-count b {
+  color: var(--highlight);
+  font-size: 16px;
+}
+
+.visitor-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.visitor-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.visitor-features b {
+  display: block;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.visitor-join {
+  font-size: 15px;
+}
+
+.visitor-login {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 12px 14px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.visitor-login h2 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 2px;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.visitor-login label {
+  display: grid;
+  gap: 2px;
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+.visitor-login .btn {
+  justify-self: start;
+}
+
+.visitor-forgot {
+  font-size: 11px;
+}
+
+/* Below it: the news wide, suggestions and weather next to it */
+.visitor-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  column-gap: 12px;
+  align-items: start;
+}
+
+.visitor-home-grid > div {
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .visitor,
+  .visitor-home-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .visitor {
+    padding: 14px;
+  }
+
+  .visitor h1 {
+    font-size: 20px;
+  }
+
+  .visitor-features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* On the waitlist: how far you are, instead of the login box */
+.visitor-waiting p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.visitor-waiting .btn {
+  justify-self: stretch;
+  justify-content: center;
+}

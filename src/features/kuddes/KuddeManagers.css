@@ -1,0 +1,99 @@
+/* Beheerders of a Kudde (KuddeManagers.tsx) */
+.km-list {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.km-list > li {
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.km-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.km-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.km-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.km-badge {
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--tint-3);
+  color: var(--title);
+  font: bold 10px/17px var(--font-body);
+}
+
+.km-badge.owner {
+  background: linear-gradient(#ffe27a, #e0a800);
+  color: #5a3d00;
+}
+
+.km-badge.light {
+  border: 1px solid var(--box-border);
+  background: var(--surface);
+  font-weight: normal;
+}
+
+.km-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.km-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 6px;
+}
+
+.km-role {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 2px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--title);
+  font: 12px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.km-role.current {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.km-rights {
+  display: grid;
+  gap: 4px;
+}
+
+.km-right {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.km-pick {
+  width: min(360px, 100%);
+}

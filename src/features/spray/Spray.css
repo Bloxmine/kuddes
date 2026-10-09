@@ -1,0 +1,71 @@
+/* The Graffitimuur page: a toolbar in the Kuddes style above the wall */
+
+.sp-page {
+  display: grid;
+  gap: 10px;
+}
+
+.sp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: linear-gradient(to bottom, var(--box-hdr-top), var(--box-hdr-bottom));
+}
+
+.sp-bar h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 22px;
+}
+
+.sp-bar-tools,
+.sp-invite,
+.sp-friend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-invite label {
+  font-weight: bold;
+}
+
+.sp-friend .avatar-img {
+  width: 28px;
+  height: 28px;
+}
+
+/* The wall fills the screen below the header, like the standalone app */
+.spray-frame {
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: #8f8c86;
+  box-shadow: 0 2px 8px rgba(19, 50, 79, 0.15);
+}
+
+.spray-frame iframe {
+  display: block;
+  width: 100%;
+  height: max(460px, calc(100vh - 230px));
+  border: 0;
+}
+
+.sp-help {
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .spray-frame iframe {
+    height: max(420px, calc(100vh - 200px));
+  }
+}
+

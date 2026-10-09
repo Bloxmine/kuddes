@@ -1,0 +1,536 @@
+/* /beheer */
+.bh-page h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bh-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.bh-stat {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: linear-gradient(var(--surface), var(--tint-1));
+  text-align: center;
+}
+
+.bh-stat b {
+  color: var(--title);
+  font: bold 22px var(--font-title);
+}
+
+.bh-stat span {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.bh-stat.warn {
+  border-color: var(--highlight);
+  background: color-mix(in srgb, var(--highlight) 10%, var(--surface));
+}
+
+.bh-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.bh-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.bh-toolbar .text-box {
+  width: min(320px, 100%);
+}
+
+.bh-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.bh-table th {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--box-border);
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: left;
+}
+
+.bh-table td {
+  padding: 6px;
+  border-bottom: 1px solid var(--row-border);
+  vertical-align: middle;
+}
+
+
+.bh-nowrap {
+  white-space: nowrap;
+}
+
+.bh-email {
+  overflow-wrap: anywhere;
+}
+
+.bh-text {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.bh-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* A member in the table: two rows (details, then buttons) with one line under both */
+.bh-table .bh-member td {
+  border-bottom: 0;
+}
+
+.bh-table .bh-member tr:first-child td {
+  padding-bottom: 2px;
+}
+
+.bh-table .bh-member tr:last-child td {
+  padding-top: 0;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.bh-table .bh-member.blocked td {
+  background: color-mix(in srgb, var(--highlight) 8%, var(--surface));
+}
+
+.bh-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 2px 8px;
+  font-size: 11px;
+}
+
+.bh-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.bh-person .avatar {
+  width: auto !important;
+}
+
+.bh-person .avatar-img {
+  /* !important: the initials placeholder sets its size inline */
+  width: 24px !important;
+  height: 24px !important;
+  font-size: 10px;
+}
+
+.bh-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--tint-3);
+  color: var(--title);
+  font: bold 10px/16px var(--font-body);
+  vertical-align: middle;
+}
+
+.bh-badge.admin {
+  background: linear-gradient(#e74c3c, #b03a2e);
+  color: #fff;
+}
+
+.bh-badge.danger {
+  background: color-mix(in srgb, var(--highlight) 25%, var(--surface));
+  color: var(--error-text);
+}
+
+.bh-details {
+  display: block;
+  margin: 2px 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.bh-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bh-list > li {
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.bh-list > li.handled {
+  opacity: 0.6;
+}
+
+.bh-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bh-row > div {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.bh-form {
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px dashed var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.bh-toggle {
+  align-self: end;
+  margin-bottom: 12px;
+}
+
+.bh-uploads {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bh-uploads li {
+  display: grid;
+  gap: 3px;
+  padding: 6px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+  font-size: 11px;
+}
+
+.bh-upload-img {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #000;
+  aspect-ratio: 4 / 3;
+}
+
+.bh-upload-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bh-upload-img .bh-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  margin: 0;
+}
+
+.bh-upload-title {
+  overflow: hidden;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bh-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.bh-page code {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--tint-2);
+  font: bold 12px monospace;
+  user-select: all;
+}
+
+/* What a new member wrote on the sign-up form */
+.bh-reason {
+  margin: 4px 0;
+  padding: 4px 8px;
+  border-left: 3px solid var(--brand);
+  background: var(--tint-1);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* "Account maken voor iemand": the details to pass on */
+.bh-made {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.bh-made p {
+  margin: 0;
+}
+
+.bh-login {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font: 12px/1.5 ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  user-select: all;
+}
+
+.bh-made .btn {
+  justify-self: start;
+}
+
+/* The banner of a news post in the form */
+.bh-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+}
+
+.bh-banner > img,
+.bh-banner-empty {
+  width: 240px;
+  height: 100px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.bh-banner-empty {
+  display: grid;
+  place-items: center;
+  background: var(--tint-1);
+  font-size: 12px;
+}
+
+.bh-banner-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.bh-banner-actions .btn {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Aanmelden: two big choices (by mail, or the waitlist) */
+.bh-modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.bh-mode {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+}
+
+.bh-mode b {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--title);
+  font-size: 13px;
+}
+
+.bh-mode:hover {
+  border-color: var(--brand);
+}
+
+.bh-mode.current {
+  border-color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 12%, var(--surface));
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+
+.bh-mail-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.bh-mail-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Leden: sorting and the grid of member cards */
+.bh-sort {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.bh-sort select {
+  width: auto;
+}
+
+.bh-views {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.bh-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.bh-card {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  padding: 12px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+  font-size: 12px;
+  text-align: center;
+}
+
+.bh-card.blocked {
+  opacity: 0.65;
+}
+
+.bh-card-name {
+  display: grid;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.bh-card-name a {
+  overflow: hidden;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bh-card .bh-badge {
+  margin: 0;
+}
+
+.bh-card-facts {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1px 6px;
+  margin: 0;
+}
+
+.bh-card-facts dt {
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.bh-card-facts dd {
+  margin: 0;
+  text-align: left;
+}
+
+.bh-card-counts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 10px;
+}
+
+.bh-card-counts span {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+/* Meldingen: where each suggestion stands */
+.bh-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.bh-status select {
+  width: auto;
+}
+
+.bh-status input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.bh-badge[class*='status-'] .farm-icon {
+  vertical-align: -3px;
+}
+
+.bh-badge.status-bezig,
+.bh-badge.status-gepland {
+  background: var(--tint-2);
+  color: var(--link);
+}
+
+.bh-badge.status-klaar {
+  background: color-mix(in srgb, #5cb82a 25%, var(--surface));
+}
+
+/* A member's last IP address, under their e-mail address */
+.bh-ip {
+  display: block;
+  font-family: Consolas, "DejaVu Sans Mono", monospace;
+}

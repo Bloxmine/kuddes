@@ -1,0 +1,17 @@
+.more {
+  margin: 12px 0 0;
+  font-size: 11px;
+}
+
+.more li {
+  display: flex;
+  gap: 4px;
+}
+
+.rsaquo {
+  width: 9px;
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 18px;
+}

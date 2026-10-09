@@ -1,0 +1,438 @@
+* { box-sizing: border-box; }
+
+/*
+ * The Kuddes look. The page that embeds the wall (/graffiti) passes in the
+ * site's own colour tokens (js/net.js), so dark and custom themes carry over;
+ * these are the standard light theme for when it runs on its own.
+ */
+:root {
+  --font-body: Verdana, Geneva, sans-serif;
+  --font-title: 'Trebuchet MS', 'Fira Sans', sans-serif;
+  --brand: #4ba3e0;
+  --brand-dark: #1f6fb0;
+  --link: #1d74bd;
+  --text: #1b2733;
+  --title: #13324f;
+  --text-muted: #8d939a;
+  --surface: #ffffff;
+  --tint-1: #f5fafe;
+  --tint-2: #ebf5fc;
+  --tint-3: #dbedfa;
+  --box-border: #c9e3f6;
+  --box-hdr-top: #f5fafe;
+  --box-hdr-bottom: #d2e8f8;
+  --btn-border: #bbbec2;
+  --btn-border-dark: #9da3a8;
+  --cta-top: #5fb3ec;
+  --cta-bottom: #1f6fb0;
+  --cta-border: #185a91;
+  --cta-shadow: #144a78;
+  --highlight: #f26b6b;
+  --gold: #e8a100;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #8f8c86;
+  color: var(--text);
+  font: 11px/1.5 var(--font-body);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+#stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* surface relief sits on top of the paint so pores and joints show through it */
+#relief {
+  mix-blend-mode: overlay;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+#stage.holding { cursor: none; }
+#stage.over-can { cursor: grab; }
+
+/* ------------------------------------------------------------ chrome */
+
+#chrome {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* everything steps aside while you hold a can */
+body.holding #chrome {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+#menu {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: calc(100vw - 24px);
+}
+
+button {
+  font: inherit;
+}
+
+/* Kuddes buttons: light and glossy, the CTA in the brand colour */
+#menuBtn,
+#cycleBtn,
+.actions button,
+.seg button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--btn-border);
+  border-bottom-color: var(--btn-border-dark);
+  border-radius: 5px;
+  background: linear-gradient(to bottom, var(--surface) 0%, var(--tint-1) 50%, var(--tint-2) 100%);
+  color: var(--text);
+  font: normal 11px/15px var(--font-body);
+  text-shadow: 1px 1px 0 var(--surface);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#menuBtn:hover,
+#cycleBtn:hover,
+.actions button:hover,
+.seg button:hover {
+  border-color: var(--btn-border-dark);
+  background: linear-gradient(to bottom, var(--surface) 0%, var(--tint-1) 60%, var(--tint-3) 100%);
+}
+
+#menuBtn:focus-visible,
+#cycleBtn:focus-visible,
+.actions button:focus-visible,
+.seg button:focus-visible,
+.walls button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
+/* The menu button is the CTA: it's how you find everything */
+#menuBtn {
+  padding: 6px 12px 7px;
+  border: 1px solid var(--cta-border);
+  border-radius: 7px;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0) 51%),
+    linear-gradient(to bottom, var(--cta-top) 0%, var(--cta-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-shadow: 1px 1px 2px var(--cta-shadow);
+}
+
+#menuBtn:hover {
+  border-color: var(--cta-border);
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(0, 0, 0, 0) 51%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--cta-top) 88%, white) 0%, color-mix(in srgb, var(--cta-bottom) 92%, white) 100%);
+}
+
+.brand {
+  font: bold 14px/18px var(--font-title);
+}
+
+/* A Kuddes box: white, a blue border and the title bar with its gradient */
+.panel {
+  flex-basis: 100%;
+  width: 300px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 70px);
+  overflow: auto;
+  padding: 0 12px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(19, 50, 79, 0.25);
+  color: var(--text);
+  font-size: 11px;
+  animation: pop 0.18s ease-out;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panel-hdr {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0 -12px 2px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--box-border);
+  border-radius: 9px 9px 0 0;
+  background: linear-gradient(to bottom, var(--box-hdr-top), var(--box-hdr-bottom));
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+section {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--box-border);
+}
+
+section:last-of-type {
+  border-bottom: 0;
+}
+
+h3 {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 7px;
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}
+
+h3 .val {
+  color: var(--text-muted);
+  font: normal 11px var(--font-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.walls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.walls button {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid var(--box-border);
+  border-radius: 6px;
+  background: #777;
+  cursor: pointer;
+  aspect-ratio: 5 / 3.4;
+}
+
+.walls canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.walls span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 10px 5px 3px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.65));
+  color: #fff;
+  font-size: 10px;
+  text-align: left;
+}
+
+.walls button:hover {
+  border-color: var(--brand);
+}
+
+.walls button[aria-checked='true'] {
+  border-color: var(--brand-dark);
+  box-shadow: 0 0 0 2px var(--brand);
+}
+
+input[type='range'] {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--brand-dark);
+}
+
+.scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.seg button {
+  padding: 4px 8px;
+}
+
+/* The chosen cap: pressed in, in the brand colour */
+.seg button[aria-checked='true'] {
+  border-color: var(--cta-border);
+  background: linear-gradient(to bottom, var(--cta-top) 0%, var(--cta-bottom) 100%);
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px var(--cta-shadow);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 4px 8px;
+}
+
+.actions .danger:hover {
+  border-color: var(--highlight);
+  color: var(--highlight);
+}
+
+.keys {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.9;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 17px;
+  padding: 0 4px;
+  border: 1px solid var(--btn-border);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: var(--tint-1);
+  color: var(--text);
+  font: 10px/14px var(--font-body);
+  text-align: center;
+}
+
+.progress {
+  margin: 8px 0 0;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: var(--tint-2);
+  color: var(--text);
+  font-size: 11px;
+}
+
+.progress.unlocked {
+  background: color-mix(in srgb, var(--gold) 18%, var(--surface));
+  color: var(--title);
+  font-weight: bold;
+}
+
+#hint {
+  position: fixed;
+  right: calc(var(--shelf-width, 520px) + 118px);
+  bottom: var(--hint-bottom, 40px);
+  z-index: 2;
+  padding: 5px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+
+#hint.gone {
+  opacity: 0;
+}
+
+/* swaps the cans on the ground; part of the scene, so it only dims while holding */
+#cycleBtn {
+  position: fixed;
+  right: calc(var(--shelf-width, 520px) + 12px);
+  bottom: var(--cycle-bottom, 30px);
+  z-index: 2;
+  padding: 4px 10px 4px 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+  transition:
+    opacity 0.35s,
+    background 0.15s;
+}
+
+#cycleBtn svg {
+  color: var(--brand-dark);
+  transition: transform 0.4s ease;
+}
+
+#cycleBtn:hover svg {
+  transform: rotate(180deg);
+}
+
+body.holding #cycleBtn {
+  opacity: 0.4;
+}
+
+body.holding #cycleBtn:hover {
+  opacity: 1;
+}
+
+#cycleBtn.fresh {
+  border-color: var(--gold);
+  animation: fresh 1.6s ease-in-out infinite;
+}
+
+@keyframes fresh {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+#rgbPicker {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (hover: none) {
+  .keys {
+    display: none;
+  }
+}

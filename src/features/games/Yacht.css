@@ -1,0 +1,299 @@
+/* Yacht Dice (YachtBoard.tsx): a green felt table with the dice, and the score sheet */
+.yd-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 16px;
+  align-items: start;
+}
+
+.yd-table {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  padding: 28px 16px 22px;
+  border: 6px solid #6b4423;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 50% 35%, #2f8f4e, #1d5e33);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.35);
+}
+
+.yd-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  min-height: 76px;
+}
+
+.yd-die {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #ffffff, #e4e4e4);
+  box-shadow:
+    0 4px 0 #b9b9b9,
+    0 6px 12px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+
+button.yd-die {
+  cursor: pointer;
+}
+
+button.yd-die:disabled {
+  cursor: default;
+}
+
+button.yd-die:hover:not(:disabled) {
+  transform: translateY(-3px);
+}
+
+.yd-die.blank {
+  opacity: 0.35;
+}
+
+/* Kept: lifted a little, with a gold edge */
+.yd-die.held {
+  box-shadow:
+    0 0 0 3px #f2c230,
+    0 4px 0 #b9b9b9,
+    0 8px 14px rgba(0, 0, 0, 0.4);
+  transform: translateY(-8px);
+}
+
+.yd-die small {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  color: #ffe58a;
+  font: bold 10px var(--font-title);
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+.yd-face {
+  display: grid;
+  grid-template-columns: repeat(3, 12px);
+  grid-template-rows: repeat(3, 12px);
+  gap: 4px;
+}
+
+.yd-face i {
+  border-radius: 50%;
+}
+
+.yd-face i.on {
+  background: radial-gradient(circle at 35% 35%, #555, #111);
+}
+
+/* A new roll: the free dice tumble in */
+.yd-die.rolling {
+  animation: yd-roll 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+
+@keyframes yd-roll {
+  0% {
+    opacity: 0;
+    transform: translate(-60px, -30px) rotate(-260deg) scale(0.7);
+  }
+  70% {
+    transform: translate(4px, 2px) rotate(12deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.yd-controls {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+}
+
+.btn.yd-roll {
+  min-width: 180px;
+  padding: 9px 18px;
+  font-size: 15px;
+}
+
+.yd-status {
+  color: #fff;
+  font-size: 13px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.yd-yacht-call {
+  color: #ffe58a;
+  font: bold 16px var(--font-title);
+}
+
+/* The score sheet */
+.yd-sheet-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: #fffdf3;
+}
+
+.yd-sheet {
+  width: 100%;
+  border-collapse: collapse;
+  color: #2b2b2b;
+  font-size: 12px;
+}
+
+.yd-sheet th,
+.yd-sheet td {
+  padding: 4px 6px;
+  border-bottom: 1px solid #ece4c8;
+}
+
+.yd-sheet thead th {
+  max-width: 80px;
+  overflow: hidden;
+  border-bottom: 2px solid #d8cc9c;
+  font: bold 12px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.yd-sheet tbody th {
+  font-weight: normal;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.yd-sheet td {
+  min-width: 42px;
+  font-weight: bold;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.yd-sheet .turn {
+  background: #fff3c4;
+}
+
+.yd-sheet thead th.mine {
+  color: var(--link);
+}
+
+.yd-sheet thead th.out {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.yd-sheet td.new {
+  animation: yd-new 1.2s ease-out;
+}
+
+@keyframes yd-new {
+  from {
+    background: #9be59b;
+  }
+}
+
+.yd-sum th,
+.yd-sum td {
+  background: #f6efd4;
+  font-size: 11px;
+}
+
+.yd-total th,
+.yd-total td {
+  border-top: 2px solid #d8cc9c;
+  border-bottom: 0;
+  font: bold 14px var(--font-title);
+}
+
+.yd-muted {
+  color: #a59d84;
+  font-weight: normal;
+}
+
+.yd-pick {
+  min-width: 34px;
+  padding: 1px 6px;
+  border: 1px dashed #3d9a6b;
+  border-radius: 4px;
+  background: #eaf8ee;
+  color: #2e7d4a;
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.yd-pick:hover {
+  border-style: solid;
+  background: #3d9a6b;
+  color: #fff;
+}
+
+.yd-pick.zero {
+  border-color: #c9c2a9;
+  background: none;
+  color: #a59d84;
+}
+
+@media (max-width: 760px) {
+  .yd-board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .yd-die {
+    width: 52px;
+    height: 52px;
+  }
+
+  .yd-face {
+    grid-template-columns: repeat(3, 10px);
+    grid-template-rows: repeat(3, 10px);
+    gap: 3px;
+  }
+
+  .yd-dice {
+    gap: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yd-die.rolling,
+  .yd-sheet td.new {
+    animation: none;
+  }
+}
+
+/* The picture on the game's card on /spellen */
+.gh-yacht-art {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 12px;
+}
+
+.gh-yacht-art .yd-die {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.gh-yacht-art .yd-die.held {
+  transform: translateY(-4px);
+}
+
+.gh-yacht-art .yd-face {
+  grid-template-columns: repeat(3, 7px);
+  grid-template-rows: repeat(3, 7px);
+  gap: 3px;
+}

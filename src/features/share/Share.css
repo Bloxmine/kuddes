@@ -1,0 +1,173 @@
+/* A shared page in Kuddes Messenger (ShareCard.tsx) and "Deel met" (ShareWithFriends.tsx) */
+.share-card {
+  display: flex;
+  gap: 8px;
+  max-width: 340px;
+  margin: 3px 0;
+  padding: 6px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+  color: var(--text);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+a.share-card:hover {
+  border-color: var(--link);
+  text-decoration: none;
+}
+
+.share-card.loading,
+.share-card.missing {
+  align-items: center;
+  gap: 4px;
+}
+
+.share-thumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--tint-1);
+}
+
+.share-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.share-text {
+  display: grid;
+  align-content: start;
+  gap: 1px;
+  min-width: 0;
+}
+
+.share-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.share-label .farm-icon {
+  width: 11px;
+  height: 11px;
+}
+
+.share-text b {
+  overflow: hidden;
+  color: var(--link);
+  font: bold 12px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-sub {
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-snippet {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* "Deel met": the friends to pick */
+.share-friends {
+  display: grid;
+  gap: 2px;
+  max-height: 260px;
+  margin: 8px 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.share-friends label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.share-friends label:hover {
+  background: var(--tint-1);
+}
+
+.share-friends .muted {
+  margin-left: auto;
+  font-size: 11px;
+}
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-done {
+  display: grid;
+  gap: 6px;
+}
+
+.share-actions.send {
+  margin-top: 8px;
+}
+
+/* "Deel met" as a link next to other links */
+.share-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.share-input {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.modal .share-card {
+  max-width: none;
+}
+
+/* A shared song: the card, with a play button on its picture */
+.share-card-wrap {
+  position: relative;
+  display: block;
+}
+
+.share-play {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.share-play:hover {
+  background: rgba(0, 0, 0, 0.75);
+}

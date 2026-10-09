@@ -1,0 +1,1 @@
+ALTER TABLE "kuddes" ADD COLUMN "design" jsonb;

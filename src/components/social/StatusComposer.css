@@ -1,0 +1,610 @@
+.composer {
+  margin: calc(-1 * var(--box-pad-y, 10px)) calc(-1 * var(--box-pad-x, 12px)) 12px;
+  padding: 12px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  background: var(--alt-bg);
+}
+
+/* On the timeline the composer is its own card */
+.composer-card {
+  padding: 14px 16px;
+}
+
+.composer-card .composer {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.composer-hdr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.composer-hdr > div:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+.composer-kudde-pic {
+  flex: none;
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.composer-hdr h2 {
+  color: var(--title);
+  font: bold 16px var(--font-title);
+}
+
+.composer-hdr p {
+  color: var(--title-soft);
+  font-size: 12px;
+}
+
+/*
+ * The full composer: your photo on the left, and everything else in a column
+ * next to it, the text field as a speech bubble pointing at the photo.
+ */
+.composer.speak {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 14px;
+}
+
+.composer.speak > * {
+  grid-column: 2;
+}
+
+.composer.speak > .composer-face {
+  grid-row: 1 / span 4;
+  grid-column: 1;
+  align-self: start;
+}
+
+.composer.speak .composer-editor::before,
+.composer.speak .composer-editor::after {
+  position: absolute;
+  top: 16px;
+  width: 0;
+  height: 0;
+  border: 9px solid transparent;
+  border-left: 0;
+  content: '';
+  pointer-events: none;
+}
+
+.composer.speak .composer-editor::before {
+  left: -10px;
+  border-right: 10px solid var(--box-border);
+}
+
+.composer.speak .composer-editor::after {
+  left: -8px;
+  border-right: 9px solid var(--surface);
+}
+
+.composer.speak .composer-editor:focus-within::before {
+  border-right-color: var(--brand);
+}
+
+.composer-note {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.composer-editor {
+  position: relative;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.composer-editor:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* The formatting buttons elsewhere (knuffels, berichten, the forum, the Prikbord): plain icons too */
+.composer-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 6px 0;
+}
+
+.composer-toolbar button {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--title);
+  font: 13px var(--font-body);
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.composer-toolbar button:hover {
+  background: var(--tint-2);
+  opacity: 1;
+}
+
+/* Formatting and smileys: plain icons in a strip under the text, with the count on the right */
+.composer-format {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 6px 4px;
+  border-top: 1px solid var(--row-border, var(--box-sctn-border));
+}
+
+.composer-format button,
+.composer-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--title);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: background-color 0.12s, opacity 0.12s;
+}
+
+.composer-format button:hover,
+.composer-format button.current,
+.composer-icon:hover,
+.composer-icon.current {
+  background: var(--tint-2);
+  opacity: 1;
+}
+
+.composer-format-sep {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: var(--box-border);
+}
+
+.composer-format .composer-count {
+  margin-left: auto;
+  padding-right: 2px;
+}
+
+.composer-count.near {
+  color: var(--error-text);
+}
+
+.composer-text {
+  display: block;
+  width: 100%;
+  padding: 9px 11px;
+  border: 0;
+  border-radius: 10px 10px 0 0;
+  background: none;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.composer-text:focus {
+  outline: 0;
+}
+
+.composer-preview {
+  position: relative;
+  display: inline-block;
+  margin: 0 10px 10px;
+}
+
+/* The chosen photos, side by side (up to four) */
+.composer-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 10px 10px;
+}
+
+.composer-previews .composer-preview {
+  margin: 0;
+}
+
+.composer-previews .composer-preview img {
+  width: 96px;
+  height: 96px;
+  max-width: none;
+  max-height: none;
+}
+
+/* A photo from a Kudde: which one, on the photo */
+.composer-preview-from {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  max-width: calc(100% - 8px);
+  padding: 1px 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-preview img {
+  display: block;
+  max-width: 180px;
+  max-height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.composer-preview button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+}
+
+.composer-mood-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 10px 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--note-bg);
+  color: var(--note-text);
+  font-size: 11px;
+}
+
+.composer-mood-chip button {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.composer-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.composer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.composer-pill:hover {
+  border-color: var(--brand);
+}
+
+.composer-where {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.dropdown-panel .composer-where {
+  margin: 2px;
+  padding: 0 10px;
+}
+
+.composer-where input {
+  width: 180px;
+  border: 0;
+  background: none;
+  font-size: 12px;
+}
+
+.composer-where input:focus {
+  outline: 0;
+}
+
+/* Under it all: who may see it on the left, Plaatsen on the right */
+.composer-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.composer-visibility {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.composer-visibility select {
+  field-sizing: content;
+  height: 26px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--title);
+  font: bold 12px var(--font-body);
+  cursor: pointer;
+}
+
+.composer-visibility select:hover,
+.composer-visibility select:focus-visible {
+  background: var(--tint-2);
+}
+
+.composer-send {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.composer-count {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.composer-icon img.smiley,
+.composer-format img.smiley,
+.composer-pill img.smiley {
+  width: 18px;
+}
+
+.composer-smiley-panel,
+.composer-glitter-hint {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+  font-size: 12px;
+}
+
+.composer-glitter-hint > span:first-of-type {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.composer-glitter-hint-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.composer-preview-panel {
+  margin-top: 8px;
+}
+
+/* Smileys differ in width; give each the same slot so the mood names line up */
+.mood-smiley {
+  display: inline-flex;
+  justify-content: center;
+  width: 40px;
+  flex: none;
+}
+
+/* Picking a photo for a post: your own, or (the Kuddes tab) one from an open Kudde you're in */
+.composer-photo-panel {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.composer-photo-tabs {
+  display: flex;
+  gap: 4px;
+  margin: -2px 0 8px;
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.composer-photo-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: -1px;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  background: none;
+  color: var(--link);
+  font: bold 12px var(--font-body);
+  cursor: pointer;
+}
+
+.composer-photo-tabs button.current {
+  border-color: var(--box-sctn-border);
+  background: var(--surface);
+  color: var(--title);
+}
+
+.composer-kudde-photos {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.composer-kudde-photos section + section {
+  margin-top: 8px;
+}
+
+.composer-kudde-photos h4 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 4px;
+  font-size: 12px;
+}
+
+.composer-kudde-photos h4 img {
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.composer-kudde-photos .composer-photo-grid {
+  max-height: none;
+  overflow: visible;
+}
+
+.composer-photo-note {
+  margin: 6px 0 0;
+  font-size: 11px;
+}
+
+.composer-photo-hdr {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+/* "Nieuwe foto uploaden": a link-like button around a hidden file input */
+.composer-photo-upload {
+  position: relative;
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  color: var(--link);
+  cursor: pointer;
+}
+
+.composer-photo-upload:hover {
+  text-decoration: underline;
+}
+
+.composer-photo-upload.full {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.composer-photo-upload.full:hover {
+  text-decoration: none;
+}
+
+.composer-photo-upload.busy {
+  color: var(--text-muted);
+  cursor: progress;
+}
+
+.composer-photo-upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.composer-photo-upload:focus-within {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.composer-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.composer-photo-grid button {
+  display: block;
+  width: 100%;
+  padding: 2px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.composer-photo-grid button:hover:not(:disabled),
+.composer-photo-grid button.current {
+  border-color: var(--brand);
+}
+
+/* The maximum is chosen: the rest can't be added */
+.composer-photo-grid button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.composer-photo-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.composer-poll-panel {
+  margin-top: 8px;
+}
+
+.composer-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Between what you add (photo, poll, pictogram) and how you feel and where you are */
+.composer-tools-sep {
+  flex: none;
+  width: 1px;
+  height: 18px;
+  margin: 0 3px;
+  background: var(--box-border);
+}

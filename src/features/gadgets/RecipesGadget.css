@@ -1,0 +1,102 @@
+/* The Recepten gadget: a gingham tin with lined index cards */
+
+.rg-tin {
+  display: grid;
+  gap: 8px;
+}
+
+.rg-lid {
+  display: flex;
+  justify-content: center;
+  margin: -4px -4px 0;
+  padding: 10px 0;
+  border-radius: 8px 8px 3px 3px;
+  background:
+    repeating-linear-gradient(0deg, rgba(200, 30, 45, 0.55) 0 8px, transparent 8px 16px),
+    repeating-linear-gradient(90deg, rgba(200, 30, 45, 0.55) 0 8px, transparent 8px 16px),
+    #fff;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.12);
+}
+
+.rg-lid span {
+  padding: 3px 14px;
+  border: 1px solid #b31c23;
+  border-radius: 999px;
+  background: #fffdf5;
+  color: #b31c23;
+  font: italic bold 13px 'Brush Script MT', 'Comic Sans MS', cursive;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.rg-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* An index card: a red line at the top, blue lines below */
+.rg-card {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 8px;
+  border-radius: 2px;
+  background:
+    linear-gradient(transparent 7px, rgba(220, 70, 70, 0.55) 7px 8px, transparent 8px) 0 0 / 100% 100% no-repeat,
+    repeating-linear-gradient(transparent 0 15px, rgba(90, 140, 200, 0.22) 15px 16px),
+    #fffdf5;
+  box-shadow: 0 1px 3px rgba(60, 40, 10, 0.25);
+  color: #2b2418;
+  transition: transform 0.15s;
+}
+
+.rg-card:hover {
+  text-decoration: none;
+  transform: translateY(-2px) rotate(-0.6deg);
+}
+
+.rg-thumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  width: 52px;
+  height: 40px;
+  border: 2px solid #fff;
+  background: #f3dcb5;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.rg-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rg-text {
+  display: grid;
+  min-width: 0;
+}
+
+.rg-text b {
+  overflow: hidden;
+  color: #7a2e12;
+  font: bold 12px Georgia, 'Palatino Linotype', serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rg-text span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+  color: #7a6a58;
+  font-size: 10px;
+  white-space: nowrap;
+}

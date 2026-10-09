@@ -1,0 +1,48 @@
+.consent-gate {
+  max-width: 680px;
+}
+
+.consent-gate p {
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.consent-changes {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--tint-1);
+  list-style: none;
+}
+
+.consent-changes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+
+.consent-changes .icon {
+  flex: none;
+  margin-top: 1px;
+}
+
+.consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.consent-check input {
+  flex: none;
+  margin: 3px 0 0;
+}
+
+.consent-out {
+  margin-top: 12px !important;
+  font-size: 12px;
+}

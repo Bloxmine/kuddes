@@ -1,0 +1,1640 @@
+/* Kuddes Forum, after the message boards of 2009: glossy category bars, striped tables, a postbit column. */
+
+.fm-page {
+  font-size: 12px;
+}
+
+.fm-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border: 1px solid var(--box-border);
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.5), transparent 45%),
+    linear-gradient(135deg, var(--tint-1), var(--tint-3));
+}
+
+.fm-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--title);
+  text-decoration: none !important;
+}
+
+.fm-logo span {
+  display: grid;
+}
+
+.fm-logo b {
+  font: bold 24px/1.1 var(--font-title);
+  letter-spacing: -0.5px;
+}
+
+.fm-logo small {
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+.fm-search {
+  display: flex;
+  gap: 4px;
+}
+
+.fm-search input {
+  width: min(260px, 50vw);
+  padding: 4px 8px;
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.fm-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 0 8px;
+  border: 1px solid var(--brand-dark);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 50%, transparent 51%),
+    linear-gradient(var(--brand), var(--brand-dark));
+}
+
+.fm-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  color: #fff;
+  font: bold 12px var(--font-body);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.fm-nav a:hover,
+.fm-nav a.active {
+  background: rgba(255, 255, 255, 0.18);
+  text-decoration: none;
+}
+
+.fm-nav-user {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 6px 4px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+}
+
+.fm-nav-user a {
+  padding: 0;
+  font-weight: bold;
+}
+
+.fm-nav-user a:hover {
+  background: none;
+  text-decoration: underline;
+}
+
+.fm-badge-chat {
+  margin-left: 2px;
+}
+
+.fm-banned {
+  margin: 8px 0 0;
+}
+
+.fm-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 11px;
+}
+
+.fm-crumbs li + li::before {
+  content: '»';
+  margin-right: 4px;
+  color: var(--text-muted);
+}
+
+.fm-content {
+  padding-top: 10px;
+}
+
+/* Role badges */
+.fm-role {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 3px;
+  color: #fff;
+  font: bold 10px/16px var(--font-body);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  vertical-align: middle;
+}
+
+.fm-role-admin {
+  background: linear-gradient(#e74c3c, #b03a2e);
+}
+
+.fm-role-moderator {
+  background: linear-gradient(#3498db, #21618c);
+}
+
+/* Tables: category bars, then striped rows */
+.fm-table {
+  width: 100%;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 6px;
+  background: var(--box-bg, var(--surface));
+}
+
+.fm-table thead th {
+  padding: 6px 10px;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 51%),
+    linear-gradient(var(--cta-top), var(--cta-bottom));
+  color: #fff;
+  font: bold 12px var(--font-title);
+  text-align: left;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.fm-table td {
+  padding: 7px 10px;
+  border-top: 1px solid var(--row-border);
+  vertical-align: middle;
+}
+
+.fm-table tbody tr:nth-child(even) td {
+  background: var(--tint-1);
+}
+
+.fm-table tbody tr:hover td {
+  background: var(--tint-2);
+}
+
+.fm-num {
+  width: 80px;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.fm-last {
+  width: 210px;
+  font-size: 11px;
+}
+
+td.fm-last {
+  display: table-cell;
+}
+
+td.fm-last > * {
+  display: block;
+}
+
+.fm-last-title {
+  overflow: hidden;
+  max-width: 200px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fm-section-icon,
+.fm-thread-icon {
+  width: 36px;
+  text-align: center;
+}
+
+.fm-section-name {
+  font: bold 14px var(--font-title);
+}
+
+.fm-section-desc,
+.fm-section-mods,
+.fm-thread-by {
+  display: block;
+  margin-top: 1px;
+  font-size: 11px;
+}
+
+.fm-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.fm-thread.pinned .fm-flag {
+  margin: 0;
+  color: #b87800;
+}
+
+.fm-thread-title {
+  font-weight: bold;
+}
+
+.fm-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.fm-tag {
+  padding: 0 6px;
+  border: 1px solid var(--box-border);
+  border-radius: 3px;
+  background: var(--tint-2);
+  color: var(--title);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.fm-tag:hover {
+  border-color: var(--brand);
+  text-decoration: none;
+}
+
+.fm-empty {
+  padding: 14px;
+}
+
+@media (max-width: 760px) {
+  .fm-table .fm-num,
+  .fm-table .fm-last {
+    display: none;
+  }
+}
+
+/* Blocks under the index */
+.fm-block {
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--box-bg, var(--surface));
+}
+
+.fm-block > h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--box-border);
+  background: linear-gradient(var(--box-hdr-top), var(--box-hdr-bottom));
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.fm-block > .fm-table {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.fm-block-body {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+}
+
+.fm-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.fm-newest {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fm-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.fm-more {
+  padding: 6px 10px;
+  text-align: right;
+}
+
+/* Section page */
+.fm-section-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.fm-section-head > div:nth-child(2) {
+  flex: 1;
+}
+
+.fm-section-head h1 {
+  font-size: 22px;
+}
+
+.fm-section-actions .btn,
+.fm-bottom-bar .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.fm-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fm-pages {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 6px 0;
+  font-size: 11px;
+}
+
+.fm-pages b {
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--brand);
+  color: #fff;
+}
+
+/* Thread page */
+.fm-thread-head {
+  margin-bottom: 8px;
+}
+
+/* "Deel met" (Kuddes Messenger): top right, next to the title */
+.fm-thread-share {
+  float: right;
+  margin: 2px 0 6px 12px;
+}
+
+.fm-thread-head h1 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+
+.fm-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border: 1px dashed var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.fm-tools .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fm-tools-label {
+  font-weight: bold;
+}
+
+.fm-tools-edit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  width: 100%;
+}
+
+.fm-tools-edit .text-box:first-child {
+  flex: 2;
+  min-width: 200px;
+}
+
+.fm-posts {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.fm-post {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--box-bg, var(--surface));
+  scroll-margin-top: 12px;
+}
+
+.fm-post:target,
+.fm-post:focus-within {
+  border-color: var(--brand);
+}
+
+@media (max-width: 640px) {
+  .fm-post {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.fm-postbit {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border-right: 1px solid var(--box-border);
+  background: linear-gradient(var(--tint-1), var(--tint-2));
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .fm-postbit {
+    grid-auto-flow: column;
+    justify-content: start;
+    border-right: 0;
+    border-bottom: 1px solid var(--box-border);
+  }
+
+  .fm-postbit dl {
+    display: none;
+  }
+}
+
+.fm-postbit-name {
+  font: bold 13px var(--font-title);
+  overflow-wrap: anywhere;
+}
+
+.fm-postbit-title {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-style: italic;
+}
+
+.fm-postbit dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0 4px;
+  margin: 2px 0 0;
+  font-size: 10px;
+}
+
+.fm-postbit dt {
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.fm-postbit dd {
+  margin: 0;
+  text-align: left;
+}
+
+.fm-postbit-links {
+  display: flex;
+  gap: 6px;
+}
+
+.fm-post-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 8px 12px 10px;
+}
+
+.fm-post-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--row-border);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.fm-post-head span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fm-post.deleted .fm-post-main {
+  opacity: 0.7;
+}
+
+.fm-deleted {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-style: italic;
+}
+
+.fm-edited {
+  margin-top: 8px;
+  font-size: 10px;
+  font-style: italic;
+}
+
+.fm-signature {
+  margin-top: 10px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--row-border);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.fm-signature .fe-embed {
+  max-width: 360px;
+}
+
+/* Signature pictures: userbars at their own size, banners over the whole width */
+.fe-sig-line {
+  margin: 4px 0;
+  line-height: 0;
+}
+
+.fe-sig-img {
+  display: inline-block;
+  max-width: 100%;
+  max-height: 150px;
+  height: auto;
+  vertical-align: middle;
+}
+
+.fe-sig-img.wide {
+  display: block;
+  width: 100%;
+  /* Not taller than a banner should be */
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.fe-preview.fm-signature {
+  margin-top: 0;
+  border-top: 0;
+}
+
+.fm-post-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.fm-post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.fm-post-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 1px 8px;
+  font-size: 10px;
+}
+
+/* Smiley reactions */
+.fm-reactions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.fm-reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 26px;
+  padding: 0 7px;
+  border: 1px solid var(--box-border);
+  border-radius: 13px;
+  background: var(--surface);
+  color: var(--text);
+  font: bold 11px var(--font-body);
+  cursor: pointer;
+}
+
+.fm-reaction img {
+  max-height: 20px;
+  width: auto;
+}
+
+.fm-reaction.mine {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.fm-reaction:disabled {
+  cursor: default;
+}
+
+.fm-reaction-add {
+  position: relative;
+}
+
+.fm-reaction-picker {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.fm-reaction-picker button {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 3px 5px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--text);
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.fm-reaction-picker button:hover {
+  background: var(--tint-2);
+}
+
+.fm-reply-login {
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px dashed var(--box-border);
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* Post bodies, quotes and embeds */
+.fe-body {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.fe-quote {
+  margin: 0;
+  padding: 6px 10px;
+  border-left: 4px solid var(--brand);
+  border-radius: 0 6px 6px 0;
+  background: var(--tint-1);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.fe-quote-author {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+  color: var(--title);
+  font-weight: bold;
+}
+
+.fe-embed {
+  display: grid;
+  gap: 5px;
+  max-width: 520px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: linear-gradient(var(--surface), var(--tint-1));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  font-size: 12px;
+}
+
+.fe-embed-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.fe-embed-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fe-embed-row > div {
+  display: grid;
+  min-width: 0;
+}
+
+.fe-embed-name {
+  font: bold 14px var(--font-title);
+}
+
+.fe-embed-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.fe-embed-desc {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fe-embed-title {
+  font-size: 12px;
+}
+
+.fe-embed-missing {
+  padding: 6px 10px;
+  border: 1px dashed var(--box-border);
+  border-radius: 6px;
+  font-style: italic;
+}
+
+/* Editor */
+.fe-editor {
+  display: grid;
+  gap: 6px;
+}
+
+.fe-editor-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.fe-editor-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid var(--box-border);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  background: var(--tint-1);
+  color: var(--text-muted);
+  font: bold 11px var(--font-body);
+  cursor: pointer;
+}
+
+.fe-editor-tabs button.current {
+  background: var(--surface);
+  color: var(--title);
+}
+
+.fe-editor .composer-toolbar button.current {
+  background: var(--tint-2);
+  opacity: 1;
+}
+
+.fe-editor .composer-toolbar .fe-embed-btn {
+  width: auto;
+  gap: 4px;
+  display: inline-flex;
+  padding: 0 8px;
+  font: bold 11px var(--font-body);
+  color: var(--text);
+}
+
+/* The news' picture upload is a label around a file input: styled like the buttons */
+.fe-editor .composer-toolbar label.fe-embed-btn {
+  align-items: center;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.fe-editor .composer-toolbar label.fe-embed-btn:hover {
+  background: var(--tint-2);
+  opacity: 1;
+}
+
+.fe-editor .composer-toolbar label.fe-embed-btn.busy {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.fe-preview {
+  min-height: 120px;
+  padding: 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.fe-editor-help {
+  font-size: 11px;
+}
+
+.fe-editor-help summary {
+  cursor: pointer;
+}
+
+.fe-editor-help p {
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* The toolbar: groups of buttons, the style picker, and "insert" on the right */
+.fe-toolbar {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.fe-tool-group {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.fe-tool-group + .fe-tool-group {
+  padding-left: 6px;
+  border-left: 1px solid var(--box-sctn-border);
+}
+
+.fe-insert {
+  margin-left: auto;
+}
+
+.fe-style {
+  height: 28px;
+  padding: 0 4px;
+  border: 1px solid var(--box-border);
+  border-radius: 7px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+  color: var(--title);
+  font: bold 12px var(--font-body);
+  cursor: pointer;
+}
+
+/* What the post embeds, as little cards under the text */
+.fe-embeds {
+  display: grid;
+  gap: 4px;
+  margin: 0 10px 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--box-sctn-border);
+  font-size: 11px;
+}
+
+.fe-embeds ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fe-embeds li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 260px;
+  padding: 3px 4px 3px 3px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.fe-embed-thumb {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.fe-embed-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fe-embed-label {
+  display: grid;
+  min-width: 0;
+}
+
+.fe-embed-label .muted {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* "Kuddes insluiten" with a preview */
+.fe-panel {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 12px;
+}
+
+.fe-panel-hdr {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fe-panel-hdr b {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fe-panel-row {
+  display: flex;
+  gap: 6px;
+}
+
+.fe-panel-row .text-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.fe-panel-preview {
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+/* In a post: headings, lists, code, a line, centred text, photos and glitters */
+.fe-h {
+  margin: 4px 0 0;
+  color: var(--title);
+  font-family: var(--font-title);
+  line-height: 1.25;
+}
+
+.fe-h1 {
+  font-size: 20px;
+}
+
+.fe-h2 {
+  font-size: 17px;
+}
+
+.fe-h3 {
+  font-size: 14px;
+}
+
+.fe-list {
+  margin: 0;
+  padding-left: 24px;
+}
+
+ul.fe-list {
+  list-style: disc;
+}
+
+ol.fe-list {
+  list-style: decimal;
+}
+
+.fe-list li + li {
+  margin-top: 2px;
+}
+
+.fe-code {
+  margin: 0;
+  padding: 8px 10px;
+  overflow-x: auto;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+  font: 12px/1.5 ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  white-space: pre;
+}
+
+.fe-body code {
+  padding: 0 3px;
+  border-radius: 3px;
+  background: var(--tint-2);
+  font: 0.92em ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
+.fe-code code {
+  padding: 0;
+  background: none;
+  font: inherit;
+}
+
+.fe-body mark {
+  padding: 0 2px;
+  border-radius: 2px;
+  background: #fff1a8;
+  color: #3d3200;
+}
+
+.fe-rule {
+  width: 100%;
+  margin: 4px 0;
+  border: 0;
+  border-top: 1px solid var(--box-border);
+}
+
+.fe-center {
+  text-align: center;
+}
+
+.fe-photo {
+  display: grid;
+  gap: 3px;
+  justify-items: start;
+  margin: 0;
+}
+
+.fe-photo img {
+  display: block;
+  max-width: 100%;
+  max-height: 480px;
+  width: auto;
+  height: auto;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+}
+
+.fe-photo figcaption {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.fe-glitter img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* The poll at the top of a thread */
+.fm-thread-poll {
+  margin-bottom: 12px;
+}
+
+/* Forum profile */
+.fm-profile {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .fm-profile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.fm-profile-card {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: linear-gradient(var(--tint-1), var(--surface));
+  text-align: center;
+}
+
+.fm-profile-card h1 {
+  font-size: 20px;
+}
+
+.fm-profile-stats {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 10px;
+  width: 100%;
+  margin: 6px 0;
+  text-align: left;
+}
+
+.fm-profile-stats dt {
+  color: var(--text-muted);
+}
+
+.fm-profile-stats dd {
+  margin: 0;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Two equal buttons next to each other; "bewerken" (and a lone last one) spans the row */
+.fm-profile-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.fm-profile-links .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+.fm-profile-links .btn:nth-child(odd):last-child,
+.fm-profile-links .fm-profile-edit {
+  grid-column: 1 / -1;
+}
+
+.fm-recent-posts {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fm-recent-posts li {
+  padding: 7px 10px;
+  border-top: 1px solid var(--row-border);
+}
+
+.fm-recent-posts li:first-child {
+  border-top: 0;
+}
+
+.fm-recent-posts a {
+  font-weight: bold;
+}
+
+.fm-recent-posts p {
+  margin-top: 2px;
+  color: var(--text-muted);
+}
+
+/* Admin */
+.fm-admin-sections,
+.fm-admin-list {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fm-admin-section {
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+.fm-admin-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fm-admin-row > div {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.fm-admin-mods {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.fm-admin-mods form,
+.fm-admin-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.fm-admin-mods .text-box {
+  width: 150px;
+}
+
+.fm-admin-list li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fm-admin-form {
+  margin-bottom: 10px;
+}
+
+.fm-icon-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.fm-icon-picker button {
+  padding: 4px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.fm-icon-picker button.current {
+  border-color: var(--brand);
+  background: var(--tint-3);
+}
+
+.fm-admin-icon {
+  margin-bottom: 10px;
+}
+
+/* Subforums under their section in Forumbeheer */
+.fm-admin-sub {
+  margin-left: 28px;
+  border-left: 3px solid var(--box-sctn-border);
+  padding-left: 8px;
+}
+
+.fm-search-form {
+  display: flex;
+  gap: 6px;
+}
+
+.fm-search-form .text-box {
+  flex: 1;
+}
+
+/* IRC chat, like mIRC: a fixed-width log, nicks in colour, a user list */
+.irc {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 170px;
+  height: min(70vh, 640px);
+  min-height: 380px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+@media (max-width: 760px) {
+  .irc {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 75vh;
+  }
+
+  .irc-users {
+    display: none;
+  }
+
+  .irc-channels ul {
+    display: flex;
+    overflow-x: auto;
+  }
+}
+
+.irc-channels,
+.irc-users {
+  overflow-y: auto;
+  background: var(--tint-1);
+}
+
+.irc-channels {
+  border-right: 1px solid var(--box-border);
+}
+
+.irc-users {
+  border-left: 1px solid var(--box-border);
+}
+
+.irc-channels h2,
+.irc-users h2 {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--box-border);
+  background: linear-gradient(var(--box-hdr-top), var(--box-hdr-bottom));
+  color: var(--title);
+  font: bold 11px var(--font-body);
+}
+
+.irc-channels ul,
+.irc-users ul {
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+}
+
+.irc-channels button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--link);
+  font: bold 12px 'Courier New', monospace;
+  text-align: left;
+  cursor: pointer;
+}
+
+.irc-channels button:hover {
+  background: var(--tint-2);
+}
+
+.irc-channels button.current {
+  background: var(--brand);
+  color: #fff;
+}
+
+.irc-count {
+  padding: 0 5px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.12);
+  font-size: 10px;
+}
+
+.irc-users li {
+  padding: 1px 4px;
+  font: 12px 'Courier New', monospace;
+}
+
+.irc-prefix {
+  display: inline-block;
+  width: 10px;
+  color: var(--text-muted);
+  font-weight: bold;
+}
+
+.irc-users a {
+  font-weight: bold;
+}
+
+.irc-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.irc-topic-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--box-border);
+  background: linear-gradient(var(--box-hdr-top), var(--box-hdr-bottom));
+  font-size: 12px;
+}
+
+.irc-topic-bar > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.irc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.irc-log {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 6px 8px;
+  overflow-y: auto;
+  list-style: none;
+  font: 13px/1.45 'Courier New', 'DejaVu Sans Mono', monospace;
+}
+
+.irc-line {
+  overflow-wrap: anywhere;
+}
+
+.irc-line img {
+  max-height: 22px;
+  vertical-align: middle;
+}
+
+.irc-time {
+  color: var(--text-muted);
+}
+
+.irc-nick {
+  font-weight: bold;
+}
+
+.irc-nick a {
+  color: inherit;
+}
+
+.irc-action {
+  color: color-mix(in srgb, #8e44ad 65%, var(--text));
+  font-style: italic;
+}
+
+.irc-join {
+  color: color-mix(in srgb, #1e8449 65%, var(--text));
+}
+
+.irc-part {
+  color: color-mix(in srgb, #b03a2e 65%, var(--text));
+}
+
+.irc-topic,
+.irc-kick {
+  color: #b9770e;
+  font-weight: bold;
+}
+
+.irc-system {
+  color: var(--text-muted);
+  white-space: pre-wrap;
+}
+
+.irc-problem {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 6px 8px;
+  border-top: 1px solid var(--box-border);
+  background: color-mix(in srgb, var(--highlight) 12%, var(--surface));
+}
+
+.irc-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-top: 1px solid var(--box-border);
+  background: var(--tint-1);
+}
+
+.irc-input label {
+  font: bold 13px 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+.irc-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid var(--btn-border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text);
+  font: 13px 'Courier New', monospace;
+}
+
+.irc-input input:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 0;
+}
+
+.fm-new-poll {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.fm-new-poll-hdr {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.fm-new-poll-hdr b {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fm-add-poll {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: start;
+}
+
+.fm-has-poll {
+  margin-left: 4px;
+  vertical-align: -3px;
+}
+
+/* The editor in the forum: square-ish, like the forum's blocks and its tabs */
+.fe-editor .composer-editor {
+  border-radius: 0 6px 6px 6px;
+}
+
+.fe-editor .composer-text {
+  border-radius: 0 0 6px 6px;
+}
+
+/* New topic: its icon next to the title */
+.fm-title-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+/* "Subfora:" under a section on the front page, and the table on the section's page */
+.fm-subforums {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+}
+
+.fm-subforums a {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.fm-subforum-table {
+  margin-bottom: 12px;
+}

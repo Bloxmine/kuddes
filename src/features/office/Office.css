@@ -1,0 +1,867 @@
+/*
+ * The Office 2007 window shared by Kuddes Woord, Rekenblad and Presentatie
+ * (src/features/office/Office.tsx): title bar with the round Office button,
+ * the ribbon, menus, the file menu, the status bar and dialogs. These are
+ * Office's own colours, not the site theme's, kept as tokens on the window:
+ * the three colour schemes of the time (Blauw, Zilver, Zwart) each set them.
+ */
+/* As wide as the other pages, with a gap under the top bar (.page, loaded later, would reset the margin) */
+.ofc-page,
+.ofc-page.page {
+  margin-top: 14px;
+}
+
+.ofc-app {
+  /* Blauw, the default */
+  --ofc-frame: #c4d8f1;
+  --ofc-title-top: #e4effc;
+  --ofc-title-bottom: #c6daf3;
+  --ofc-title-text: #3e6aaa;
+  --ofc-tab-text: #15428b;
+  --ofc-tab-on: #ffffff;
+  --ofc-tab-border: #8db2e3;
+  --ofc-ribbon-top: #f6faff;
+  --ofc-ribbon-mid: #dde9f8;
+  --ofc-ribbon-bottom: #c7dbf3;
+  --ofc-group-border: #a7c2e6;
+  --ofc-group-label: #3e6aaa;
+  --ofc-group-label-top: #c7dcf4;
+  --ofc-group-label-bottom: #b6d0ee;
+  --ofc-text: #15428b;
+  --ofc-workspace: #a5bad6;
+  --ofc-status-top: #dfeafa;
+  --ofc-status-bottom: #bed3ef;
+  --ofc-status-text: #15428b;
+  --ofc-menu-bg: #ffffff;
+  --ofc-menu-side: #e9eef6;
+  /* The famous orange hover and press of Office 2007 */
+  --ofc-hover-top: #fffbe2;
+  --ofc-hover-mid: #ffe598;
+  --ofc-hover-bottom: #fff3c4;
+  --ofc-hover-border: #dbce99;
+  --ofc-press-top: #fcdba1;
+  --ofc-press-mid: #f8b15e;
+  --ofc-press-bottom: #fcd291;
+  --ofc-press-border: #c2a46e;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: calc(100vh - 110px);
+  height: calc(100dvh - 110px);
+  min-height: 560px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ofc-frame) 60%, #000);
+  border-radius: 8px 8px 4px 4px;
+  background: var(--ofc-frame);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  color: var(--ofc-text);
+  font: 12px/1.3 "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.ofc-app[data-scheme='zilver'] {
+  --ofc-frame: #dfe3e8;
+  --ofc-title-top: #f6f7f9;
+  --ofc-title-bottom: #dde1e7;
+  --ofc-title-text: #4d5966;
+  --ofc-tab-text: #2b333d;
+  --ofc-tab-border: #a9b1bb;
+  --ofc-ribbon-top: #fbfbfc;
+  --ofc-ribbon-mid: #eceef1;
+  --ofc-ribbon-bottom: #dfe2e7;
+  --ofc-group-border: #b9bfc8;
+  --ofc-group-label: #4d5966;
+  --ofc-group-label-top: #e1e4e9;
+  --ofc-group-label-bottom: #d3d7de;
+  --ofc-text: #2b333d;
+  --ofc-workspace: #c3c8cf;
+  --ofc-status-top: #eef0f3;
+  --ofc-status-bottom: #d4d8de;
+  --ofc-status-text: #2b333d;
+  --ofc-menu-side: #eef0f3;
+}
+
+.ofc-app[data-scheme='zwart'] {
+  --ofc-frame: #535353;
+  --ofc-title-top: #4c4c4c;
+  --ofc-title-bottom: #2f2f2f;
+  --ofc-title-text: #e8e8e8;
+  --ofc-tab-text: #ffffff;
+  --ofc-tab-on: #f2f2f2;
+  --ofc-tab-border: #7a7a7a;
+  --ofc-ribbon-top: #f7f7f7;
+  --ofc-ribbon-mid: #e6e6e6;
+  --ofc-ribbon-bottom: #d0d0d0;
+  --ofc-group-border: #a5a5a5;
+  --ofc-group-label: #ffffff;
+  --ofc-group-label-top: #6d6d6d;
+  --ofc-group-label-bottom: #4f4f4f;
+  --ofc-text: #222222;
+  --ofc-workspace: #8a8a8a;
+  --ofc-status-top: #4c4c4c;
+  --ofc-status-bottom: #2f2f2f;
+  --ofc-status-text: #ffffff;
+  --ofc-menu-side: #e9e9e9;
+}
+
+.ofc-app:fullscreen {
+  height: 100vh;
+  border-radius: 0;
+}
+
+.ofc-app button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------ title bar */
+.ofc-titlebar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 6px 0 4px;
+  background: linear-gradient(var(--ofc-title-top), var(--ofc-title-bottom));
+}
+
+/* The round Office button, hanging over the top of the ribbon */
+.ofc-orb {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin: 8px 2px -14px 2px;
+  padding: 0;
+  border: 1px solid #2a5a9b;
+  border-radius: 50%;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.25) 48%, rgba(255, 255, 255, 0) 50%),
+    radial-gradient(circle at 50% 110%, #9fe3ff 0%, #3b8be0 45%, #1f4f9c 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.ofc-orb:hover,
+.ofc-orb.on {
+  border-color: #b8761d;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.25) 48%, rgba(255, 255, 255, 0) 50%),
+    radial-gradient(circle at 50% 110%, #ffe9a6 0%, #f7a43a 45%, #b35a07 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+    0 0 8px rgba(255, 190, 80, 0.8);
+}
+
+.ofc-orb img {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4));
+}
+
+.ofc-qat {
+  display: flex;
+  gap: 1px;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.ofc-qat button,
+.ofc-close {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+}
+
+.ofc-qat button:hover,
+.ofc-close:hover {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 50%, var(--ofc-hover-bottom));
+  text-decoration: none;
+}
+
+.ofc-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ofc-title-text);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ofc-title-name {
+  padding: 1px 4px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  font-weight: bold;
+}
+
+.ofc-title-name:hover {
+  border-color: var(--ofc-group-border);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.ofc-title-input {
+  width: 220px;
+  padding: 1px 4px;
+  border: 1px solid var(--ofc-tab-border);
+  font: bold 12px "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.ofc-close {
+  width: 30px;
+  color: var(--ofc-title-text);
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------ ribbon */
+.ofc-ribbon {
+  position: relative;
+  z-index: 2;
+}
+
+.ofc-tabs {
+  display: flex;
+  gap: 2px;
+  height: 24px;
+  padding: 0 0 0 54px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ofc-tabs button {
+  flex: none;
+  padding: 3px 14px 2px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+  background: none;
+  color: var(--ofc-tab-text);
+}
+
+.ofc-tabs button:hover {
+  border-color: var(--ofc-tab-border);
+  background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
+}
+
+.ofc-tabs button.on {
+  position: relative;
+  border-color: var(--ofc-tab-border);
+  background: linear-gradient(var(--ofc-tab-on), var(--ofc-ribbon-top));
+  color: #15428b;
+  margin-bottom: -1px;
+}
+
+.ofc-ribbon-body {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  height: 92px;
+  padding: 3px 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-top: 1px solid var(--ofc-tab-border);
+  border-bottom: 1px solid var(--ofc-group-border);
+  background: linear-gradient(var(--ofc-ribbon-top) 0%, var(--ofc-ribbon-mid) 22%, var(--ofc-ribbon-bottom) 100%);
+  scrollbar-width: thin;
+}
+
+.ofc-group {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  border: 1px solid var(--ofc-group-border);
+  border-radius: 3px;
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.15));
+}
+
+.ofc-group-body {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 3px 4px 0;
+}
+
+.ofc-group h3 {
+  margin: 0;
+  padding: 1px 6px 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(var(--ofc-group-label-top), var(--ofc-group-label-bottom));
+  color: var(--ofc-group-label);
+  font: normal 11px "Segoe UI", Tahoma, Arial, sans-serif;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ofc-big,
+.ofc-small {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  white-space: nowrap;
+}
+
+.ofc-big {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+  min-width: 46px;
+  height: 66px;
+  padding: 2px 4px;
+  text-align: center;
+}
+
+.ofc-big span {
+  max-width: 64px;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+.ofc-small {
+  gap: 4px;
+  height: 22px;
+  padding: 1px 3px;
+}
+
+.ofc-big:hover,
+.ofc-small:hover,
+.ofc-styles button:hover,
+.ofc-scheme:hover {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 45%, var(--ofc-hover-bottom));
+}
+
+.ofc-big.on,
+.ofc-small.on,
+.ofc-big:active,
+.ofc-small:active,
+.ofc-styles button.on,
+.ofc-scheme.on {
+  border-color: var(--ofc-press-border);
+  background: linear-gradient(var(--ofc-press-top), var(--ofc-press-mid) 45%, var(--ofc-press-bottom));
+}
+
+.ofc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ofc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ofc-row {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.ofc-select {
+  height: 22px;
+  margin-right: 3px;
+  padding: 0 2px;
+  border: 1px solid var(--ofc-group-border);
+  border-radius: 2px;
+  background: #fff;
+  color: #000;
+  font: 12px "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.ofc-font {
+  width: 132px;
+}
+
+.ofc-size {
+  width: 50px;
+}
+
+/* A button with a menu: a small arrow after it */
+.ofc-menu {
+  position: relative;
+}
+
+.ofc-caret {
+  width: 0;
+  height: 0;
+  border: 3px solid transparent;
+  border-top: 4px solid currentColor;
+  border-bottom: 0;
+  opacity: 0.7;
+}
+
+.ofc-big .ofc-caret {
+  margin-top: 1px;
+}
+
+.ofc-popup {
+  /* Over everything, placed under its button by Ribbon.tsx (the ribbon would cut it off) */
+  position: fixed;
+  z-index: 60;
+  min-width: 160px;
+  padding: 3px;
+  border: 1px solid #868686;
+  background: #fafafa;
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+.ofc-popup h4 {
+  margin: 2px 0;
+  padding: 2px 4px;
+  background: #dde7ee;
+  color: #15428b;
+  font: bold 11px "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.ofc-popup-list {
+  display: grid;
+}
+
+.ofc-popup-item {
+  display: grid;
+  gap: 1px;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: none;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ofc-popup-item small {
+  color: #666;
+}
+
+.ofc-popup-item:hover,
+.ofc-popup-item.on {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 45%, var(--ofc-hover-bottom));
+}
+
+.ofc-colors {
+  width: 176px;
+}
+
+.ofc-color-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 14px);
+  gap: 3px;
+  padding: 3px 4px 6px;
+}
+
+.ofc-color-grid button {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 1px solid #c5c5c5;
+}
+
+.ofc-color-grid button:hover {
+  outline: 2px solid #f29436;
+}
+
+.ofc-table-cells {
+  display: grid;
+  grid-template-columns: repeat(10, 16px);
+  gap: 2px;
+  padding: 4px;
+}
+
+.ofc-table-cells button {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid #9a9a9a;
+  background: #fff;
+}
+
+.ofc-table-cells button.on {
+  border-color: #f29436;
+  background: #ffe5b4;
+}
+
+.ofc-symbols {
+  display: grid;
+  grid-template-columns: repeat(10, 24px);
+  gap: 1px;
+  padding: 2px;
+}
+
+.ofc-symbols button {
+  height: 24px;
+  padding: 0;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 14px;
+}
+
+.ofc-symbols button:hover {
+  border-color: #f29436;
+  background: #fff3c4;
+}
+
+/* ------------------------------------------------------------ the file menu */
+.ofc-orbmenu {
+  position: absolute;
+  top: 30px;
+  left: 4px;
+  z-index: 30;
+  width: min(560px, calc(100% - 8px));
+  border: 1px solid #6f8fbf;
+  border-radius: 0 4px 4px 4px;
+  background: linear-gradient(var(--ofc-title-top), var(--ofc-title-bottom));
+  box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.35);
+  color: #000;
+}
+
+.ofc-orbmenu-main {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  margin: 6px 6px 0;
+  border: 1px solid #a7b8cf;
+  background: var(--ofc-menu-bg);
+}
+
+.ofc-orbmenu-cmds {
+  margin: 0;
+  padding: 3px;
+  border-right: 1px solid #d5dde8;
+  list-style: none;
+}
+
+.ofc-orbmenu-cmds button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  font-size: 13px;
+  text-align: left;
+}
+
+.ofc-orbmenu-cmds button span {
+  flex: 1;
+}
+
+.ofc-orbmenu-cmds button:hover,
+.ofc-orbmenu-cmds li.open > button {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 45%, var(--ofc-hover-bottom));
+}
+
+.ofc-arrow {
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+  border-left: 5px solid #444;
+  border-right: 0;
+}
+
+.ofc-orbmenu-side {
+  padding: 6px 8px;
+  background: var(--ofc-menu-side);
+}
+
+.ofc-orbmenu-side h3 {
+  margin: 0 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #c5cfdc;
+  color: #15428b;
+  font: bold 12px "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.ofc-recent {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ofc-recent button,
+.ofc-orbmenu-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  text-align: left;
+}
+
+.ofc-recent button {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ofc-recent button.on {
+  font-weight: bold;
+}
+
+.ofc-orbmenu-option span {
+  display: grid;
+}
+
+.ofc-orbmenu-option small {
+  color: #555;
+}
+
+.ofc-recent button:hover,
+.ofc-orbmenu-option:hover {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 45%, var(--ofc-hover-bottom));
+}
+
+.ofc-muted {
+  color: #666;
+}
+
+.ofc-orbmenu-foot {
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px 6px;
+}
+
+.ofc-orbmenu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border: 1px solid #8ba2c1;
+  border-radius: 3px;
+  background: linear-gradient(#fdfdfe, #dfe7f2);
+  color: #000;
+}
+
+.ofc-orbmenu-btn:hover {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-mid) 45%, var(--ofc-hover-bottom));
+  text-decoration: none;
+}
+
+/* ------------------------------------------------------------ the workspace */
+.ofc-workspace {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  padding: 18px 24px 40px;
+  background: var(--ofc-workspace);
+}
+
+/* ------------------------------------------------------------ status bar */
+.ofc-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px;
+  border-top: 1px solid var(--ofc-group-border);
+  background: linear-gradient(var(--ofc-status-top), var(--ofc-status-bottom));
+  color: var(--ofc-status-text);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ofc-status > span + span::before {
+  margin-right: 4px;
+  color: currentColor;
+  content: '|';
+  opacity: 0.35;
+}
+
+.ofc-status-msg {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ofc-status-msg.error {
+  color: #c00000;
+  font-weight: bold;
+}
+
+.ofc-zoombar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ofc-zoombar::before {
+  display: none;
+}
+
+.ofc-zoombar button {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: none;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.ofc-zoombar button:hover {
+  border-color: var(--ofc-hover-border);
+  background: var(--ofc-hover-mid);
+}
+
+.ofc-zoombar input {
+  width: 110px;
+  accent-color: #4f81bd;
+}
+
+.ofc-zoombar b {
+  width: 38px;
+  text-align: right;
+}
+
+/* ------------------------------------------------------------ dialogs (site Modals) */
+.ofc-form {
+  display: grid;
+  gap: 10px;
+}
+
+.ofc-form label {
+  display: grid;
+  gap: 3px;
+  font-weight: bold;
+}
+
+.ofc-wordart-pick {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ofc-wordart-pick button {
+  padding: 10px 4px;
+  border: 2px solid var(--box-border);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.ofc-wordart-pick button.on {
+  border-color: var(--brand);
+}
+
+.ofc-wordart-pick .kw-wordart {
+  font-size: 22pt;
+}
+
+.ofc-photo-grid,
+.ofc-open-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ofc-photo-grid {
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+}
+
+.ofc-photo-grid button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.ofc-photo-grid button:hover {
+  border-color: var(--brand);
+}
+
+.ofc-photo-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ofc-open-search {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.ofc-open-list button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ofc-open-list button:hover {
+  border-color: var(--brand);
+  background: var(--tint-1);
+}
+
+.ofc-open-list span {
+  display: grid;
+}
+
+@media (max-width: 760px) {
+  .ofc-page {
+    padding: 0;
+  }
+
+  .ofc-app {
+    height: calc(100dvh - 72px);
+    border-radius: 0;
+  }
+
+  .ofc-qat button:nth-child(n + 3) {
+    display: none;
+  }
+
+  .ofc-workspace {
+    padding: 10px 8px 30px;
+  }
+
+  .ofc-status > span:nth-child(3),
+  .ofc-status > span:nth-child(2) {
+    display: none;
+  }
+
+  .ofc-zoombar input {
+    width: 70px;
+  }
+}

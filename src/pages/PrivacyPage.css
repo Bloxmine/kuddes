@@ -1,0 +1,81 @@
+/* The privacy statement (PrivacyPage.tsx): a summary, a table of contents and numbered sections */
+.news-article.pv {
+  max-width: 860px;
+}
+
+.news-article.pv p,
+.news-article.pv ul {
+  max-width: none;
+}
+
+.pv-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--brand) 8%, var(--surface));
+}
+
+.pv-summary .farm-icon {
+  flex: none;
+}
+
+.pv-toc ol {
+  columns: 2 220px;
+  margin: 12px 0;
+  padding-left: 22px;
+  font-size: 12px;
+}
+
+.pv-section {
+  scroll-margin-top: 70px;
+}
+
+.pv-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 22px 0 8px;
+  color: var(--title);
+  font: bold 15px var(--font-title);
+}
+
+.pv-section ul {
+  padding-left: 20px;
+}
+
+.pv-section li {
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.pv-table {
+  width: 100%;
+  margin: 6px 0 12px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.pv-table th,
+.pv-table td {
+  padding: 6px 8px;
+  border: 1px solid var(--row-border, var(--box-border));
+  text-align: left;
+  vertical-align: top;
+}
+
+.pv-table th {
+  background: color-mix(in srgb, var(--brand) 8%, var(--surface));
+  color: var(--title);
+}
+
+@media (max-width: 560px) {
+  .pv-table th,
+  .pv-table td {
+    padding: 5px;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,69 @@
+.theme-options {
+  display: grid;
+  gap: 2px;
+  padding: 2px 6px;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+  text-align: left;
+  cursor: pointer;
+}
+
+.theme-option:hover {
+  background: var(--alt-bg);
+}
+
+.theme-option.current {
+  border-color: var(--brand);
+  background: var(--tint-1);
+}
+
+.theme-swatch {
+  display: inline-block;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.theme-swatch-small {
+  width: 18px;
+  height: 18px;
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+/* On the settings page the themes sit side by side */
+.settings .theme-options {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 0;
+}
+
+.settings .theme-option {
+  border-color: var(--box-border);
+}
+
+.settings .theme-option.current {
+  border-color: var(--brand);
+}
+
+.theme-more {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 6px 2px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--box-sctn-border);
+  font-size: 12px;
+}

@@ -1,0 +1,858 @@
+/* Profile gadgets (GadgetBox.tsx): glossy, 2011-style hardware and paper */
+
+.gadget-edit {
+  display: inline-flex;
+  opacity: 0.7;
+}
+
+.gadget-edit:hover {
+  opacity: 1;
+}
+
+.gadget-note {
+  margin-top: 6px;
+  font-size: 10px;
+}
+
+/* ---------------------------------------------------------- Plaknotities */
+.corkboard {
+  padding: 14px 12px 16px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  /* Cork: warm brown with speckles, and a wooden frame */
+  background:
+    radial-gradient(circle at 20% 30%, rgba(90, 50, 20, 0.35) 0 1px, transparent 2px) 0 0 / 9px 11px,
+    radial-gradient(circle at 70% 60%, rgba(255, 230, 190, 0.35) 0 1px, transparent 2px) 0 0 / 13px 7px,
+    radial-gradient(circle at 40% 80%, rgba(70, 35, 10, 0.3) 0 1.5px, transparent 2.5px) 0 0 / 17px 15px,
+    linear-gradient(135deg, #c8915a, #b27a44 50%, #c38b52);
+  box-shadow:
+    inset 0 0 0 5px #8a5a2b,
+    inset 0 0 0 6px #6d431d,
+    inset 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+.corkboard-empty {
+  color: #fff4e0;
+  font-style: italic;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.sticky-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px 12px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+}
+
+.sticky-note,
+.sticky-add {
+  position: relative;
+  min-height: 110px;
+}
+
+.sticky-note {
+  padding: 16px 10px 12px;
+  /* Paper: slightly darker towards the bottom, like a real Post-it */
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--note) 85%, white) 0%, var(--note) 25%, color-mix(in srgb, var(--note) 88%, #7a5a00) 100%);
+  color: #3a3000;
+  transform: rotate(var(--tilt));
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.15),
+    0 6px 8px -4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s;
+}
+
+.sticky-note:hover,
+.sticky-note.editing {
+  z-index: 2;
+  transform: rotate(0deg) scale(1.04);
+}
+
+/* A red push pin */
+.sticky-pin {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffb3a6 0 2px, #e0301e 3px, #9c1509 100%);
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.45);
+}
+
+.sticky-text {
+  display: block;
+  width: 100%;
+  min-height: 70px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 15px/1.3 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', 'Marker Felt', cursive;
+  text-align: left;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+button.sticky-text {
+  cursor: text;
+}
+
+.sticky-note textarea {
+  display: block;
+  width: 100%;
+  min-height: 78px;
+  padding: 0;
+  border: 0;
+  outline: 1px dashed rgba(58, 48, 0, 0.35);
+  background: none;
+  color: inherit;
+  font: 15px/1.3 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', 'Marker Felt', cursive;
+  resize: none;
+}
+
+.sticky-colors {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.sticky-colors button {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.sticky-colors button[aria-pressed='true'] {
+  box-shadow: 0 0 0 2px #3a3000;
+}
+
+.sticky-colors .sticky-delete {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-left: auto;
+  border: 0;
+  background: none;
+}
+
+.sticky-add button {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  min-height: 110px;
+  border: 2px dashed rgba(255, 244, 224, 0.7);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff4e0;
+  font: bold 12px var(--font-body);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.sticky-add button:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ------------------------------------------------------------------ Muziek */
+.music-device {
+  padding: 10px;
+  border: 1px solid #2a2f33;
+  border-radius: 12px;
+  /* Brushed dark plastic with a glossy top half */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 48%, transparent 50%),
+    linear-gradient(to bottom, #4a5157, #1f2326);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.music-lcd {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1px 8px;
+  padding: 6px 8px;
+  border: 1px solid #0d2a10;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #b8e6a0, #8fcf74);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35);
+  color: #173d10;
+  font: bold 11px/1.3 'Courier New', monospace;
+}
+
+.music-lcd-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.music-lcd-track {
+  grid-row: 1;
+  grid-column: 2;
+  font-size: 9px;
+}
+
+.music-lcd-title {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* The title scrolls across the display when it's too long */
+.music-lcd-title span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: lcd-scroll 12s linear infinite;
+}
+
+@keyframes lcd-scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.music-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.music-controls button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #15181a;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #f5f7f8, #c4cacd);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.music-controls .music-play {
+  width: 40px;
+  height: 40px;
+  margin-top: -4px;
+  background: linear-gradient(to bottom, var(--brand-light), var(--brand));
+}
+
+.music-controls button:active {
+  background: linear-gradient(to bottom, #c4cacd, #f5f7f8);
+}
+
+.music-controls button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.music-unblock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin: 8px 0 0;
+  padding: 8px;
+  border: 1px solid var(--cta-border);
+  border-radius: 4px;
+  background: linear-gradient(var(--cta-top), var(--cta-bottom));
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  animation: music-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes music-pulse {
+  50% {
+    box-shadow: 0 0 0 4px var(--focus-ring);
+  }
+}
+
+:root[data-reduce-motion] .music-unblock {
+  animation: none;
+}
+
+.music-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: track;
+}
+
+.music-list button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--text);
+  font: 11px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.music-list button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-list button:hover {
+  background: var(--tint-1);
+}
+
+.music-list .current button {
+  background: var(--tint-2);
+  color: var(--title);
+  font-weight: bold;
+}
+
+.yt-frame {
+  position: relative;
+  margin-top: 8px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #000;
+}
+
+.yt-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ------------------------------------------------------------------- Video */
+.video-gadget .yt-frame {
+  margin-top: 0;
+}
+
+.video-poster {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: #000;
+  cursor: pointer;
+}
+
+.video-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A glossy round play button */
+.video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 51%),
+    linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s;
+}
+
+.video-play::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  border: 11px solid transparent;
+  border-left: 17px solid #fff;
+  border-right: 0;
+  transform: translate(-50%, -50%);
+}
+
+.video-poster:hover .video-play {
+  transform: scale(1.08);
+}
+
+.video-title {
+  margin-top: 6px;
+  color: var(--title);
+  font-weight: bold;
+}
+
+.video-strip {
+  display: flex;
+  gap: 5px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.video-strip button {
+  width: 64px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.video-strip button.current {
+  border-color: var(--brand);
+}
+
+.video-strip img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------- Aftellen */
+.countdown {
+  text-align: center;
+}
+
+.countdown-cards {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.countdown-card {
+  display: grid;
+  min-width: 52px;
+}
+
+/* A flip card: two halves with a hinge line through the middle */
+.countdown-num {
+  position: relative;
+  padding: 8px 4px;
+  border-radius: 6px;
+  background: linear-gradient(to bottom, #3b4247 0%, #262b2f 49.5%, #15181a 50.5%, #23282b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 2px 3px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font: bold 24px/1 var(--font-title);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.countdown-num::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.countdown-unit {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.countdown-when {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 11px;
+}
+
+.countdown-done {
+  color: var(--title);
+  font: bold 18px var(--font-title);
+}
+
+/* -------------------------------------------------------------------- Poll */
+.poll-question {
+  margin-bottom: 8px;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.poll-options,
+.poll-results {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.poll-options button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 7px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+  color: var(--text);
+  font: 12px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.poll-options button:hover:not(:disabled),
+.poll-options button.current {
+  border-color: var(--brand);
+  background: linear-gradient(to bottom, var(--tint-1), var(--tint-2));
+}
+
+.poll-radio {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--btn-border-dark);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff, #dde3e6);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.poll-options button:hover .poll-radio,
+.poll-options button.current .poll-radio {
+  background: radial-gradient(circle, var(--brand) 0 3px, #fff 4px);
+}
+
+.poll-results li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 36px;
+  gap: 2px 8px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.poll-label {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.poll-results .mine .poll-label {
+  color: var(--title);
+  font-weight: bold;
+}
+
+/* Glossy result bars */
+.poll-bar {
+  height: 12px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.poll-bar span {
+  display: block;
+  height: 100%;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 50%, transparent 51%),
+    linear-gradient(to bottom, var(--brand-light), var(--brand));
+  transition: width 0.4s;
+}
+
+.poll-pct {
+  font-size: 11px;
+  text-align: right;
+}
+
+.poll-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+}
+
+/* ------------------------------------------------ Mijn gadgets (GadgetMarket.tsx) */
+.gadget-list {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.gadget-list > li {
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-1);
+}
+
+.gadget-list > li.off {
+  opacity: 0.7;
+}
+
+.gadget-list-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 10px;
+}
+
+.gadget-list-row > div {
+  display: grid;
+  flex: 1;
+  min-width: 140px;
+  font-size: 12px;
+}
+
+.gadget-list-row b {
+  color: var(--title);
+}
+
+.gadget-list-row .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.gadget-form {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--box-sctn-border);
+  background: var(--surface);
+  border-radius: 0 0 8px 8px;
+}
+
+.gadget-rows {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.gadget-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gadget-row .text-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.gadget-row select.text-box {
+  flex: 0 0 90px;
+}
+
+.note-row textarea {
+  background: var(--note);
+  color: #3a3000;
+}
+
+.track-thumb {
+  width: 64px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.gadget-add-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gadget-add-link .text-box {
+  flex: 1;
+}
+
+.gadget-rows > .btn,
+.gadget-add-link .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  justify-self: start;
+}
+
+.gadget-hint {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 11px;
+}
+
+/* ------------------------------------------------------------ Kuddes Video */
+.kuddesvideo-gadget .bv-player {
+  margin-bottom: 6px;
+}
+
+.kuddesvideo-gadget .video-strip span {
+  display: block;
+  overflow: hidden;
+  padding: 4px;
+  font-size: 9px;
+  aspect-ratio: 16 / 9;
+}
+
+.kuddesvideo-gadget > .gadget-note {
+  display: block;
+  margin-top: 6px;
+  text-align: right;
+}
+
+.kuddesvideo-picker {
+  display: grid;
+  gap: 4px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kuddesvideo-picker label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.kuddesvideo-picker label.picked {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.kuddesvideo-picker img {
+  width: 64px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.kuddesvideo-picker span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.kuddesvideo-pos {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11px;
+}
+
+/* A new poll in a composer (WieWatWaar, Prikbord): PollEditor */
+.kb-poll-edit {
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px dashed var(--box-border);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.kb-poll-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kb-poll-tools {
+  display: flex;
+  gap: 14px;
+}
+
+
+/* The poll under a WieWatWaar */
+.buzz-poll {
+  max-width: 460px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--row-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+}
+
+/* Shuffle: lit up while it's on */
+.music-controls .music-shuffle.on {
+  box-shadow: inset 0 0 0 2px #8fd36b;
+  background: color-mix(in srgb, #8fd36b 30%, transparent);
+}
+
+/*
+ * A gadget can sit in the narrow left column of a profile (about 200px) or
+ * a wide one: gadgets adapt to their own box's width (@container gadget),
+ * not the screen's.
+ */
+.gadget {
+  container: gadget / inline-size;
+}
+
+@container gadget (max-width: 260px) {
+  /* Three counters side by side don't fit: three rows, "5 berichten" */
+  .gadget .gh-stats {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+  }
+
+  .gadget .gh-stats div {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    padding: 3px 8px;
+    text-align: left;
+  }
+
+  .gadget .gh-stats b {
+    font-size: 14px;
+  }
+
+  .gadget .gh-stats span {
+    font-size: 11px;
+  }
+
+  .mkw-vehicle {
+    margin: 0 auto;
+  }
+}

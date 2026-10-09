@@ -1,0 +1,405 @@
+/*
+ * Kuddes Rekenblad (RekenbladPage.tsx): the grid as Excel 2007 draws it.
+ * The window around it is the shared Office window (office/Office.css);
+ * these are Excel's own colours, kept as tokens here.
+ */
+.rb-app {
+  --rb-head-top: #f3f6fb;
+  --rb-head-bottom: #e4ecf7;
+  --rb-head-border: #9eb6ce;
+  --rb-head-text: #27413e;
+  --rb-head-on-top: #f9e3a8;
+  --rb-head-on-bottom: #f1c15f;
+  --rb-grid: #d0d7e5;
+  --rb-sel: rgba(170, 196, 232, 0.45);
+  --rb-active: #000;
+}
+
+.rb-app[data-scheme='zwart'] {
+  --rb-head-top: #f4f4f4;
+  --rb-head-bottom: #dedede;
+  --rb-head-border: #9a9a9a;
+  --rb-head-text: #222;
+}
+
+.rb-app[data-scheme='zilver'] {
+  --rb-head-top: #f8f9fa;
+  --rb-head-bottom: #e6e9ed;
+  --rb-head-border: #a9b1bb;
+}
+
+/* ------------------------------------------------------------ the name box and the formula bar */
+.rb-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--ofc-group-border);
+  background: linear-gradient(var(--ofc-ribbon-mid), var(--ofc-ribbon-bottom));
+}
+
+.rb-namebox,
+.rb-formula {
+  height: 22px;
+  padding: 0 5px;
+  border: 1px solid var(--ofc-group-border);
+  background: #fff;
+  color: #000;
+  font: 12px Calibri, Carlito, "Segoe UI", sans-serif;
+}
+
+.rb-namebox {
+  width: 92px;
+  text-align: center;
+}
+
+.rb-formula {
+  flex: 1;
+  min-width: 0;
+}
+
+.rb-fx {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 22px;
+  color: #6a6a6a;
+  font: italic bold 13px "Times New Roman", serif;
+}
+
+/* ------------------------------------------------------------ the grid */
+.rb-workspace {
+  padding: 0;
+  background: #fff;
+  outline: 0;
+}
+
+.rb-zoom {
+  position: relative;
+  width: max-content;
+}
+
+.rb-grid {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  color: #000;
+  font: 11pt Calibri, Carlito, "Segoe UI", sans-serif;
+  user-select: none;
+}
+
+.rb-head-col {
+  width: 40px;
+}
+
+.rb-grid th {
+  position: sticky;
+  z-index: 2;
+  height: 20px;
+  padding: 0;
+  border-right: 1px solid var(--rb-head-border);
+  border-bottom: 1px solid var(--rb-head-border);
+  background: linear-gradient(var(--rb-head-top), var(--rb-head-bottom));
+  color: var(--rb-head-text);
+  font: 11px "Segoe UI", Tahoma, sans-serif;
+  text-align: center;
+  cursor: default;
+}
+
+.rb-grid thead th {
+  top: 0;
+}
+
+.rb-grid tbody th {
+  left: 0;
+  z-index: 1;
+}
+
+.rb-grid th.on {
+  background: linear-gradient(var(--rb-head-on-top), var(--rb-head-on-bottom));
+  color: #000;
+}
+
+.rb-grid thead th:not(.rb-corner) {
+  position: sticky;
+}
+
+.rb-corner {
+  left: 0;
+  z-index: 3 !important;
+}
+
+/* Drag the right edge of a column heading to resize it */
+.rb-resize {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+}
+
+.rb-grid td {
+  position: relative;
+  height: 20px;
+  max-width: 0;
+  padding: 0 3px;
+  overflow: hidden;
+  border-right: 1px solid var(--rb-grid);
+  border-bottom: 1px solid var(--rb-grid);
+  line-height: 19px;
+  text-overflow: clip;
+  white-space: nowrap;
+  cursor: cell;
+}
+
+.rb-zoom.no-grid .rb-grid td {
+  border-color: transparent;
+}
+
+.rb-zoom.no-heads .rb-grid thead,
+.rb-zoom.no-heads .rb-grid tbody th,
+.rb-zoom.no-heads .rb-head-col {
+  display: none;
+}
+
+.rb-grid td.bd {
+  box-shadow: inset 0 0 0 1px #000;
+}
+
+.rb-grid td.err {
+  color: #c00000;
+}
+
+/* The selection: a light blue wash with a dark edge; the active cell keeps its own colour with a thick border */
+.rb-grid td.sel {
+  background-image: linear-gradient(var(--rb-sel), var(--rb-sel));
+}
+
+.rb-grid td.st {
+  border-top: 2px solid var(--rb-active);
+}
+
+.rb-grid td.sb {
+  border-bottom: 2px solid var(--rb-active);
+}
+
+.rb-grid td.sl {
+  border-left: 2px solid var(--rb-active);
+}
+
+.rb-grid td.sr {
+  border-right: 2px solid var(--rb-active);
+}
+
+.rb-grid td.act {
+  overflow: visible;
+}
+
+.rb-grid td.filling {
+  outline: 1px dashed #555;
+  outline-offset: -2px;
+}
+
+/* The fill handle: a small black square at the selection's corner */
+.rb-fill {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  z-index: 3;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #fff;
+  background: #000;
+  cursor: crosshair;
+}
+
+.rb-cell-input {
+  position: absolute;
+  inset: -1px;
+  z-index: 4;
+  min-width: 100%;
+  padding: 0 2px;
+  border: 0;
+  outline: 0;
+  background: #fff;
+  color: #000;
+  font: inherit;
+}
+
+/* ------------------------------------------------------------ charts on the sheet */
+.rb-chart {
+  position: absolute;
+  z-index: 5;
+  padding: 4px;
+  border: 1px solid #a5a5a5;
+  background: #fff;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: move;
+}
+
+.rb-chart.on {
+  border-color: #6d8ab7;
+  box-shadow: 0 0 0 3px rgba(141, 178, 227, 0.6);
+}
+
+.rb-chart-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.rb-chart-title {
+  fill: #000;
+  font: bold 15px Calibri, Carlito, sans-serif;
+}
+
+.rb-chart-axis,
+.rb-chart-legend {
+  fill: #333;
+  font: 11px Calibri, Carlito, sans-serif;
+}
+
+.rb-chart-pct {
+  fill: #fff;
+  font: bold 12px Calibri, Carlito, sans-serif;
+}
+
+.rb-chart-empty {
+  fill: #888;
+  font: 13px Calibri, Carlito, sans-serif;
+}
+
+.rb-chart-grid {
+  stroke: #d9d9d9;
+}
+
+.rb-chart-zero {
+  stroke: #868686;
+}
+
+.rb-chart-tools {
+  position: absolute;
+  top: -28px;
+  left: -1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  border: 1px solid #6d8ab7;
+  background: #eef3fa;
+  color: #000;
+  font-size: 11px;
+  cursor: default;
+}
+
+.rb-chart-tools select {
+  font: 11px "Segoe UI", Tahoma, sans-serif;
+}
+
+.rb-chart-tools button {
+  padding: 0 5px;
+  border: 0;
+  background: none;
+  font-size: 14px !important;
+  line-height: 1;
+}
+
+.rb-chart-range {
+  color: #555;
+}
+
+.rb-chart-size {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid #6d8ab7;
+  background: #fff;
+  cursor: nwse-resize;
+}
+
+/* ------------------------------------------------------------ sheet tabs */
+.rb-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 24px;
+  padding: 0 6px;
+  overflow-x: auto;
+  border-top: 1px solid var(--ofc-group-border);
+  background: linear-gradient(var(--ofc-ribbon-mid), var(--ofc-ribbon-bottom));
+  scrollbar-width: none;
+}
+
+.rb-sheet {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  margin-top: -1px;
+  border: 1px solid var(--ofc-group-border);
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(#e8eef7, #d1ddee);
+}
+
+.rb-sheet button {
+  padding: 2px 12px 3px;
+  border: 0;
+  background: none;
+  font-size: 11px;
+}
+
+.rb-sheet.on {
+  background: #fff;
+  font-weight: bold;
+}
+
+.rb-sheet .rb-sheet-x {
+  padding: 0 6px 0 0;
+  color: #888;
+  font-size: 13px !important;
+}
+
+.rb-sheet-add {
+  align-self: center;
+  width: 22px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  font-size: 14px !important;
+  line-height: 1;
+}
+
+.rb-sheet-add:hover {
+  border-color: var(--ofc-hover-border);
+  background: var(--ofc-hover-mid);
+}
+
+/* ------------------------------------------------------------ ribbon bits */
+.rb-numfmt {
+  width: 132px;
+}
+
+.rb-pct {
+  justify-content: center;
+  width: 22px;
+  font: bold 13px "Segoe UI", Tahoma, sans-serif;
+}
+
+.rb-fn-list {
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.rb-fn-list .ofc-popup-item small {
+  white-space: normal;
+}
+
+.rb-stats {
+  margin-right: 8px;
+}

@@ -1,0 +1,301 @@
+/*
+ * Animated borders around profile photos. A "ring" frame keeps a transparent
+ * border of its own width (--fw) and draws its moving part on ::before and
+ * ::after, cut to the ring with a mask, so the photo itself stays clear.
+ * Animations are switched off by "Minder beweging" (global.css).
+ */
+@property --frame-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.avatar-frame.frame-ring {
+  --fw: 6px;
+  border-width: var(--fw);
+  border-style: solid;
+  border-color: transparent;
+}
+
+.avatar-frame.frame-ring::before,
+.avatar-frame.frame-ring::after {
+  position: absolute;
+  inset: calc(var(--fw) * -1);
+  padding: var(--fw);
+  pointer-events: none;
+  content: '';
+  /* Only the ring: the whole box minus the padding box */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+/* The seasonal borders (FestiveEffects) replace these for viewers who have them on */
+:root[data-festive-frames] .avatar-frame.frame-ring:not(.no-season)::before,
+:root[data-festive-frames] .avatar-frame.frame-ring:not(.no-season)::after {
+  content: none;
+}
+
+/* ---- Draaiende regenboog: the colours go round and round */
+.avatar-frame.frame-draaiend::before {
+  background: conic-gradient(from var(--frame-angle), #f26b6b, #f7a33b, #f5e04f, #5fc39a, #4ba3e0, #8b72d9, #f26b6b);
+  animation: frame-spin 4s linear infinite;
+}
+
+@keyframes frame-spin {
+  to {
+    --frame-angle: 360deg;
+  }
+}
+
+/* ---- Disco: fast colour blocks, with a twinkle on top */
+.avatar-frame.frame-disco {
+  --fw: 7px;
+}
+
+.avatar-frame.frame-disco::before {
+  background: repeating-conic-gradient(from var(--frame-angle), #ff3fa4 0 8%, #3ff4ff 8% 16%, #ffe93f 16% 24%, #8b5cff 24% 32%);
+  animation: frame-spin 1.6s linear infinite;
+}
+
+.avatar-frame.frame-disco::after {
+  background:
+    radial-gradient(circle, #fff 0 1.5px, transparent 2.5px) 0 0 / 14px 14px,
+    radial-gradient(circle, #fff 0 1px, transparent 2px) 7px 7px / 14px 14px;
+  animation: frame-blink 0.9s steps(2, jump-none) infinite;
+}
+
+@keyframes frame-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---- Vuur: a warm border that flickers and glows */
+.avatar-frame.frame-vuur {
+  --fw: 5px;
+  animation: frame-fire 1.4s ease-in-out infinite alternate;
+}
+
+.avatar-frame.frame-vuur::before {
+  background: linear-gradient(to top, #ffd84a, #ff8a1f 35%, #e0301a 75%, #ff7a1a);
+  background-size: 100% 220%;
+  animation: frame-flame 0.9s linear infinite;
+}
+
+@keyframes frame-flame {
+  to {
+    background-position: 0 100%;
+  }
+}
+
+@keyframes frame-fire {
+  0% {
+    box-shadow:
+      0 0 5px 1px #ff9a2a,
+      0 -3px 9px 1px #ff5a1a;
+  }
+  50% {
+    box-shadow:
+      0 0 9px 2px #ffb92a,
+      0 -6px 14px 2px #ff4a12;
+  }
+  100% {
+    box-shadow:
+      0 0 6px 1px #ff8a2a,
+      0 -4px 11px 2px #ff6a1a;
+  }
+}
+
+/* ---- Bliksem: cold blue-white that flashes at odd moments */
+.avatar-frame.frame-bliksem {
+  --fw: 4px;
+  animation: frame-flash 3.2s linear infinite;
+}
+
+.avatar-frame.frame-bliksem::before {
+  background: linear-gradient(135deg, #bfe4ff, #5d8bff 30%, #ffffff 50%, #5d8bff 70%, #bfe4ff);
+}
+
+@keyframes frame-flash {
+  0%,
+  8%,
+  12%,
+  40%,
+  100% {
+    box-shadow: 0 0 4px 1px #5d8bff;
+    filter: none;
+  }
+  9%,
+  11% {
+    box-shadow:
+      0 0 14px 4px #ffffff,
+      0 0 26px 8px #7aa2ff;
+    filter: brightness(1.6);
+  }
+  42% {
+    box-shadow:
+      0 0 10px 3px #bfe4ff,
+      0 0 18px 5px #5d8bff;
+    filter: brightness(1.35);
+  }
+}
+
+/* ---- Sterrenhemel: a night sky with stars that blink in turns */
+.avatar-frame.frame-sterrenhemel {
+  --fw: 7px;
+  /* The sky stays; only the stars fade in and out */
+  border-color: #23296a;
+}
+
+.avatar-frame.frame-sterrenhemel::before {
+  background:
+    radial-gradient(circle, #fff 0 1px, transparent 2px) 3px 2px / 17px 13px,
+    radial-gradient(circle, #ffe9a8 0 1.4px, transparent 2.4px) 11px 6px / 23px 19px;
+  animation: frame-twinkle 2.2s ease-in-out infinite alternate;
+}
+
+.avatar-frame.frame-sterrenhemel::after {
+  background:
+    radial-gradient(circle, #fff 0 1.3px, transparent 2.3px) 8px 9px / 19px 15px,
+    radial-gradient(circle, #cfe3ff 0 1px, transparent 2px) 2px 5px / 13px 21px;
+  animation: frame-twinkle 1.7s ease-in-out 0.8s infinite alternate;
+}
+
+@keyframes frame-twinkle {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- Lopende lichtjes: marquee bulbs that take turns */
+.avatar-frame.frame-lichtjes {
+  --fw: 8px;
+  border-color: #3a2412;
+}
+
+/* Two sets of bulbs along the border that light up in turns */
+.avatar-frame.frame-lichtjes::before {
+  background:
+    radial-gradient(circle at 4px 4px, #fff6c4 0 1px, #ffcf3a 1.8px, #d98a00 2.6px, transparent 3.2px) 0 0 / 16px 16px,
+    radial-gradient(circle at 12px 12px, #fff6c4 0 1px, #ffcf3a 1.8px, #d98a00 2.6px, transparent 3.2px) 0 0 / 16px 16px;
+  animation: frame-bulbs 1s steps(2, jump-none) infinite;
+}
+
+.avatar-frame.frame-lichtjes::after {
+  background:
+    radial-gradient(circle at 12px 4px, #fff6c4 0 1px, #ffcf3a 1.8px, #d98a00 2.6px, transparent 3.2px) 0 0 / 16px 16px,
+    radial-gradient(circle at 4px 12px, #fff6c4 0 1px, #ffcf3a 1.8px, #d98a00 2.6px, transparent 3.2px) 0 0 / 16px 16px;
+  animation: frame-bulbs 1s steps(2, jump-none) 0.5s infinite;
+}
+
+@keyframes frame-bulbs {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ---- Glanzend goud: a gold border with a shine that sweeps across it */
+.avatar-frame.frame-glans {
+  --fw: 5px;
+}
+
+.avatar-frame.frame-glans::before {
+  background: linear-gradient(135deg, #fff3b0, #d4a017 25%, #fbe38a 50%, #b8860b 75%, #fff1a0);
+}
+
+.avatar-frame.frame-glans::after {
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.95) 50%, transparent 62%) 150% 0 / 250% 100% no-repeat;
+  animation: frame-sheen 2.8s ease-in-out infinite;
+}
+
+@keyframes frame-sheen {
+  60%,
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+/* ---- Water: a blue border with waves rolling along it */
+.avatar-frame.frame-water {
+  --fw: 6px;
+}
+
+.avatar-frame.frame-water::before {
+  background: linear-gradient(90deg, #2f86c9, #8fd3ff 25%, #2f86c9 50%, #8fd3ff 75%, #2f86c9);
+  background-size: 200% 100%;
+  animation: frame-waves 3s linear infinite;
+}
+
+@keyframes frame-waves {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---- Sneeuwval: an icy border, and snow falling over the photo */
+.avatar-frame.frame-sneeuwval {
+  --fw: 5px;
+}
+
+.avatar-frame.frame-sneeuwval::before {
+  background: linear-gradient(135deg, #ffffff, #cfe8ff 50%, #ffffff);
+}
+
+.avatar-frame.frame-sneeuwval::after {
+  inset: 0;
+  padding: 0;
+  -webkit-mask: none;
+  mask: none;
+  background:
+    radial-gradient(circle, #fff 0 1.6px, transparent 2.6px) 0 0 / 23px 29px,
+    radial-gradient(circle, #fff 0 1.1px, transparent 2px) 9px 5px / 17px 21px,
+    radial-gradient(circle, #fff 0 2px, transparent 3px) 4px 11px / 37px 41px;
+  animation: frame-snow 5s linear infinite;
+}
+
+@keyframes frame-snow {
+  to {
+    background-position:
+      -6px 29px,
+      4px 21px,
+      -10px 41px;
+  }
+}
+
+/* ---- Hartslag: pink, beating like a heart */
+.avatar-frame.frame-hartslag {
+  --fw: 5px;
+  animation: frame-beat 1.2s ease-in-out infinite;
+}
+
+.avatar-frame.frame-hartslag::before {
+  background: linear-gradient(135deg, #ff9ec4, #e8466a 50%, #ff9ec4);
+}
+
+@keyframes frame-beat {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 3px 0 rgba(232, 70, 106, 0.4);
+  }
+  15% {
+    transform: scale(1.06);
+    box-shadow: 0 0 10px 3px rgba(232, 70, 106, 0.7);
+  }
+  30% {
+    transform: scale(1);
+    box-shadow: 0 0 4px 0 rgba(232, 70, 106, 0.4);
+  }
+  45% {
+    transform: scale(1.04);
+    box-shadow: 0 0 8px 2px rgba(232, 70, 106, 0.6);
+  }
+}

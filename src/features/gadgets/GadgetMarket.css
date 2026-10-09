@@ -1,0 +1,396 @@
+/* The Gadgetmarkt (GadgetMarketPage.tsx, around it components/catalog) and the gadget picker on the profile (GadgetMarket.tsx) */
+
+
+/* How many of the gadget places (LIMITS.gadgets) are used */
+.gmk-meter {
+  display: grid;
+  gap: 3px;
+  min-width: 150px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.gmk-meter b {
+  color: var(--title);
+}
+
+.gmk-meter-bar {
+  overflow: hidden;
+  height: 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.gmk-meter-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #8fd36b, #4e9d33);
+  transition: width 0.3s;
+}
+
+.gmk-meter.full .gmk-meter-bar > span {
+  background: linear-gradient(to bottom, #f0a15a, #d0632a);
+}
+
+/* Just added: where it went */
+.gmk-added {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid #8fd36b;
+  border-radius: 8px;
+  background: color-mix(in srgb, #8fd36b 18%, var(--surface));
+}
+
+.gmk-added > span {
+  flex: 1;
+  min-width: 200px;
+}
+
+.gmk-added .icon-button {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.gmk-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gmk-search > .farm-icon {
+  position: absolute;
+  left: 8px;
+  pointer-events: none;
+}
+
+.gmk-search .text-box {
+  width: 220px;
+  padding-left: 30px;
+}
+
+.gmk-full {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, #f0a15a 18%, var(--surface));
+  font-size: 12px;
+}
+
+/* The shop window */
+.gmk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gmk-card {
+  --cat: #7a9fd0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--surface);
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s;
+}
+
+.gmk-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.gmk-card.cat-kasten {
+  --cat: #b0773f;
+}
+
+.gmk-card.cat-media {
+  --cat: #8a63c9;
+}
+
+.gmk-card.cat-jezelf {
+  --cat: #e0709e;
+}
+
+.gmk-card.cat-handig {
+  --cat: #e0b030;
+}
+
+.gmk-card.cat-kuddes {
+  --cat: #3f9a8f;
+}
+
+.gmk-card.cat-tools {
+  --cat: #4f81bd;
+}
+
+/* Voor Kuddes: which of your Kuddes a gadget goes to */
+.gmk-target {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.gmk-target select {
+  width: auto;
+  max-width: 100%;
+}
+
+.gmk-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 86px;
+  background:
+    radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--cat) 10%, var(--surface)) 0 30px, transparent 31px),
+    linear-gradient(135deg, color-mix(in srgb, var(--cat) 40%, var(--surface)), color-mix(in srgb, var(--cat) 15%, var(--surface)));
+}
+
+.gmk-art > .farm-icon {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+  transition: transform 0.15s;
+}
+
+.gmk-card:hover .gmk-art > .farm-icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.gmk-owned {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  padding: 2px 7px 2px 4px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: var(--title);
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.gmk-info {
+  flex: 1;
+  padding: 10px 12px 4px;
+}
+
+.gmk-info h3 {
+  margin: 0;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.gmk-cat {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cat) 20%, var(--surface));
+  color: var(--text);
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.gmk-info p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.gmk-card footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 12px;
+  font-size: 11px;
+}
+
+.gmk-card footer .muted {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.gmk-card footer .btn {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 12px;
+}
+
+.gmk-empty {
+  padding: 30px 0;
+  text-align: center;
+}
+
+.gmk-mine .gadget-list {
+  margin-top: 0;
+}
+
+/* On the Gadgetmarkt page, inside the list's box */
+.gmk-page .gmk-grid {
+  padding: 14px;
+}
+
+.gmk-page .gmk-full {
+  margin: 12px 14px 0;
+}
+
+.gmk-page .gmk-added {
+  margin: -4px 0 14px;
+}
+
+.gmk-mine-wrap {
+  padding: 12px 14px;
+}
+
+/* ------------------------------------------------------ The window on the profile */
+.gmk-search-list {
+  display: grid;
+  gap: 10px;
+}
+
+.gmk-search-list .gmk-search .text-box {
+  width: 100%;
+  font-size: 14px;
+}
+
+.gmk-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.gmk-chips button {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: 11px var(--font-body);
+  cursor: pointer;
+}
+
+.gmk-chips button.current {
+  border-color: var(--brand);
+  background: var(--tint-2);
+  font-weight: bold;
+}
+
+.gmk-rows {
+  display: grid;
+  gap: 4px;
+  max-height: min(52vh, 440px);
+  margin: 0;
+  padding: 2px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.gmk-rows button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--tint-1);
+  color: var(--text);
+  font: 12px var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.gmk-rows button > span:nth-child(2) {
+  display: grid;
+  flex: 1;
+  gap: 1px;
+}
+
+.gmk-rows b {
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.gmk-rows em {
+  color: #3d8a2b;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.gmk-rows-add {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.gmk-rows button.current {
+  border-color: var(--brand);
+  background: var(--tint-2);
+}
+
+.gmk-rows button.current .gmk-rows-add {
+  opacity: 1;
+}
+
+.gmk-rows button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.gmk-picker-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.gmk-picker-foot a {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font-weight: bold;
+}
+
+@media (max-width: 760px) {
+  .gmk-search,
+  .gmk-search .text-box {
+    width: 100%;
+  }
+}

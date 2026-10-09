@@ -1,0 +1,404 @@
+/* Blogs (/blogs, the blog page, the boxes on Home and profiles) */
+.blog-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-list > li + li {
+  border-top: 1px dotted var(--box-sctn-border);
+}
+
+.blog-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.blog-card.compact {
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.blog-thumb {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background: var(--tint-1);
+}
+
+.blog-card.compact .blog-thumb {
+  width: 36px;
+  height: 36px;
+}
+
+.blog-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blog-card-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.blog-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font: bold 14px var(--font-title);
+}
+
+.blog-card.compact h3 {
+  font-size: 12px;
+}
+
+.blog-card h3 a {
+  overflow: hidden;
+  color: var(--link);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blog-meta,
+.blog-counts {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.blog-snippet {
+  display: -webkit-box;
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.blog-counts {
+  display: flex;
+  gap: 10px;
+}
+
+.blog-counts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.blog-friends {
+  display: inline-flex;
+  flex: none;
+}
+
+/* The blog itself: a sheet of paper with the title in a handwriting-ish heading */
+.blog-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 0 12px;
+  align-items: start;
+}
+
+.blog-sheet .box-con {
+  padding: 18px 22px;
+}
+
+.blog-sheet h1 {
+  margin: 0 0 6px;
+  color: var(--title);
+  font: bold 24px/1.25 var(--font-title);
+}
+
+.blog-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.blog-byline .avatar-img {
+  border-radius: 4px;
+}
+
+.blog-byline b a {
+  color: var(--title);
+}
+
+.blog-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--tint-1);
+  color: var(--title-soft);
+  font-size: 11px;
+}
+
+.blog-body {
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.blog-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.blog-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.blog-tools .muted {
+  margin-right: auto;
+  font-size: 11px;
+}
+
+.blog-social {
+  margin-top: 10px;
+}
+
+/* Lists */
+.blogs-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 0 12px;
+  align-items: start;
+}
+
+.blogs-pager {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.blogs-intro {
+  margin: 0 0 10px;
+  font-size: 12px;
+}
+
+.blog-write {
+  width: 100%;
+  justify-content: center;
+}
+
+/* The editor */
+.blog-edit .text-box.blog-title {
+  width: 100%;
+  font: bold 18px var(--font-title);
+}
+
+.blog-edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.blog-edit-actions .danger {
+  margin-left: auto;
+}
+
+@media (max-width: 860px) {
+  .blog-page,
+  .blogs-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .blog-sheet .box-con {
+    padding: 14px;
+  }
+}
+
+/* The Blog gadget (BlogGadget.tsx); "dagboek": lined paper with a red margin and rings on top */
+.bg-gadget {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
+}
+
+.bg-diary {
+  position: relative;
+  padding: 18px 8px 8px 28px;
+  border: 1px solid #d9d2b8;
+  border-radius: 4px;
+  background:
+    linear-gradient(to right, transparent 21px, #e9a3a3 21px, #e9a3a3 22px, transparent 22px),
+    repeating-linear-gradient(to bottom, transparent 0 23px, #cfe0ef 23px 24px),
+    #fffdf6;
+  color: #3a3220;
+}
+
+.bg-rings {
+  position: absolute;
+  top: -6px;
+  right: 12px;
+  left: 12px;
+  height: 14px;
+  background: radial-gradient(circle at 50% 50%, #9aa3ad 0 3.5px, #59616a 4px 5px, transparent 5.5px) 0 0 / 22px 14px repeat-x;
+}
+
+.bg-stats {
+  margin: 0;
+}
+
+.bg-stats > div {
+  padding: 3px 2px;
+}
+
+.bg-stats b {
+  font-size: 15px;
+}
+
+.bg-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bg-stats span {
+  overflow: hidden;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-diary .bg-stats > div {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.bg-featured {
+  display: flex;
+  min-width: 0;
+  gap: 8px;
+  padding: 6px;
+  border: 1px dashed var(--box-border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: inherit;
+}
+
+.bg-featured:hover {
+  border-color: var(--link);
+  text-decoration: none;
+}
+
+.bg-featured > img {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.bg-featured > span {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  font-size: 11px;
+}
+
+.bg-featured b {
+  color: var(--link);
+  font: bold 13px var(--font-title);
+}
+
+.bg-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #b07a00;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.bg-snippet {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.bg-diary .bg-featured b,
+.bg-diary .bg-snippet {
+  color: #3a3220;
+}
+
+.bg-lines {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bg-lines li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  font-size: 12px;
+}
+
+.bg-lines a {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: #1d4f8a;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bg-date {
+  flex: none;
+  width: 44px;
+  color: #a05050;
+  font-size: 10px;
+}
+
+.bg-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  color: #8a7f66;
+  font-size: 10px;
+}
+
+.bg-foot {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bg-foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}

@@ -1,0 +1,52 @@
+{
+  "name": "kuddes",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c blue,green \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:web": "vite",
+    "dev:api": "tsx watch --env-file-if-exists=.env server/index.ts",
+    "start": "NODE_ENV=production tsx --env-file-if-exists=.env server/index.ts",
+    "build": "tsc -b && vite build",
+    "db:up": "docker compose up -d --wait",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file-if-exists=.env server/db/migrate.ts",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "admin": "tsx --env-file-if-exists=.env server/scripts/admin.ts",
+    "backup": "bash deploy/backup.sh"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "@tanstack/react-query": "^5.103.2",
+    "dompurify": "^3.4.16",
+    "drizzle-orm": "^0.45.3",
+    "fflate": "^0.8.3",
+    "hono": "^4.13.9",
+    "nodemailer": "^10.0.12",
+    "postgres": "^3.4.9",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "sharp": "^0.35.4",
+    "tsx": "^4.23.15",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/nodemailer": "^8.0.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^10.0.5",
+    "drizzle-kit": "^0.31.11",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}

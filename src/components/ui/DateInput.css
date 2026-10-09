@@ -1,0 +1,168 @@
+/* Dutch date fields (DateInput.tsx) */
+.di {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+}
+
+.di .di-text.text-box {
+  width: 11.5em;
+  min-width: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.di-pick {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  margin-left: -1px;
+  padding: 0;
+  border: 1px solid var(--btn-border);
+  border-bottom-color: var(--btn-border-dark);
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(to bottom, var(--surface) 0%, var(--tint-1) 50%, var(--tint-2) 100%);
+  cursor: pointer;
+}
+
+.di-pick:hover {
+  background: linear-gradient(to bottom, var(--surface) 0%, var(--tint-1) 60%, var(--tint-3) 100%);
+}
+
+.di-pick[aria-expanded='true'] {
+  background: linear-gradient(to bottom, var(--tint-3) 0%, var(--tint-2) 100%);
+}
+
+.di-dt {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.di-dt .di-time.text-box {
+  flex: none;
+  width: 5.5em;
+}
+
+.di .text-box[aria-invalid='true'],
+.di-time.text-box[aria-invalid='true'] {
+  border-color: #c0392b;
+}
+
+/* The calendar */
+.di-cal {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  width: 244px;
+  padding: 6px;
+  border: 1px solid var(--box-border);
+  border-radius: 5px;
+  background: var(--surface);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  font: 12px/16px var(--font-body);
+}
+
+.di-cal-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: -6px -6px 6px;
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--box-border);
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(to bottom, var(--box-hdr-top), var(--box-hdr-bottom));
+}
+
+.di-cal-head select {
+  flex: 1;
+  min-width: 0;
+  padding: 1px 2px;
+  border: 1px solid var(--btn-border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text);
+  font: 12px var(--font-body);
+}
+
+.di-cal-head select:last-of-type {
+  flex: 0 0 64px;
+}
+
+.di-cal-step {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--title);
+  font: bold 16px/1 var(--font-title);
+  cursor: pointer;
+}
+
+.di-cal-step:hover {
+  border-color: var(--btn-border);
+  background: var(--surface);
+}
+
+.di-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+
+.di-cal-day-name {
+  padding: 2px 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.di-cal-day {
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: var(--text);
+  font: 12px var(--font-body);
+  cursor: pointer;
+}
+
+.di-cal-day:hover:not(:disabled) {
+  border-color: var(--box-border);
+  background: var(--tint-1);
+}
+
+.di-cal-day.today {
+  border-color: var(--brand);
+  font-weight: bold;
+}
+
+.di-cal-day.selected {
+  border-color: var(--cta-border);
+  background: linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+  color: #fff;
+  font-weight: bold;
+}
+
+.di-cal-day:disabled {
+  color: var(--text-muted);
+  opacity: 0.4;
+  cursor: default;
+}
+
+.di-cal-foot {
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+  margin-top: 4px;
+  border-top: 1px solid var(--box-border);
+}

@@ -1,0 +1,208 @@
+/* Kuddes Paint (PaintPage.tsx): the canvas on Paint's grey-blue workspace */
+.pnt-workspace {
+  padding: 8px;
+  background: #cad6e6;
+}
+
+.pnt-sheet {
+  position: relative;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.35);
+  background: #fff;
+}
+
+.pnt-canvas,
+.pnt-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+.pnt-overlay {
+  pointer-events: none;
+}
+
+.pnt-canvas {
+  cursor: crosshair;
+}
+
+.pnt-canvas.tool-tekst {
+  cursor: text;
+}
+
+.pnt-canvas.tool-emmer,
+.pnt-canvas.tool-pipet {
+  cursor: cell;
+}
+
+.pnt-text {
+  position: absolute;
+  z-index: 2;
+  min-width: 140px;
+  min-height: 2em;
+  padding: 0;
+  border: 1px dashed #3c7fb1;
+  outline: 0;
+  background: transparent;
+  font-family: Calibri, Carlito, sans-serif;
+  line-height: 1.2;
+  resize: both;
+}
+
+.pnt-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+/* Tools: a 3 × 2 grid of small buttons */
+.pnt-tools {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 2px;
+}
+
+.pnt-shapes {
+  display: grid;
+  grid-template-columns: repeat(4, 26px);
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--ofc-group-border);
+  background: #fff;
+}
+
+.pnt-shape {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+}
+
+.pnt-shape:hover,
+.pnt-shape.on {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-bottom));
+}
+
+.pnt-shape svg,
+.pnt-shape span,
+.pnt-shape span svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.pnt-sizes {
+  display: grid;
+  gap: 1px;
+  width: 64px;
+}
+
+.pnt-sizes button {
+  display: flex;
+  align-items: center;
+  height: 12px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+}
+
+.pnt-sizes button:hover,
+.pnt-sizes button.on {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-bottom));
+}
+
+.pnt-sizes i {
+  flex: 1;
+  min-height: 1px;
+  background: #000;
+}
+
+/* Colour 1 and 2, with the palette next to them */
+.pnt-swatch {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: inherit;
+  font-size: 11px;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.pnt-swatch.on {
+  border-color: var(--ofc-hover-border);
+  background: linear-gradient(var(--ofc-hover-top), var(--ofc-hover-bottom));
+}
+
+.pnt-swatch i {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #000;
+  outline: 2px solid #fff;
+  outline-offset: -3px;
+}
+
+.pnt-palette {
+  display: grid;
+  grid-template-columns: repeat(10, 18px);
+  gap: 3px;
+  align-content: center;
+}
+
+.pnt-palette button {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid #7f8ea3;
+  cursor: pointer;
+}
+
+.pnt-palette button:hover {
+  border-color: #e5a200;
+}
+
+.pnt-edit-color {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  width: 56px;
+  font-size: 11px;
+  line-height: 1.1;
+  text-align: center;
+  cursor: pointer;
+}
+
+.pnt-edit-color input {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.pnt-resize {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.pnt-resize input[type="number"] {
+  width: 70px;
+}

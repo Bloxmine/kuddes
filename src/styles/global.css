@@ -1,0 +1,556 @@
+/*
+ * Kuddes design tokens: Kuddes' colours on the glossy Hyves-era look
+ * (gradients, bevelled buttons, bordered boxes). A theme (themes.css) only
+ * sets the brand colours and surfaces; tints and borders are mixed from them.
+ */
+:root {
+  --font-body: Verdana, Geneva, sans-serif;
+  --font-title: 'Trebuchet MS', 'Fira Sans', sans-serif;
+
+  /* Brand colour (header, buttons) */
+  --brand: #4ba3e0;
+  --brand-light: #8ccbf5;
+  --brand-dark: #1f6fb0;
+  --brand-darker: #185a91;
+  --link: #1d74bd;
+  --accent: var(--link);
+  --highlight: #f26b6b;
+
+  /* Text */
+  --text: #1b2733;
+  --title: #13324f;
+  --title-soft: color-mix(in srgb, var(--title) 75%, var(--surface));
+  --text-muted: color-mix(in srgb, var(--text) 50%, var(--surface));
+  --text-date: var(--text-muted);
+
+  /* Surfaces: cards, and tints of the brand colour on top of them */
+  --surface: #ffffff;
+  --page-bg: #ffffff;
+  --tint-1: color-mix(in srgb, var(--brand) 6%, var(--surface));
+  --tint-2: color-mix(in srgb, var(--brand) 11%, var(--surface));
+  --tint-3: color-mix(in srgb, var(--brand) 18%, var(--surface));
+  --alt-bg: var(--tint-2);
+  --box-hdr-top: var(--tint-1);
+  --box-hdr-bottom: color-mix(in srgb, var(--brand) 24%, var(--surface));
+  --box-border: color-mix(in srgb, var(--brand) 30%, var(--surface));
+  --box-hdr-border: color-mix(in srgb, var(--brand) 36%, var(--surface));
+  --box-sctn-border: color-mix(in srgb, var(--brand) 20%, var(--surface));
+  --row-border: var(--box-sctn-border);
+  --focus-ring: color-mix(in srgb, var(--brand) 30%, transparent);
+
+
+  /* Grey bevelled buttons */
+  --btn-border: color-mix(in srgb, var(--text) 30%, var(--surface));
+  --btn-border-dark: color-mix(in srgb, var(--text) 42%, var(--surface));
+
+  /* Big glossy buttons */
+  --cta-top: #5fb3ec;
+  --cta-bottom: var(--brand-dark);
+  --cta-border: var(--brand-darker);
+  --cta-shadow: color-mix(in srgb, var(--brand-darker) 80%, black);
+
+  /* Logo accent colours */
+  --logo-purple: #8b7fd6;
+  --logo-green: #5fc39a;
+  --logo-red: #f26b6b;
+
+  --page-width: 1180px;
+  --radius: 10px;
+}
+
+/* Messages and notes, mixed from the text and surface colours so dark and own
+   themes get readable versions without their own values. Also on .skinned:
+   a member's own profile or Kudde design has its own (often light) colours,
+   and the mix has to be made again with those. */
+:root,
+.skinned {
+  --error-text: color-mix(in srgb, #c43c1c 60%, var(--text));
+  --success-text: color-mix(in srgb, #2e7d1e 55%, var(--text));
+  --success-bg: color-mix(in srgb, #7ac555 14%, var(--surface));
+  --success-border: color-mix(in srgb, #7ac555 45%, var(--surface));
+  --note-text: color-mix(in srgb, #7a5a00 55%, var(--text));
+  --note-bg: color-mix(in srgb, #f7d84a 20%, var(--surface));
+  --note-border: color-mix(in srgb, #e0b93a 50%, var(--surface));
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+fieldset,
+input,
+textarea,
+p,
+blockquote,
+table,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  padding: 0 0 40px;
+  /* --page-image: an own theme's background image (shared/customization.ts) */
+  background:
+    var(--page-image, linear-gradient(transparent, transparent)),
+    linear-gradient(to bottom, var(--tint-3) 0, var(--tint-1) 320px, var(--page-bg) 700px) no-repeat,
+    var(--page-bg);
+  color: var(--text);
+  font: 11px/1.65 var(--font-body);
+  /* Text size preference (src/lib/preferences.ts) */
+  zoom: var(--zoom, 1);
+}
+
+/* "Compact": less space around and inside boxes */
+[data-compact] .box-con {
+  --box-pad-y: 6px;
+  --box-pad-x: 9px;
+}
+
+[data-compact] .cols,
+[data-compact] .layout-grid {
+  gap: 8px;
+}
+
+[data-compact] .box {
+  margin-bottom: 8px;
+}
+
+/* "Minder beweging": no animations, fades or smooth scrolling */
+[data-reduce-motion] *,
+[data-reduce-motion] *::before,
+[data-reduce-motion] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 28px;
+  color: var(--title);
+  font-family: var(--font-title);
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.date {
+  color: var(--text-date);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Page frame */
+.page {
+  width: 100%;
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 8px;
+}
+
+@media (min-width: 1196px) {
+  .page {
+    padding: 0;
+  }
+}
+
+.page-con {
+  margin-top: 12px;
+}
+
+/* Right-hand columns that stay in view while you scroll (src/lib/stickySides.ts sets when, and how far down) */
+.sticky-side[data-side-sticky] {
+  position: sticky;
+  top: var(--side-top, 14px);
+  align-self: start;
+}
+
+/* Two-column "w8" wrapper: 683px main column + 300px sidebar */
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Plain text field, Hyves style */
+.text-box {
+  border: 1px solid var(--btn-border);
+  border-top-color: var(--btn-border-dark);
+  border-radius: 2px;
+  padding: 3px 5px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 11px;
+}
+
+.text-box:focus {
+  outline: 0;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* Forms */
+.form-error {
+  color: var(--error-text);
+  font-size: 11px;
+}
+
+.form-notice {
+  color: var(--note-text);
+  padding: 6px 10px;
+  border: 1px solid var(--note-border);
+  border-radius: 3px;
+  background: var(--note-bg);
+  font-size: 11px;
+}
+
+.form-success {
+  color: var(--success-text);
+  padding: 6px 10px;
+  border: 1px solid var(--success-border);
+  border-radius: 3px;
+  background: var(--success-bg);
+  font-size: 11px;
+}
+
+.field {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 10px;
+}
+
+.field > span {
+  color: var(--title-soft);
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.field .hint {
+  color: var(--text-muted);
+  font-weight: normal;
+  font-size: 10px;
+}
+
+.field .text-box {
+  width: 100%;
+  font-size: 12px;
+  padding: 4px 6px;
+}
+
+.field textarea.text-box {
+  resize: vertical;
+}
+
+.field.has-error .text-box {
+  border-color: var(--error-text);
+}
+
+.empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+a.btn {
+  text-decoration: none;
+}
+
+.page-con h1 {
+  font-size: 26px;
+}
+
+.news-article h1 {
+  margin-bottom: 4px;
+}
+
+.news-article p {
+  max-width: 680px;
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* A text field with a button next to it */
+.inline-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inline-form .text-box {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+/* Farm-Fresh icons next to text */
+.farm-icon {
+  display: inline-block;
+  vertical-align: -3px;
+}
+
+/* A small icon-only button, e.g. the bin to delete a post */
+/* A button that looks like a link */
+.link-button {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.link-button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.link-button:disabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  padding: 1px 3px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  vertical-align: middle;
+  cursor: pointer;
+  opacity: 0.75;
+}
+
+.icon-button:hover:not(:disabled) {
+  border-color: var(--box-border);
+  background: var(--tint-1);
+  opacity: 1;
+}
+
+.icon-button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+/*
+ * An own theme with a photo behind the page (data-page-image, src/lib/theme.ts):
+ * the text that stands on the page itself (titles, intros, tab rows) gets a
+ * see-through label behind it, like the name plate on a profile, so it stays
+ * readable on any photo. Text inside boxes already has its own background.
+ */
+:root[data-page-image]
+  :is(
+    main.page h1:not(.box *, .visitor *, .profile-hdr *, .wlm-page *),
+    main.page h1:not(.box *, .visitor *, .profile-hdr *) + p,
+    main.page > p,
+    .page-intro,
+    .agenda-intro,
+    .messages-privacy,
+    .timeline-tabs,
+    .now-nl-tab,
+    .vt-logo,
+    .vt-account,
+    .vt-tabs
+  ) {
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px 12px 3px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+:root[data-page-image] main.page h1 + p {
+  margin-top: 4px;
+}
+
+:root[data-page-image] .now-nl-tab {
+  padding: 2px 8px;
+  opacity: 1;
+}
+
+/* "@sanne" in a post (src/lib/richText.tsx) */
+a.mention {
+  font-weight: bold;
+}
+
+/* The page's heading and links that the server puts in the HTML for search
+   engines (server/lib/seo.ts renderBody); visitors see it only until the app starts */
+.ssr-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  color: var(--text);
+  font: 14px/1.6 var(--font-body);
+}
+
+.ssr-logo a {
+  color: var(--brand-dark);
+  font: bold 28px var(--font-title);
+  text-decoration: none;
+}
+
+.ssr-page p {
+  margin: 0 0 10px;
+}
+
+.ssr-page h1 {
+  margin: 8px 0 12px;
+  color: var(--title);
+  font: bold 22px var(--font-title);
+}
+
+.ssr-page ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Bullet points in posts, knuffels and reactions ("- " lines, src/lib/richText.tsx).
+   A span shown as a list item, so it may sit inside a <p> */
+.rt-li {
+  display: list-item;
+  margin-left: 1.4em;
+  list-style: disc outside;
+}
+
+.rt-li::marker {
+  color: var(--link);
+}
+
+/* A neon name: on, with a short flicker now and then */
+@keyframes name-neon {
+  0%,
+  7%,
+  9%,
+  11%,
+  55%,
+  57.5%,
+  100% {
+    opacity: 1;
+  }
+  8%,
+  10% {
+    opacity: 0.55;
+  }
+  56% {
+    opacity: 0.75;
+  }
+}
+
+/* A design's own fonts (BODY_FONTS, set as --font-body and --font-title by skinVars) */
+.profile.skinned,
+.kudde-page.skinned {
+  font-family: var(--font-body);
+}
+
+/* "Bot" next to a bot account's name (src/components/ui/BotBadge.tsx) */
+.bot-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 5px;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background: var(--tint-2);
+  color: var(--title);
+  font: bold 9px/1.6 var(--font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+/* The quiet mode's line at the top of every page (QuietBanner.tsx) */
+.quiet-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--tint-2);
+  color: var(--title);
+}

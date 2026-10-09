@@ -1,0 +1,345 @@
+/* News posts (NewsPage.tsx) and what only the news has in its text (ForumBody with news) */
+/*
+ * A post as a page from "De Kuddes Courant" (the paper look of the news box
+ * on Home, NewsCard.css): a centred head with the rubric, a big serif headline
+ * and the lede, the photo under it, and the text in serif, in two columns on
+ * wide screens, starting with a drop cap.
+ */
+.courant-article {
+  --paper-serif: Georgia, 'Times New Roman', serif;
+}
+
+.news-article.courant-article p {
+  max-width: none;
+}
+
+.courant-head {
+  max-width: 760px;
+  margin: 6px auto 14px;
+  text-align: center;
+}
+
+.courant-head .courant-rubric {
+  display: inline-block;
+  padding: 0 10px 2px;
+  border-bottom: 1px solid var(--box-sctn-border);
+  font-size: 14px;
+}
+
+.news-article.courant-article h1 {
+  margin: 8px 0 10px;
+  color: var(--title);
+  font: bold 38px/1.12 var(--paper-serif);
+  letter-spacing: -0.3px;
+  text-wrap: balance;
+}
+
+.courant-article .courant-lede {
+  margin: 0 auto 10px;
+  color: var(--title-soft);
+  font: italic 17px/1.5 var(--paper-serif);
+  text-wrap: pretty;
+}
+
+.courant-article .courant-byline {
+  margin: 0;
+  color: var(--text-muted);
+  font: 12px var(--font-title);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.courant-byline a {
+  font-weight: bold;
+}
+
+.courant-photo {
+  margin: 0 0 16px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--box-sctn-border);
+}
+
+.courant-photo img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  border: 1px solid var(--box-border);
+  object-fit: cover;
+  filter: sepia(0.1);
+}
+
+/* A short piece stays one column at a comfortable width, under the headline */
+.courant-text:not(.columns) {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* The text: serif, with a column rule between two columns where there's room */
+.courant-article .news-body {
+  font-family: var(--paper-serif);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.courant-article .news-body p {
+  font-size: inherit;
+  line-height: inherit;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.courant-article .news-body > p:first-child::first-letter {
+  float: left;
+  margin: 4px 7px 0 0;
+  color: var(--title);
+  font: bold 52px/0.8 var(--paper-serif);
+}
+
+.courant-article .news-body :is(h2, h3, h4) {
+  color: var(--title);
+  font-family: var(--paper-serif);
+  break-after: avoid;
+}
+
+.courant-article .news-body :is(.news-figure, .news-youtube, .news-button, blockquote, ul, ol) {
+  break-inside: avoid;
+}
+
+@media (min-width: 900px) {
+  /* A block, not the forum's grid (columns don't work on a grid); the grid's gap becomes margins */
+  .courant-text.columns .news-body {
+    display: block;
+    columns: 2;
+    column-gap: 32px;
+    column-rule: 1px solid var(--box-sctn-border);
+  }
+
+  .courant-text.columns .news-body > * {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+}
+
+.courant-end {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 2px solid var(--title);
+}
+
+@media (max-width: 760px) {
+  .news-article.courant-article h1 {
+    font-size: 28px;
+  }
+
+  .courant-article .courant-lede {
+    font-size: 15px;
+  }
+
+  .courant-article .news-body p {
+    text-align: left;
+  }
+}
+
+.news-body {
+  margin: 10px 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.news-figure {
+  margin: 14px 0;
+  text-align: center;
+}
+
+.news-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.news-figure figcaption {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.news-youtube {
+  position: relative;
+  max-width: 640px;
+  margin: 14px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+  aspect-ratio: 16 / 9;
+}
+
+.news-youtube iframe,
+.news-youtube button,
+.news-youtube img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.news-youtube button {
+  position: relative;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.news-youtube img {
+  object-fit: cover;
+}
+
+.news-youtube-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 50px;
+  border-radius: 14px;
+  background: #e8211a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: translate(-50%, -50%);
+  transition: transform 0.12s;
+}
+
+.news-youtube-play::after {
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  border: 12px solid transparent;
+  border-right: 0;
+  border-left: 20px solid #fff;
+  content: '';
+  transform: translate(-50%, -50%);
+}
+
+.news-youtube button:hover .news-youtube-play {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.news-button {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.news-button .btn {
+  padding: 8px 22px;
+  font-size: 14px;
+}
+
+/* Respect under the post */
+.news-respect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  margin: 18px 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 10px;
+  background: var(--tint-1);
+}
+
+.news-respect .social-respect {
+  padding: 4px 14px;
+  border-color: var(--note-border);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.news-respect-count {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.news-respecters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.news-respecters .avatar-img {
+  width: 26px;
+  height: 26px;
+}
+
+/* The list of all news */
+.news-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.news-list-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.news-list-item:hover {
+  border-color: var(--brand);
+  background: var(--tint-1);
+  text-decoration: none;
+}
+
+.news-list-item > img,
+.news-list-icon {
+  flex: none;
+  width: 150px;
+  height: 84px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.news-list-icon {
+  display: grid;
+  place-items: center;
+  background: var(--tint-2);
+}
+
+.news-list-text {
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.news-list-text b {
+  color: var(--link);
+  font: bold 15px var(--font-title);
+}
+
+.news-label {
+  color: var(--brand-dark);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .news-list-item > img,
+  .news-list-icon {
+    width: 96px;
+    height: 64px;
+  }
+}

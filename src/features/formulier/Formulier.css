@@ -1,0 +1,486 @@
+/* Kuddes Formulieren: the builder (FormulierPage.tsx, in the Office window) and the page that's filled in (FormFillPage.tsx, in the site's colours) */
+.frm-workspace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: #e8edf5;
+}
+
+.frm-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid #b6c6db;
+}
+
+.frm-tabs button {
+  padding: 6px 18px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: #4a6386;
+  font: bold 13px "Segoe UI", Tahoma, sans-serif;
+  cursor: pointer;
+}
+
+.frm-tabs button.on {
+  border-color: #4f81bd;
+  color: #1e395b;
+}
+
+.frm-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  margin: 0;
+  color: #1e395b;
+  font-size: 12px;
+}
+
+.frm-share a {
+  overflow-wrap: anywhere;
+}
+
+.frm-share.closed {
+  color: #8a5a00;
+}
+
+.frm-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(100%, 720px);
+}
+
+.frm-card {
+  display: grid;
+  gap: 8px;
+  padding: 14px 18px;
+  border: 1px solid #c5d2e3;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #222;
+  font: 13px Calibri, Carlito, sans-serif;
+  text-align: left;
+}
+
+.frm-head {
+  border-top: 8px solid #4f81bd;
+}
+
+.frm-title {
+  padding: 2px 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  outline: 0;
+  color: #1e395b;
+  font: bold 24px Calibri, Carlito, sans-serif;
+}
+
+.frm-desc,
+.frm-help-input {
+  padding: 2px 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  outline: 0;
+  color: #444;
+  font: 13px Calibri, Carlito, sans-serif;
+  resize: vertical;
+}
+
+.frm-title:focus,
+.frm-desc:focus,
+.frm-help-input:focus,
+.frm-title:hover,
+.frm-desc:hover,
+.frm-help-input:hover {
+  border-bottom-color: #9fb4cd;
+}
+
+.frm-preview {
+  cursor: pointer;
+}
+
+.frm-preview:hover {
+  border-color: #6f9fd8;
+}
+
+/* What it looks like, not something to click in */
+.frm-preview-field {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.frm-editing {
+  border-left: 5px solid #4f81bd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.frm-q-title {
+  margin: 0;
+  color: #1e395b;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.frm-req {
+  color: #c0392b;
+}
+
+.frm-help {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+}
+
+.frm-q-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.frm-q-input {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 8px;
+  border: 0;
+  border-bottom: 2px solid #9fb4cd;
+  outline: 0;
+  background: #f4f7fb;
+  font: bold 15px Calibri, Carlito, sans-serif;
+}
+
+.frm-q-input:focus {
+  border-color: #4f81bd;
+}
+
+.frm-q-row select,
+.frm-scale-set select {
+  padding: 4px;
+  border: 1px solid #9fb4cd;
+  border-radius: 3px;
+  background: #fff;
+  font: 13px "Segoe UI", Tahoma, sans-serif;
+}
+
+.frm-options {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.frm-options-keuze {
+  list-style: circle;
+}
+
+.frm-options-vinkjes {
+  list-style: square;
+}
+
+.frm-options li > input {
+  width: calc(100% - 30px);
+  padding: 3px 2px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  outline: 0;
+  font: 13px Calibri, Carlito, sans-serif;
+}
+
+.frm-options li > input:hover,
+.frm-options li > input:focus {
+  border-bottom-color: #9fb4cd;
+}
+
+.frm-options li > button,
+.frm-q-tools button,
+.frm-del {
+  padding: 3px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+}
+
+.frm-options li > button:hover,
+.frm-q-tools button:hover:not(:disabled),
+.frm-del:hover {
+  background: #e3eefa;
+}
+
+.frm-q-tools button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.frm-add-option {
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: #1f4e8c;
+  font: 13px Calibri, Carlito, sans-serif;
+  cursor: pointer;
+}
+
+.frm-add-option:hover {
+  text-decoration: underline;
+}
+
+.frm-q-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding-top: 8px;
+  border-top: 1px solid #e3e9f1;
+}
+
+.frm-required {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 10px;
+  padding-left: 12px;
+  border-left: 1px solid #e3e9f1;
+}
+
+.frm-add {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.frm-add .btn,
+.frm-answers-tools .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ------------------------------------------------------------ the fields (builder preview and fill page) */
+.frm-input {
+  width: 100%;
+  font-size: 13px;
+}
+
+.frm-short {
+  width: auto;
+  min-width: 180px;
+}
+
+.frm-choices {
+  display: grid;
+  gap: 6px;
+}
+
+.frm-workspace .frm-choices label {
+  color: #222;
+}
+
+.frm-choices label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.frm-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.frm-scale label {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------ answers */
+.frm-answers-head h2 {
+  margin: 0;
+  color: #1e395b;
+  font: bold 20px Calibri, Carlito, sans-serif;
+}
+
+.frm-answers-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.frm-answers-tools .btn.on {
+  border-color: #4f81bd;
+  box-shadow: inset 0 0 0 1px #4f81bd;
+}
+
+.frm-empty {
+  color: #4a6386;
+  font-style: italic;
+}
+
+.frm-empty.error {
+  color: #c0392b;
+}
+
+.frm-bars {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.frm-bars li {
+  display: grid;
+  grid-template-columns: minmax(80px, 30%) 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.frm-bar-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.frm-bar {
+  height: 16px;
+  border-radius: 2px;
+  background: #eef2f8;
+}
+
+.frm-bar i {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(#7aa3d6, #4f81bd);
+}
+
+.frm-bar-count {
+  color: #555;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.frm-numbers {
+  margin: 0;
+}
+
+.frm-texts {
+  display: grid;
+  gap: 3px;
+  max-height: 260px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.frm-texts li {
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: #f4f7fb;
+  overflow-wrap: anywhere;
+}
+
+.frm-table-wrap {
+  overflow-x: auto;
+  padding: 0;
+}
+
+.frm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.frm-table th,
+.frm-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid #e3e9f1;
+  text-align: left;
+  vertical-align: top;
+}
+
+.frm-table th {
+  background: linear-gradient(#f4f7fb, #dfe7f1);
+  color: #1e395b;
+  white-space: nowrap;
+}
+
+.frm-table td {
+  max-width: 260px;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------ the fill page */
+.frm-fill {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.frm-fill-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.frm-fill-head h1 {
+  margin: 0;
+}
+
+.frm-fill-by {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.frm-fill-desc {
+  margin: 0 0 12px;
+  white-space: pre-line;
+}
+
+.frm-fill-form {
+  display: grid;
+  gap: 10px;
+}
+
+.frm-fill-q {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--box-bg, var(--surface));
+}
+
+.frm-fill-q.missing {
+  border-color: var(--error-text);
+}
+
+.frm-fill-q legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  color: var(--title-soft);
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.frm-fill .frm-help {
+  color: var(--text-muted);
+}
+
+.frm-fill-send {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

@@ -1,0 +1,426 @@
+/* Mijn thema's and the theme editor (ThemeStudio.tsx) */
+.ts-library {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.ts-library-hdr {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ts-library-hdr h3 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.ts-backup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ts-backup > span {
+  flex: 1 1 220px;
+}
+
+.ts-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ts-card {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.ts-card.current {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 35%, transparent);
+}
+
+.ts-card.editing {
+  border-style: dashed;
+}
+
+.ts-card-pick {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.ts-card-name {
+  display: grid;
+  min-width: 0;
+}
+
+.ts-card-name b {
+  overflow: hidden;
+  color: var(--title);
+  font: bold 13px var(--font-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ts-card-name small {
+  font-size: 11px;
+}
+
+.ts-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+/* The icon-only buttons (edit, copy, share, gallery, remove) stay small, so they fit on one row */
+.ts-card-actions .btn:not(.btn-cta):has(> .farm-icon:only-child) {
+  min-width: 0;
+  padding-right: 7px;
+  padding-left: 7px;
+}
+
+.ts-badge {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  margin-right: auto;
+  color: var(--success-text);
+  font: bold 12px var(--font-title);
+}
+
+.ts-new button {
+  display: grid;
+  gap: 4px;
+  place-items: center;
+  align-content: center;
+  width: 100%;
+  min-height: 150px;
+  border: 2px dashed var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+  color: var(--title);
+  text-align: center;
+  cursor: pointer;
+}
+
+.ts-new button:hover {
+  border-color: var(--brand);
+}
+
+.ts-new small {
+  font-size: 11px;
+}
+
+/* The small site picture */
+.theme-mini {
+  display: grid;
+  grid-template-rows: 14px 1fr;
+  gap: 6px;
+  height: 92px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  background-size: cover;
+}
+
+.theme-mini.big {
+  grid-template-rows: 26px 1fr;
+  height: 190px;
+}
+
+.theme-mini-bar {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.theme-mini-bar i {
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.theme-mini.big .theme-mini-bar i {
+  width: 34px;
+  height: 6px;
+}
+
+.theme-mini-box {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 4px;
+  margin: 0 10px 10px;
+  overflow: hidden;
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+.theme-mini-hdr {
+  min-height: 9px;
+  padding: 0 6px;
+  font: bold 12px var(--font-title);
+  line-height: 20px;
+}
+
+.theme-mini-text {
+  display: grid;
+  gap: 3px;
+  align-content: start;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.theme-mini-text b {
+  display: block;
+  width: 70%;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.theme-mini-text b + b {
+  width: 40%;
+}
+
+.theme-mini-btn {
+  justify-self: start;
+  min-width: 34px;
+  min-height: 9px;
+  margin: 0 6px 6px;
+  padding: 0 8px;
+  border-radius: 4px;
+  color: #fff;
+  font: bold 11px var(--font-title);
+  line-height: 20px;
+}
+
+/* The editor */
+.ts-editor {
+  margin-top: 14px;
+  padding: 12px;
+  border: 2px solid var(--brand);
+  border-radius: 10px;
+  background: var(--tint-1);
+}
+
+.ts-editor-hdr {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.ts-name {
+  display: grid;
+  flex: 1 1 200px;
+  gap: 2px;
+}
+
+.ts-undo {
+  display: flex;
+  gap: 4px;
+}
+
+.ts-sitepreview {
+  font-size: 12px;
+}
+
+.ts-state {
+  margin-left: auto;
+  color: var(--success-text);
+  font: bold 12px var(--font-title);
+}
+
+.ts-state.dirty {
+  color: var(--note-text);
+}
+
+.ts-editor-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 14px;
+  align-items: start;
+}
+
+.ts-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.ts-tabs button {
+  padding: 5px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.ts-tabs button.current {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.ts-section {
+  padding: 10px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.ts-starters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ts-starters button {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 4px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+.ts-starters button:hover {
+  border-color: var(--brand);
+}
+
+.ts-side {
+  position: sticky;
+  top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.ts-checks {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid var(--box-sctn-border);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 11.5px;
+  list-style: none;
+}
+
+.ts-checks li {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.ts-checks small {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ts-checks li.bad {
+  color: var(--error-text);
+}
+
+.ts-checks-hint {
+  margin: 0;
+  font-size: 11px;
+}
+
+.ts-editor-actions {
+  margin-top: 12px;
+}
+
+.ts-code {
+  width: 100%;
+  font-family: monospace;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.ts-import-preview {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.unsaved-question p {
+  margin: 0 0 12px;
+}
+
+@media (max-width: 760px) {
+  .ts-editor-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ts-side {
+    position: static;
+    order: -1;
+  }
+
+  .theme-mini.big {
+    height: 140px;
+  }
+}
+
+/* A profile design's small picture (DesignStudio.tsx): the title bar with a name */
+.design-mini {
+  grid-template-rows: 26px 1fr;
+}
+
+.design-mini-bar {
+  display: flex;
+  align-items: center;
+  margin: 8px 10px 0;
+  padding: 0 8px;
+  border-radius: 4px;
+}
+
+.design-mini-bar b {
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.ds-intro {
+  margin: -4px 0 10px;
+  font-size: 12px;
+}

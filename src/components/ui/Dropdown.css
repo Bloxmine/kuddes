@@ -1,0 +1,117 @@
+.dropdown {
+  position: relative;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 100%;
+  z-index: 30;
+  min-width: 200px;
+  padding: 6px 0;
+  border: 1px solid var(--box-border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--surface);
+  box-shadow: 0 6px 16px rgba(19, 50, 79, 0.18);
+  text-align: left;
+}
+
+.dropdown-left {
+  left: 0;
+}
+
+.dropdown-right {
+  right: 0;
+}
+
+.dropdown-panel a,
+.dropdown-panel .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 14px;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: 12px var(--font-body);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dropdown-panel a:hover,
+.dropdown-panel .dropdown-item:hover {
+  background: var(--alt-bg);
+  text-decoration: none;
+}
+
+.dropdown-panel .dropdown-item[aria-current='true'] {
+  font-weight: bold;
+  color: var(--title);
+}
+
+.dropdown-divider {
+  margin: 6px 0;
+  border-top: 1px solid var(--box-sctn-border);
+}
+
+.dropdown-note {
+  padding: 5px 14px;
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/*
+ * A speech bubble (bubble on Dropdown): it pops out of the button, rounded,
+ * with a tail pointing at it (--tail-x is measured when it opens).
+ */
+.dropdown-panel.bubble {
+  margin-top: 10px;
+  border-radius: 14px;
+  box-shadow:
+    0 10px 28px rgba(19, 50, 79, 0.22),
+    0 2px 6px rgba(19, 50, 79, 0.1);
+  transform-origin: var(--tail-origin, 50%) -10px;
+  animation: bubble-pop 0.22s cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+
+/* The tail: a border-coloured triangle with a surface-coloured one on it */
+.dropdown-panel.bubble::before,
+.dropdown-panel.bubble::after {
+  position: absolute;
+  left: var(--tail-x, 24px);
+  width: 0;
+  height: 0;
+  border: 9px solid transparent;
+  border-top: 0;
+  content: '';
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.dropdown-panel.bubble::before {
+  top: -10px;
+  border-bottom: 10px solid var(--box-border);
+}
+
+.dropdown-panel.bubble::after {
+  top: -8px;
+  border-bottom: 9px solid var(--bubble-tail, var(--surface));
+}
+
+@keyframes bubble-pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-panel.bubble {
+    animation: none;
+  }
+}

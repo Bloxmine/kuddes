@@ -1,0 +1,39 @@
+/* Beheer → Automatiseringen (AutomationsAdmin.tsx); the rest comes from the bots' styles */
+.auto-list {
+  margin-top: 10px;
+}
+
+.auto-conds {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.auto-away {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.auto-step {
+  font-weight: bold;
+  color: var(--title);
+}
+
+.auto-tools {
+  display: flex;
+  margin-left: auto;
+}
+
+.auto-input {
+  width: auto;
+  min-width: 0;
+  flex: 1 1 160px;
+}
+
+@media (max-width: 700px) {
+  .auto-conds {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "bots" ADD COLUMN "options" jsonb DEFAULT '{"acceptFriends":true,"readMessages":true,"openToAll":true,"delaySeconds":0,"maxPerHour":30}'::jsonb NOT NULL;

@@ -1,0 +1,2 @@
+ALTER TABLE "statuses" ADD COLUMN "glitter_id" integer;--> statement-breakpoint
+ALTER TABLE "statuses" ADD CONSTRAINT "statuses_glitter_id_glitters_id_fk" FOREIGN KEY ("glitter_id") REFERENCES "public"."glitters"("id") ON DELETE set null ON UPDATE no action;

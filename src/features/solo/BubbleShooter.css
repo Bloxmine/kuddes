@@ -1,0 +1,55 @@
+/* Bellen schieten (BubbleShooter.tsx) */
+.bs {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.bs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.bs-stage {
+  position: relative;
+  width: min(100%, 440px);
+}
+
+.bs-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.bs-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  gap: 8px;
+  place-content: center;
+  justify-items: center;
+  border-radius: 12px;
+  background: rgba(10, 20, 40, 0.72);
+  color: #fff;
+  text-align: center;
+}
+
+.bs-overlay b {
+  font: bold 28px var(--font-title);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.bs-help {
+  max-width: 440px;
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+}

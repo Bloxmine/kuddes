@@ -1,0 +1,304 @@
+/* The Mindfulness gadget (MindfulnessGadget.tsx); --mf-a/--mf-b are the chosen colours */
+.mf {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+}
+
+.mf-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mf-a) 15%, var(--surface));
+}
+
+.mf-tabs button {
+  display: inline-flex;
+  flex: 1;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--title);
+  font: bold 11px var(--font-title);
+  cursor: pointer;
+}
+
+.mf-tabs button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mf-tabs button.current {
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Breathing */
+.mf-breath {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+}
+
+/* Everything stays inside the box, and long lines wrap */
+.mf-breath > *,
+.mf-mantra > *,
+.mf-feeling > * {
+  max-width: 100%;
+}
+
+.mf-breath .btn {
+  white-space: normal;
+}
+
+.mf-circle-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+}
+
+.mf-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--mf-a) 70%, white), var(--mf-b));
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--mf-a) 18%, transparent);
+  opacity: 0.85;
+  transform: scale(0.5);
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+}
+
+.mf-circle.big {
+  transform: scale(1);
+}
+
+.mf-circle-text {
+  position: relative;
+  display: grid;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.mf-circle-text b {
+  font: bold 14px var(--font-title);
+}
+
+.mf-circle-text span {
+  font: bold 22px var(--font-title);
+}
+
+.mf-hint {
+  margin: 0;
+  font-size: 11px;
+}
+
+/* Mantra */
+.mf-mantra {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  justify-items: center;
+  text-align: center;
+}
+
+.mf-mantra blockquote {
+  margin: 0;
+  padding: 16px 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--mf-a) 22%, var(--surface)), color-mix(in srgb, var(--mf-b) 18%, var(--surface)));
+  color: var(--title);
+  font: italic bold 15px/1.4 var(--font-title);
+  animation: mf-fade 0.6s ease-out;
+}
+
+@keyframes mf-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.mf-link {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  justify-self: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: bold 12px var(--font-title);
+  cursor: pointer;
+}
+
+/* Feeling */
+.mf-feeling {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.mf-now {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mf-a) 14%, var(--surface));
+}
+
+.mf-now-smiley .smiley {
+  width: 32px;
+  height: 32px;
+}
+
+.mf-now > span:last-child {
+  display: grid;
+  min-width: 0;
+}
+
+.mf-note {
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.mf-log {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mf-pick {
+  display: grid;
+  gap: 6px;
+}
+
+.mf-moods {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 4px;
+}
+
+.mf-moods button {
+  display: grid;
+  gap: 1px;
+  justify-items: center;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.mf-moods button.current {
+  border-color: var(--mf-b);
+  background: color-mix(in srgb, var(--mf-a) 18%, var(--surface));
+}
+
+.mf-moods small {
+  font-size: 9.5px;
+}
+
+.mf-pick-actions {
+  display: flex;
+  gap: 4px;
+}
+
+/* Grateful */
+.mf-grateful p {
+  margin: 0 0 4px;
+  font-size: 12px;
+}
+
+.mf-grateful ol {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mf-grateful li {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--mf-a) 12%, var(--surface));
+  overflow-wrap: anywhere;
+}
+
+/* The editor */
+.mf-edit-parts {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.mf-edit-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.mf-edit-colors button {
+  padding: 5px 10px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  color: #fff;
+  font: bold 11px var(--font-title);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.mf-edit-colors button.current {
+  border-color: var(--title);
+}
+
+.mf-edit-block {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+
+/* Four tabs with names only fit in a wide box; otherwise just the icons (the name is the tooltip) */
+@container gadget (max-width: 380px) {
+  .gadget .mf-tabs button span {
+    display: none;
+  }
+}
+
+@container gadget (max-width: 260px) {
+
+  .gadget .mf-circle-wrap {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mf-circle {
+    transition: none;
+  }
+
+  .mf-mantra blockquote {
+    animation: none;
+  }
+}

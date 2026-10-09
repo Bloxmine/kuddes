@@ -1,0 +1,176 @@
+/* Over Kuddes (AboutPage.tsx) */
+.ab-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 22px;
+  align-items: center;
+  margin: 6px 0 14px;
+  padding: 20px 22px;
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  /* The same diagonal stripes as the Gadgetmarkt banner */
+  background:
+    radial-gradient(ellipse 50% 90% at 100% 0%, color-mix(in srgb, var(--brand-light) 35%, transparent), transparent 70%),
+    repeating-linear-gradient(-45deg, transparent 0 14px, color-mix(in srgb, var(--brand) 6%, transparent) 14px 28px),
+    linear-gradient(to bottom, var(--tint-1), var(--tint-3));
+}
+
+.ab-hero > img {
+  flex: none;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+}
+
+.ab-hero > div {
+  flex: 1;
+  min-width: 240px;
+}
+
+.ab-hero h1 {
+  margin: 0 0 4px;
+}
+
+.ab-lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.ab-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.ab-cta .btn-cta {
+  padding: 7px 18px;
+  font-size: 13px;
+}
+
+.ab-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(90px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.ab-stats div {
+  padding: 8px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.ab-stats dt {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.ab-stats dd {
+  margin: 0;
+  color: var(--title);
+  font: bold 20px var(--font-title);
+}
+
+.ab-stats dd.ab-since {
+  font-size: 12px;
+  line-height: 2.2;
+}
+
+.ab-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-features a {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  height: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: linear-gradient(to bottom, var(--surface), var(--tint-1));
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.12s, border-color 0.12s;
+}
+
+.ab-features a:hover {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+
+.ab-features a > .farm-icon {
+  flex: none;
+}
+
+.ab-features a > span,
+.ab-promises li > span {
+  display: grid;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.ab-features b,
+.ab-promises b {
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.ab-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.ab-promises {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-promises li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.ab-links,
+.ab-thanks {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-links li {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ab-thanks {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 760px) {
+  .ab-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ab-stats {
+    width: 100%;
+  }
+}

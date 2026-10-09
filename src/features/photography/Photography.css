@@ -1,0 +1,533 @@
+/* The parts of Fotografie (PhotographyParts.tsx) */
+
+/* Rows at one height, each photo as wide as its shape; the last row doesn't stretch */
+.ph-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 12px;
+  list-style: none;
+}
+
+.ph-grid::after {
+  flex-grow: 10;
+  content: '';
+}
+
+.ph-grid li {
+  position: relative;
+  min-width: 0;
+  max-height: 320px;
+}
+
+.ph-grid button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 3px;
+  background: var(--tint-2);
+  cursor: zoom-in;
+}
+
+/* Keeps the shape while the photo loads */
+.ph-grid i {
+  display: block;
+}
+
+.ph-grid button > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.ph-grid button:hover > img {
+  transform: scale(1.03);
+}
+
+.ph-grid-info {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  gap: 1px;
+  padding: 18px 8px 6px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.6));
+  color: #fff;
+  font-size: 11px;
+  text-align: left;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ph-grid button:hover .ph-grid-info,
+.ph-grid button:focus-visible .ph-grid-info {
+  opacity: 1;
+}
+
+.ph-grid-info b,
+.ph-grid-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ph-grid-info span {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+@media (hover: none) {
+  .ph-grid-info {
+    opacity: 1;
+  }
+}
+
+/* A photo big */
+.ph-lightbox {
+  background: #1d1f22;
+  color: #eee;
+}
+
+.ph-lightbox a {
+  color: #9ccaff;
+}
+
+.ph-lightbox-info {
+  display: grid;
+  gap: 6px;
+  padding: 10px 4px 2px;
+  font-size: 12px;
+}
+
+.ph-lightbox-who {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ph-lightbox-who > span {
+  display: grid;
+}
+
+.ph-lightbox-who b {
+  font-size: 14px;
+}
+
+.ph-lightbox .muted {
+  color: #aaa;
+}
+
+.ph-lightbox-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ph-lightbox-bar .muted {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* A photographer on the overview */
+.ph-cards {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ph-card a {
+  display: grid;
+  gap: 6px;
+  color: var(--text);
+}
+
+.ph-card a:hover {
+  text-decoration: none;
+}
+
+.ph-card-cover {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  height: 110px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--tint-2);
+  place-items: center;
+}
+
+.ph-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ph-card-cover img:first-child {
+  grid-row: span 2;
+}
+
+.ph-card-cover.n1 img:first-child {
+  grid-column: span 2;
+}
+
+.ph-card-cover.n0 {
+  display: grid;
+  grid-template: none;
+}
+
+.ph-card-text {
+  display: grid;
+}
+
+.ph-card-text b {
+  color: var(--title);
+  font: bold 13px var(--font-title);
+}
+
+.ph-card-text small {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ph-card-gear {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Dialogs */
+.ph-form {
+  display: grid;
+  gap: 10px;
+}
+
+.ph-visibility {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ph-visibility legend {
+  margin-bottom: 4px;
+  color: var(--title);
+  font: bold 12px var(--font-title);
+}
+
+.ph-visibility label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ph-visibility label.current {
+  border-color: var(--brand);
+  background: var(--tint-1);
+}
+
+.ph-visibility label > span {
+  display: grid;
+}
+
+.ph-check {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.ph-note {
+  margin: 0;
+  font-size: 11px;
+}
+
+.ph-exif-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.ph-drop {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  place-items: center;
+  min-height: 140px;
+  padding: 14px;
+  border: 2px dashed var(--box-border);
+  border-radius: var(--radius);
+  background: var(--tint-1);
+  color: var(--text-muted);
+  text-align: center;
+  cursor: pointer;
+}
+
+.ph-drop:hover,
+.ph-drop:focus-within {
+  border-color: var(--brand);
+}
+
+.ph-drop.has-file img {
+  max-width: 100%;
+  max-height: 220px;
+}
+
+.ph-drop input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.ph-pick {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ph-pick button {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background: var(--tint-2);
+  cursor: pointer;
+}
+
+.ph-pick button.on {
+  border-color: #5cb82a;
+}
+
+.ph-pick button > img:not(.farm-icon) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ph-pick-tick {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  padding: 2px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+@media (max-width: 560px) {
+  .ph-grid li {
+    width: auto !important;
+    flex-basis: 45%;
+  }
+
+  .ph-exif-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* An album to scroll through (AlbumViewer) */
+.ph-album {
+  padding: 12px;
+}
+
+.ph-album-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ph-album-head > div {
+  flex: 1;
+  min-width: 160px;
+}
+
+.ph-album-head h2 {
+  color: var(--title);
+  font: bold 18px var(--font-title);
+}
+
+.ph-album-head p {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+.ph-album-count {
+  font: bold 12px var(--font-title);
+}
+
+.ph-album-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #1d1f22;
+}
+
+/* One photo per screen width; swipe or scroll from one to the next */
+.ph-album-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.ph-album-track::-webkit-scrollbar {
+  display: none;
+}
+
+.ph-album-slide {
+  display: grid;
+  flex: 0 0 100%;
+  place-items: center;
+  height: min(62vh, 560px);
+  margin: 0;
+  scroll-snap-align: center;
+}
+
+.ph-album-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.ph-album-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.ph-album-arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ph-album-arrow.prev {
+  left: 10px;
+}
+
+.ph-album-arrow.next {
+  right: 10px;
+}
+
+.ph-album-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 8px 2px;
+  font-size: 12px;
+}
+
+.ph-album-caption b {
+  color: var(--title);
+  font: bold 14px var(--font-title);
+}
+
+.ph-album-caption .muted {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* All of them small below, the one in view lit up */
+.ph-album-strip {
+  display: flex;
+  gap: 6px;
+  padding: 4px 2px 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.ph-album-strip button {
+  flex: none;
+  width: 72px;
+  height: 54px;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  background: var(--tint-2);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.ph-album-strip button.current {
+  border-color: var(--brand);
+  opacity: 1;
+}
+
+.ph-album-strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ph-banner-preview {
+  height: 160px;
+  border-radius: 6px;
+  background-color: var(--tint-2);
+  background-size: cover;
+}
+
+/* Already in the Kudde: greyed out, with a label */
+.ph-pick button.there {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.ph-pick-there {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font: bold 10px var(--font-title);
+  text-align: center;
+}

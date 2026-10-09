@@ -1,0 +1,173 @@
+/* Kudde gadgets (KuddeGadgets.tsx) */
+.kg-people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kg-members {
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+
+.kg-members p {
+  margin: 0;
+}
+
+.kg-big {
+  color: var(--title);
+  font: 16px var(--font-title);
+}
+
+.kg-big b {
+  font-size: 32px;
+}
+
+.kg-goal {
+  display: grid;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.kg-goal-bar {
+  height: 12px;
+  border: 1px solid var(--box-border);
+  border-radius: 999px;
+  background: var(--tint-1);
+  overflow: hidden;
+}
+
+.kg-goal-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--cta-top), var(--cta-bottom));
+}
+
+.kg-ranking,
+.kg-events,
+.kg-rules {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.kg-ranking,
+.kg-events {
+  padding: 0;
+  list-style: none;
+}
+
+.kg-rules {
+  padding-left: 22px;
+  list-style: decimal;
+}
+
+.kg-rules li::marker {
+  color: var(--link);
+  font-weight: bold;
+}
+
+.kg-ranking li {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.kg-ranking .muted {
+  margin-left: auto;
+  font-size: 11px;
+}
+
+/* Gold, silver and bronze for the first three */
+.kg-place {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--tint-2);
+  color: var(--title);
+  font: bold 11px var(--font-title);
+}
+
+.kg-place.p1 {
+  background: linear-gradient(#ffe27a, #e0a800);
+  color: #5a3d00;
+}
+
+.kg-place.p2 {
+  background: linear-gradient(#f1f3f5, #aab2bb);
+  color: #333;
+}
+
+.kg-place.p3 {
+  background: linear-gradient(#f3c79b, #b9733a);
+  color: #3d1f00;
+}
+
+.kg-events li {
+  display: grid;
+  padding-left: 8px;
+  border-left: 3px solid var(--brand);
+}
+
+.kg-when {
+  color: var(--link);
+  font: bold 11px var(--font-title);
+  text-transform: uppercase;
+}
+
+.kg-label {
+  margin: 0 0 6px;
+  color: var(--title);
+  font: bold 14px var(--font-title);
+  text-align: center;
+}
+
+/* The owner's box: a row of gadgets to add, then the ones on the Kudde */
+.kg-add {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.kg-add button {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 6px;
+  background: var(--tint-1);
+  color: var(--title);
+  font: bold 12px var(--font-title);
+  text-align: left;
+  cursor: pointer;
+}
+
+.kg-add button span {
+  flex: 1;
+}
+
+.kg-add button:hover:not(:disabled) {
+  border-color: var(--link);
+}
+
+.kg-move {
+  display: inline-flex;
+}
+
+.kg-rule-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}

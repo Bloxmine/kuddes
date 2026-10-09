@@ -1,0 +1,97 @@
+/*
+ * Webfonts for the text on profiles and Kuddes (BODY_FONTS in
+ * shared/customization.ts): calmer than the name fonts, for reading. Served
+ * from our own server; a file only loads when a design on the page uses it.
+ * Licences: public/fonts/body/OFL.txt.
+ */
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/body/nunito.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/body/quicksand.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/fonts/body/fredoka.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/body/lora.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  src: url('/fonts/body/merriweather.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Neue';
+  src: url('/fonts/body/comic-neue.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comic Neue';
+  src: url('/fonts/body/comic-neue-700.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Patrick Hand';
+  src: url('/fonts/body/patrick-hand.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fonts/body/atkinson-hyperlegible.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/fonts/body/atkinson-hyperlegible-700.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Courier Prime';
+  src: url('/fonts/body/courier-prime.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Courier Prime';
+  src: url('/fonts/body/courier-prime-700.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Varela Round';
+  src: url('/fonts/body/varela-round.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
