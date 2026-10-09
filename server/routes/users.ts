@@ -46,9 +46,20 @@ import { HANDLE_PATTERN } from '../../shared/federation'
 
 const VIEW_DEDUPE_MS = 30 * 60 * 1000
 
+/** Accounts whose earlier posts were already asked for since the server started (once each is enough). */
+const fetchedEarlier = new Set<number>()
+
 /** Where someone from another server is, and whether the viewer follows them (Mastodon and the like). */
 async function remoteInfo(user: User, viewer: User | null): Promise<NonNullable<Profile['remote']>> {
   const remote = await remoteOf(user.id)
+  // Followed before their earlier posts were fetched (or that failed): try once more when the profile is opened
+  if (remote && !remote.actor.weide && !fetchedEarlier.has(user.id)) {
+    const [followed] = await db.select({ id: remoteFollows.followerId }).from(remoteFollows).where(eq(remoteFollows.targetId, user.id)).limit(1)
+    if (followed) {
+      fetchedEarlier.add(user.id)
+      void fetchEarlierPosts(remote).catch((e) => console.error('[federatie] eerdere berichten:', e))
+    }
+  }
   const [follow] = viewer
     ? await db
         .select({ accepted: remoteFollows.accepted })
@@ -381,6 +392,7 @@ export const userRoutes = new Hono<AppEnv>()
     if (row) {
       followChanged(me, user)
       // The first to follow them: their newest posts and photos come here too
+      fetchedEarlier.add(user.id)
       void fetchEarlierPosts(remote).catch((e) => console.error('[federatie] eerdere berichten:', e))
     }
     return c.json(await remoteInfo(user, me))

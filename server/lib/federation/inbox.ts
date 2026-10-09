@@ -23,7 +23,7 @@ import { report } from '../reports'
 import { friendshipBetween } from '../users'
 import { CONTEXT, PUBLIC, forgetAccount, resolveActor, type Remote } from './actors'
 import { cleanLine, htmlToText } from './content'
-import { fetchImage, fetchJson } from './http'
+import { fetchImage, fetchJson, safeFetch } from './http'
 import { storeImage } from '../uploads'
 import { removeMedia } from './actors'
 import { enqueue } from './deliver'
@@ -347,24 +347,60 @@ export async function fetchEarlierPosts(from: Remote) {
   const [any] = await db.select({ id: statuses.id }).from(statuses).where(eq(statuses.userId, from.user.id)).limit(1)
   if (any) return
   const key = await instanceSigningKey()
+  const host = new URL(from.actor.uri).host
   const outboxUrl = str((await fetchJson(from.actor.uri, key)).json.outbox)
-  if (!outboxUrl || new URL(outboxUrl).host !== new URL(from.actor.uri).host) return
-  let page = (await fetchJson(outboxUrl, key)).json
-  // Mastodon and Pixelfed put the posts on the first page
-  const first = page.first
-  if (!Array.isArray(page.orderedItems) && first) page = typeof first === 'string' ? (await fetchJson(first, key)).json : (first as Json)
-  const items = list(page.orderedItems ?? page.items)
-    .filter((a): a is Json => !!a && typeof a === 'object' && (a as Json).type === 'Create')
-    .map((a) => a.object)
-    .filter((o): o is Json => !!o && typeof o === 'object')
-    .slice(0, 20)
-    .reverse()
-  for (const note of items) {
+  let items: Json[] = []
+  if (outboxUrl && new URL(outboxUrl).host === host) {
+    let page = (await fetchJson(outboxUrl, key)).json
+    // Mastodon puts the posts on the first page
+    const first = page.first
+    if (!Array.isArray(page.orderedItems) && first) page = typeof first === 'string' ? (await fetchJson(first, key)).json : (first as Json)
+    items = list(page.orderedItems ?? page.items)
+      .filter((a): a is Json => !!a && typeof a === 'object' && (a as Json).type === 'Create')
+      .map((a) => a.object)
+      .filter((o): o is Json => !!o && typeof o === 'object')
+      .slice(0, 20)
+  }
+  // Pixelfed's outbox only says how many there are: its public API lists them, and each is fetched from there as ActivityPub
+  if (!items.length) items = await postsFromApi(from, key)
+  for (const note of items.reverse()) {
     const id = idOf(note.id)
     if (!id || !POST_TYPES.has(String(note.type)) || idOf(note.attributedTo) !== from.actor.uri || note.inReplyTo) continue
     if (new URL(id).host !== new URL(from.actor.uri).host) continue
     await onStatus(id, note, from, true)
   }
+}
+
+/** The newest public posts through the server's Mastodon-style API (Pixelfed, and Mastodon when its outbox is closed), as ActivityPub objects. */
+async function postsFromApi(from: Remote, key: Awaited<ReturnType<typeof instanceSigningKey>>) {
+  const origin = new URL(from.actor.uri).origin
+  const name = from.user.username.split('@')[0]
+  const getJson = async (url: string) => {
+    const { res, body } = await safeFetch(url, { headers: { Accept: 'application/json' } })
+    return res.ok ? (JSON.parse(body) as unknown) : null
+  }
+  const account = (await getJson(`${origin}/api/v1/accounts/lookup?acct=${encodeURIComponent(name)}`).catch(() => null)) as Json | null
+  const id = str(account?.id)
+  if (!id) return []
+  let listed: unknown = null
+  for (const path of [`/api/pixelfed/v1/accounts/${id}/statuses?limit=20`, `/api/v1/accounts/${id}/statuses?limit=20&exclude_replies=true&exclude_reblogs=true`]) {
+    listed = await getJson(origin + path).catch(() => null)
+    if (Array.isArray(listed)) break
+  }
+  const uris = (Array.isArray(listed) ? listed : [])
+    .filter((s): s is Json => !!s && typeof s === 'object' && !(s as Json).reblog && ((s as Json).visibility ?? 'public') === 'public')
+    .map((s) => str(s.uri))
+    .filter((u): u is string => !!u && new URL(u).origin === origin)
+    .slice(0, 20)
+  const notes: Json[] = []
+  for (const uri of uris) {
+    // The post itself from its own server, not the API's copy of it
+    const note = await fetchJson(uri, key)
+      .then((r) => r.json)
+      .catch(() => null)
+    if (note) notes.push(note)
+  }
+  return notes
 }
 
 async function onUpdate(object: unknown, from: Remote) {

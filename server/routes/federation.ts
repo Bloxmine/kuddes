@@ -102,6 +102,15 @@ export const federationRoutes = new Hono()
     const resource = c.req.query('resource') ?? ''
     const m = /^(?:acct:)?@?([^@]+)@(.+)$/.exec(resource)
     const domain = serverInfo().domain
+    // The server's own actor (acct:kuddes.nl@kuddes.nl): Mastodon looks it up before trusting its signature
+    const instanceName = new URL(ids.instance()).hostname
+    if (m && m[2].toLowerCase() === domain && m[1].toLowerCase() === instanceName) {
+      c.header('Access-Control-Allow-Origin', '*')
+      c.header('Content-Type', 'application/jrd+json; charset=utf-8')
+      return c.body(
+        JSON.stringify({ subject: `acct:${instanceName}@${domain}`, aliases: [ids.instance()], links: [{ rel: 'self', type: AP_TYPE, href: ids.instance() }] }),
+      )
+    }
     let username: string | null = null
     if (m && m[2].toLowerCase() === domain) username = m[1]
     else {

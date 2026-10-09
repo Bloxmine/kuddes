@@ -94,10 +94,12 @@ export function signedHeaders(method: string, raw: string, key: SigningKey, body
 }
 
 /** A signed GET of an ActivityPub document (servers with "authorized fetch" want one). */
-export async function fetchJson(raw: string, key: SigningKey | null) {
+export async function fetchJson(raw: string, key: SigningKey | null): Promise<{ json: Record<string, unknown>; url: string }> {
   const headers = { Accept: AP_ACCEPT, ...(key ? signedHeaders('GET', raw, key) : {}) }
   delete (headers as Record<string, string>).host
   const { res, body, url } = await safeFetch(raw, { headers })
+  // A server that can't check our signature may still answer without one
+  if (key && (res.status === 401 || res.status === 403)) return fetchJson(raw, null)
   if (!res.ok) throw new Error(`${raw}: ${res.status}`)
   return { json: JSON.parse(body) as Record<string, unknown>, url }
 }

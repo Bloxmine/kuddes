@@ -30,7 +30,7 @@ A server MUST answer:
 
 | Path | What |
 | --- | --- |
-| `/.well-known/webfinger?resource=acct:naam@server` | WebFinger (RFC 7033) with a `self` link of type `application/activity+json` to the actor |
+| `/.well-known/webfinger?resource=acct:naam@server` | WebFinger (RFC 7033) with a `self` link of type `application/activity+json` to the actor; also for the server actor (`acct:server@server`), because Mastodon looks it up before it trusts a signature |
 | `/.well-known/nodeinfo` | NodeInfo index, pointing at `/nodeinfo/2.1` |
 | `/nodeinfo/2.1` | NodeInfo 2.1 with `metadata.weide` (below) |
 
@@ -117,7 +117,8 @@ If the signature doesn't match, the receiver fetches the actor once more (it
 may have a new key) before refusing with 401.
 
 GETs MAY be signed by the server actor, for servers that require "authorized
-fetch". Each member has their own RSA-2048 key pair.
+fetch". When a signed GET is refused (401 or 403), Kuddes tries once more
+without a signature. Each member has their own RSA-2048 key pair.
 
 ## 6. Actors
 
@@ -187,7 +188,10 @@ Friendships only exist between Weide servers. An account on a server without
     descriptions (`name`), as that account's photos: in the post and in the
     Foto's of its profile.
   - When the first member follows an account, Kuddes also fetches its 20
-    newest posts from its `outbox`, so the profile isn't empty.
+    newest posts, so the profile isn't empty. They come from its `outbox`,
+    or, when that only gives a count (as on Pixelfed), from the server's
+    public Mastodon-style API. Each post found there is then fetched as
+    ActivityPub from its own id.
   - Pictures of a `sensitive` post stay links; other attachments (video,
     audio) are links too.
   - Kuddes shows these posts in a separate "Fediverse" tab, not between the
