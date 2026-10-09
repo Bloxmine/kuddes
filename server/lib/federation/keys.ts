@@ -33,12 +33,14 @@ export const ids = {
   /** A member here following an account elsewhere (not a friendship): follower and followed. */
   subscription: (followerId: number, targetId: number) => `${baseUrl()}/fed/subscriptions/${followerId}-${targetId}`,
   sharedInbox: () => `${baseUrl()}/fed/inbox`,
+  /** A member's reply in a community's Kudde (a comment on Lemmy). */
+  kuddeReply: (id: number) => `${baseUrl()}/fed/kudde-replies/${id}`,
 }
 
 /** What a local id points at ("status" 12), or null for an id of another server. */
 export function localId(
   uri: string,
-): { kind: 'actor'; username: string } | { kind: 'status' | 'knuffel' | 'follow'; id: number } | { kind: 'subscription'; followerId: number; targetId: number } | null {
+): { kind: 'actor'; username: string } | { kind: 'status' | 'knuffel' | 'follow' | 'kuddeReply'; id: number } | { kind: 'subscription'; followerId: number; targetId: number } | null {
   const base = `${baseUrl()}/fed/`
   if (!uri.startsWith(base)) {
     const profile = `${baseUrl()}/profiel/`
@@ -46,12 +48,12 @@ export function localId(
   }
   const sub = /^subscriptions\/(\d+)-(\d+)$/.exec(uri.slice(base.length))
   if (sub) return { kind: 'subscription', followerId: Number(sub[1]), targetId: Number(sub[2]) }
-  const m = /^(users|statuses|knuffels|follows)\/([^/#?]+)/.exec(uri.slice(base.length))
+  const m = /^(users|statuses|knuffels|follows|kudde-replies)\/([^/#?]+)/.exec(uri.slice(base.length))
   if (!m) return null
   if (m[1] === 'users') return { kind: 'actor', username: decodeURIComponent(m[2]).toLowerCase() }
   const id = Number(m[2])
   if (!Number.isInteger(id)) return null
-  return { kind: ({ statuses: 'status', knuffels: 'knuffel', follows: 'follow' } as const)[m[1] as 'statuses' | 'knuffels' | 'follows'], id }
+  return { kind: ({ statuses: 'status', knuffels: 'knuffel', follows: 'follow', 'kudde-replies': 'kuddeReply' } as const)[m[1] as 'statuses' | 'knuffels' | 'follows' | 'kudde-replies'], id }
 }
 
 // ---------------------------------------------------------------- keys

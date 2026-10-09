@@ -17,6 +17,8 @@ import { MAX_UPLOAD_BYTES, removeUpload, storeImage } from '../lib/uploads'
 import { summaryColumns } from '../lib/users'
 import { checkSoon } from '../lib/achievements'
 import { checkPost } from '../lib/moderation'
+import { removeGroupReply, sendGroupReply, syncCommunity } from '../lib/federation/groups'
+import { ids } from '../lib/federation/keys'
 import { notHidden } from '../lib/reports'
 
 type KuddeRow = typeof kuddes.$inferSelect
@@ -58,7 +60,7 @@ async function readersOf(kudde: KuddeRow, ids: number[]) {
 
 /** A community on another server (Lemmy): you read along here, and post on its own server. */
 function readOnlyCommunity(kudde: { remoteActorId: number | null; remoteDomain: string | null }) {
-  if (kudde.remoteActorId) throw new HttpError(403, `Deze Kudde is een community op ${kudde.remoteDomain}. Plaatsen en reageren doe je (nog) daar.`)
+  if (kudde.remoteActorId) throw new HttpError(403, `Deze Kudde is een community op ${kudde.remoteDomain}. Nieuwe berichten plaats je (nog) daar; reageren kan hier wel.`)
 }
 
 function mustBeMember(role: Role) {
@@ -173,6 +175,8 @@ export const kuddePostRoutes = new Hono<AppEnv>()
     const kudde = await findKudde(c.req.param('slug'))
     const role = viewer ? await rightsOf(kudde.id, viewer.id) : null
     if (!mayRead(kudde, role, viewer)) throw new HttpError(403, 'Alleen leden kunnen het prikbord van deze besloten Kudde lezen.')
+    // A community's Kudde (Lemmy): comments and posts that didn't come in by themselves are fetched in the background
+    if (kudde.remoteActorId) void syncCommunity(kudde.id).catch((e) => console.error('[federatie] community:', e))
     const before = Number(c.req.query('voor')) || null
     // The pinned post comes on top of the first page, and isn't in the list itself
     const [rows, pinnedRows] = await Promise.all([
@@ -304,11 +308,15 @@ export const kuddePostRoutes = new Hono<AppEnv>()
   .post('/kudde-posts/:id{[0-9]+}/replies', rateLimit('reacties', 120, 60 * 60 * 1000), async (c) => {
     const me = requireVerified(c)
     const { post, kudde, role } = await findPost(Number(c.req.param('id')), me)
-    readOnlyCommunity(kudde)
     mustBeMember(role)
     const input = parse(z.object({ text: text(KUDDE_POST_LIMITS.reply, 'Je reactie').min(1, 'Schrijf een reactie.') }), await c.req.json().catch(() => null))
     const [reply] = await db.insert(kuddePostReplies).values({ postId: post.id, userId: me.id, text: input.text }).returning({ id: kuddePostReplies.id })
     checkSoon(me.id)
+    // In a community's Kudde (Lemmy) it's a comment there too
+    if (kudde.remoteActorId && post.apId) {
+      await db.update(kuddePostReplies).set({ apId: ids.kuddeReply(reply.id) }).where(eq(kuddePostReplies.id, reply.id))
+      void sendGroupReply(reply.id).catch((e) => console.error('[federatie] reactie:', e))
+    }
     // Whoever wrote the post hears about it, and who's mentioned in the reaction
     const ref = `kudde-post:${post.id}/reply:${reply.id}`
     const link = `/kuddes/${kudde.slug}`
@@ -330,6 +338,8 @@ export const kuddePostRoutes = new Hono<AppEnv>()
     if (!reply) throw notFound('Deze reactie bestaat niet (meer).')
     const { role } = await findPost(reply.postId, me)
     if (reply.userId !== me.id && !may(role, 'prikbord') && !isAdmin(me)) throw new HttpError(403, 'Dit is niet jouw reactie.')
+    // One written here in a community's Kudde is taken back there too
+    if (reply.apId && reply.userId === me.id) await removeGroupReply(reply.id).catch((e) => console.error('[federatie] reactie weg:', e))
     await db.delete(kuddePostReplies).where(eq(kuddePostReplies.id, reply.id))
     await unnotify(`kudde-post:${reply.postId}/reply:${reply.id}`)
     return c.json(await onePost(reply.postId, me))

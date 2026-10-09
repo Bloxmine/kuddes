@@ -10,10 +10,11 @@ import { KUDDE_POST_LIMITS } from '../../../shared/kuddePosts'
 import { db } from '../../db/client'
 import { kuddeMembers, kuddePostReplies, kuddePosts, kuddes, remoteFollows, users, type User } from '../../db/schema'
 import { removeUpload, storeImage } from '../uploads'
-import { remoteOf, resolveActor, type Remote } from './actors'
-import { cleanLine, cleanName, htmlToText } from './content'
-import { fetchImage, fetchJson } from './http'
-import { instanceSigningKey } from './keys'
+import { CONTEXT, PUBLIC, remoteOf, resolveActor, type Remote } from './actors'
+import { enqueue } from './deliver'
+import { cleanLine, cleanName, htmlToText, textToHtml } from './content'
+import { fetchImage, fetchJson, safeFetch } from './http'
+import { ids, instanceSigningKey, localId } from './keys'
 import { followChanged } from './outbox'
 import { mayFederateWith } from './servers'
 
@@ -42,7 +43,7 @@ async function freeName(title: string, domain: string, ownId: number | null) {
 }
 
 /** The Kudde for a community (made the first time, its name, text and picture brought up to date after that). */
-export async function kuddeForGroup(remote: Remote, json: Json) {
+export async function kuddeForGroup(remote: Remote, json: Json, iconChanged = false) {
   const domain = remote.user.domain!
   const handle = remote.user.username.split('@')[0]
   const existing = await kuddeOfGroup(remote.user.id)
@@ -55,13 +56,15 @@ export async function kuddeForGroup(remote: Remote, json: Json) {
     remoteName: handle,
     remoteUrl: str(json.url) ?? remote.actor.uri,
   }
+  // The community's icon is the Kudde's picture: fetched when it's new or changed (or failed before)
   let picture: string | null = existing?.imagePath ?? null
   const icon = link(json.icon)
-  if (icon && !existing?.imagePath) {
+  if (icon && (!existing?.imagePath || iconChanged)) {
     try {
       picture = (await storeImage(new File([new Uint8Array(await fetchImage(icon))], 'kudde'), 'kuddes', 'fed-')).path
+      if (existing?.imagePath) await removeUpload(existing.imagePath)
     } catch {
-      // Without a picture then
+      // Without a (new) picture then; tried again with the next update
     }
   }
   if (existing) {
@@ -238,12 +241,129 @@ export async function groupMembershipChanged(member: User, kudde: typeof kuddes.
     if (!row) return
     followChanged(member, group)
     const remote = await remoteOf(group.id)
-    if (remote) void fetchGroupPosts(remote).catch((e) => console.error('[federatie] community:', e))
+    if (remote)
+      void fetchGroupPosts(remote)
+        .then(() => syncCommunity(kudde.id))
+        .catch((e) => console.error('[federatie] community:', e))
   } else {
     const [row] = await db
       .delete(remoteFollows)
       .where(and(eq(remoteFollows.followerId, member.id), eq(remoteFollows.targetId, group.id)))
       .returning()
     if (row) followChanged(member, group, true)
+  }
+}
+
+// ---------------------------------------------------------------- replying from here
+
+/** A member's reply in a community's Kudde as a comment there: a Note in reply to the post, for the community. */
+export async function replyNote(replyId: number) {
+  const [row] = await db
+    .select({ reply: kuddePostReplies, post: kuddePosts, kudde: kuddes, member: users })
+    .from(kuddePostReplies)
+    .innerJoin(kuddePosts, eq(kuddePosts.id, kuddePostReplies.postId))
+    .innerJoin(kuddes, eq(kuddes.id, kuddePosts.kuddeId))
+    .innerJoin(users, eq(users.id, kuddePostReplies.userId))
+    .where(eq(kuddePostReplies.id, replyId))
+  if (!row?.kudde.remoteActorId || !row.post.apId || row.member.domain) return null
+  const group = await remoteOf(row.kudde.remoteActorId)
+  const author = row.post.userId ? await remoteOf(row.post.userId) : null
+  if (!group) return null
+  const actor = ids.actor(row.member.username)
+  return {
+    note: {
+      id: ids.kuddeReply(row.reply.id),
+      type: 'Note',
+      attributedTo: actor,
+      content: textToHtml(row.reply.text),
+      mediaType: 'text/html',
+      source: { content: row.reply.text, mediaType: 'text/markdown' },
+      inReplyTo: row.post.apId,
+      published: row.reply.createdAt.toISOString(),
+      to: [PUBLIC],
+      cc: [group.actor.uri, ...(author ? [author.actor.uri] : [])],
+      audience: group.actor.uri,
+    },
+    member: row.member,
+    // The community passes it on to everyone there; the post's writer hears it straight away too
+    inboxes: [group.actor.sharedInbox ?? group.actor.inbox, ...(author ? [author.actor.sharedInbox ?? author.actor.inbox] : [])],
+  }
+}
+
+/** A reply written here in a community's Kudde goes to the community. */
+export async function sendGroupReply(replyId: number) {
+  const found = await replyNote(replyId)
+  if (!found) return
+  const { note, member, inboxes } = found
+  await enqueue(inboxes, { '@context': CONTEXT, id: `${note.id}/create`, type: 'Create', actor: note.attributedTo, object: note, to: note.to, cc: note.cc, audience: note.audience }, member.id)
+}
+
+/** A reply written here is deleted: the community hears it (call before the row goes). */
+export async function removeGroupReply(replyId: number) {
+  const found = await replyNote(replyId)
+  if (!found) return
+  const { note, member, inboxes } = found
+  await enqueue(inboxes, { '@context': CONTEXT, id: `${note.id}#delete`, type: 'Delete', actor: note.attributedTo, object: { id: note.id, type: 'Tombstone' }, to: note.to, cc: note.cc, audience: note.audience }, member.id)
+}
+
+// ---------------------------------------------------------------- keeping up through the API
+
+const synced = new Map<number, number>()
+
+/**
+ * What the community has that didn't come in by itself: the comments that were
+ * there before anyone here joined, and posts that were missed. Read from
+ * Lemmy's public API (also on PieFed), at most every ten minutes per Kudde.
+ */
+export async function syncCommunity(kuddeId: number) {
+  if (Date.now() - (synced.get(kuddeId) ?? 0) < 10 * 60 * 1000) return
+  synced.set(kuddeId, Date.now())
+  const [kudde] = await db.select().from(kuddes).where(eq(kuddes.id, kuddeId))
+  if (!kudde?.remoteActorId || !kudde.remoteName || !(await hasMembers(kudde.id))) return
+  const group = await remoteOf(kudde.remoteActorId)
+  if (!group) return
+  const origin = new URL(group.actor.uri).origin
+  const getJson = async (path: string) => {
+    const { res, body } = await safeFetch(origin + path, { headers: { Accept: 'application/json' } })
+    return res.ok ? (JSON.parse(body) as Json) : null
+  }
+  const listed = await getJson(`/api/v3/post/list?community_name=${encodeURIComponent(kudde.remoteName)}&sort=New&limit=20`).catch(() => null)
+  const posts = (Array.isArray(listed?.posts) ? listed.posts : []) as Json[]
+  for (const item of posts.slice(0, 20).reverse()) {
+    const post = item.post as Json | undefined
+    const apId = str(post?.ap_id)
+    const apiId = post?.id
+    if (!apId || post?.deleted || post?.removed) continue
+    let [mine] = await db.select({ id: kuddePosts.id }).from(kuddePosts).where(eq(kuddePosts.apId, apId))
+    // A post that never came in: fetched from its own server
+    if (!mine) {
+      const object = await trusted(apId, group)
+      if (object && (object.type === 'Page' || object.type === 'Note' || object.type === 'Article')) await storePost(object, kudde.id, false).catch(() => {})
+      ;[mine] = await db.select({ id: kuddePosts.id }).from(kuddePosts).where(eq(kuddePosts.apId, apId))
+      if (!mine) continue
+    }
+    const comments = Number((item.counts as Json | undefined)?.comments ?? 0)
+    const [{ n }] = await db.select({ n: count() }).from(kuddePostReplies).where(eq(kuddePostReplies.postId, mine.id))
+    if (!comments || n >= comments) continue
+    const thread = await getJson(`/api/v3/comment/list?post_id=${apiId}&sort=Old&limit=50&max_depth=8&type_=All`).catch(() => null)
+    for (const entry of ((Array.isArray(thread?.comments) ? thread.comments : []) as Json[]).slice(0, 40)) {
+      const comment = entry.comment as Json | undefined
+      const creator = entry.creator as Json | undefined
+      const id = str(comment?.ap_id)
+      const authorUri = str(creator?.actor_id)
+      if (!id || !authorUri || comment?.deleted || comment?.removed || localId(id)) continue
+      const [known] = await db.select({ id: kuddePostReplies.id }).from(kuddePostReplies).where(eq(kuddePostReplies.apId, id))
+      if (known || !(await mayFederateWith(new URL(authorUri).host))) continue
+      const author = await resolveActor(authorUri).catch(() => null)
+      // The API gives Markdown, which reads fine as it is, apart from pictures: those become their link
+      const text = htmlToText(str(comment?.content) ?? '').replace(/!\[[^\]]*\]\(([^)\s]+)[^)]*\)/g, '$1')
+      if (!author || !text) continue
+      const short = text.length > KUDDE_POST_LIMITS.reply ? `${text.slice(0, KUDDE_POST_LIMITS.reply - 1)}…` : text
+      const published = new Date(str(comment?.published) ?? '')
+      await db
+        .insert(kuddePostReplies)
+        .values({ postId: mine.id, userId: author.user.id, text: short, apId: id, createdAt: Number.isNaN(published.getTime()) ? new Date() : published })
+        .onConflictDoNothing()
+    }
   }
 }

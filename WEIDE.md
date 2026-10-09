@@ -93,6 +93,7 @@ uses:
 | Knuffel | `/fed/knuffels/{id}` |
 | Friend request | `/fed/follows/{id}` |
 | Following an account outside Weide | `/fed/subscriptions/{follower}-{followed}` |
+| A reply in a community's Kudde | `/fed/kudde-replies/{id}` |
 | Shared inbox | `/fed/inbox` |
 
 A profile page (`/profiel/{naam}`) requested with
@@ -243,8 +244,19 @@ A community is an ActivityPub `Group`. On a Weide server it becomes a Kudde:
   - A `Delete` or `Remove` takes them away again.
 - **Trust:** what the Group passes on from accounts on other servers is
   fetched again from its own server, not taken from the announcement.
-- **Read-only:** members read along here and post on the community's own
-  server (posting through Weide comes in a later version).
+- **The picture:** the community's `icon` is the Kudde's picture, fetched
+  again when it changes.
+- **Replying:** a member's reply under a community post is a `Create` of a
+  `Note`, sent to the community's inbox and to the post's writer. It has
+  `inReplyTo` set to the post, `audience` and `cc` set to the community, and
+  `source` with the Markdown. Deleting the reply sends a `Delete`. Kuddes
+  serves it at `/fed/kudde-replies/{id}`.
+- **Earlier comments:** a community only announces what's new. When its Kudde
+  is opened (at most every ten minutes), Kuddes reads the community's
+  newest posts and their comments through Lemmy's public API (also on
+  PieFed), and adds the posts and comments it doesn't have yet.
+- **New posts:** members post them on the community's own server (posting
+  from Kuddes comes in a later version).
 
 ### WieWatWaar (status)
 

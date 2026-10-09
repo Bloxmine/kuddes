@@ -223,7 +223,8 @@ async function storeActor(json: Record<string, unknown>, fetchedFrom: string): P
     .values({ domain: host, weide, lastSeenAt: new Date() })
     .onConflictDoUpdate({ target: federationServers.domain, set: { weide, lastSeenAt: new Date() } })
   void describeServer(host, new URL(uri).origin)
-  if (type === 'Group') await kuddeForGroup({ user, actor }, json)
+  // A community: its Kudde, with a new picture when its icon changed (or wasn't fetched before)
+  if (type === 'Group') await kuddeForGroup({ user, actor }, json, link(json.icon) !== existing.actor.avatarSource)
   return { user, actor }
 }
 

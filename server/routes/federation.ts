@@ -24,6 +24,7 @@ import { handleActivity } from '../lib/federation/inbox'
 import { ids, localId } from '../lib/federation/keys'
 import { knuffelNote, picturesOf, statusNote } from '../lib/federation/outbox'
 import { federationOn, mayFederateWith } from '../lib/federation/servers'
+import { replyNote } from '../lib/federation/groups'
 
 /** What a Weide server can do beyond plain ActivityPub (in NodeInfo, so other servers know). */
 export const WEIDE_FEATURES = ['vriendschap', 'knuffels', 'respect', 'wiewatwaar', 'profielontwerp', 'meldingen']
@@ -224,6 +225,14 @@ export const federationRoutes = new Hono()
   .post('/fed/users/:username/inbox', rateLimit('federatie', 1200, 60 * 1000), inboxLimit, async (c) => {
     await sharedMember(c.req.param('username'))
     return receive(c)
+  })
+
+  // A member's reply in a community's Kudde: a comment there, by its id
+  .get('/fed/kudde-replies/:id', async (c) => {
+    const id = Number(c.req.param('id'))
+    const found = Number.isInteger(id) ? await replyNote(id) : null
+    if (!found) throw notFound()
+    return ap(c, { '@context': CONTEXT, ...found.note })
   })
 
   // A public WieWatWaar by its id

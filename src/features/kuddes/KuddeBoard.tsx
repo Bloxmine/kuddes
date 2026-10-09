@@ -83,8 +83,10 @@ export function KuddeBoard({ kudde }: { kudde: KuddeDetail }) {
             // A community on another server: read along here, post there
             <p className="muted kb-join">
               <FarmIcon name="world_link" /> Dit prikbord komt van <b>{kudde.remote.handle}</b>.{' '}
-              {member ? 'Nieuwe berichten en reacties komen vanzelf binnen.' : 'Word lid om de nieuwe berichten en reacties binnen te krijgen.'} Zelf plaatsen of reageren doe
-              je{' '}
+              {member
+                ? 'Nieuwe berichten en reacties komen vanzelf binnen, en jouw reacties gaan naar de community.'
+                : 'Word lid om de berichten te volgen en te reageren.'}{' '}
+              Een nieuw bericht plaats je{' '}
               {kudde.remote.url ? (
                 <a href={kudde.remote.url} target="_blank" rel="noopener noreferrer nofollow">
                   op {kudde.remote.domain}
@@ -317,10 +319,16 @@ function Composer({ kudde }: { kudde: KuddeDetail }) {
   )
 }
 
+/** How many replies a post shows before "Bekijk alle reacties". */
+const REPLIES_FOLDED = 3
+
 function PostCard({ post: p, kudde, member }: { post: KuddePost; kudde: KuddeDetail; member: boolean }) {
   const patch = usePatchPost(kudde.slug)
   const [reply, setReply] = useState('')
   const [big, setBig] = useState(false)
+  // Long threads (a Lemmy post can have dozens) start folded: the newest few, the rest on request
+  const [allReplies, setAllReplies] = useState(false)
+  const shownReplies = allReplies ? p.replies : p.replies.slice(-REPLIES_FOLDED)
   const [replySmileys, setReplySmileys] = useState(false)
   const act = useMutation({
     mutationFn: ({ path, method = 'POST', body }: { path: string; method?: 'POST' | 'DELETE'; body?: unknown }) => api<KuddePost | null>(path, { method, body }),
@@ -429,7 +437,12 @@ function PostCard({ post: p, kudde, member }: { post: KuddePost; kudde: KuddeDet
 
       {(p.replies.length > 0 || member) && (
         <div className="kb-replies">
-          {p.replies.map((r) => (
+          {p.replies.length > shownReplies.length && (
+            <button type="button" className="link-button kb-more-replies" onClick={() => setAllReplies(true)}>
+              Bekijk alle {p.replies.length} reacties
+            </button>
+          )}
+          {shownReplies.map((r) => (
             <div key={r.id} className="kb-reply">
               <Avatar user={r.user} size="tiny" />
               <div className="kb-reply-text">
@@ -452,7 +465,7 @@ function PostCard({ post: p, kudde, member }: { post: KuddePost; kudde: KuddeDet
               )}
             </div>
           ))}
-          {member && !kudde.remote && (
+          {member && (
             <form
               className="kb-reply-form"
               onSubmit={(e) => {
